@@ -1,8 +1,8 @@
 (function () {
   const STORAGE_KEY = "obe_sge_user_2026";
   const AUTH = {
-    login: "102525",
-    senha: "Furuk4w4*",
+    login: "admin",
+    senha: "admin",
   };
 
   const loginForm = document.getElementById("login-form");

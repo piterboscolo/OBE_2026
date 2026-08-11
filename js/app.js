@@ -1,6 +1,6 @@
 (function () {
   const STORAGE_KEY = "obe_sge_user_2026";
-  const AUTH_LOGIN = "102525";
+  const AUTH_LOGIN = "admin";
 
   const main = document.getElementById("main");
   const userInitials = document.getElementById("user-initials");
