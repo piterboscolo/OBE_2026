@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>OBE 2026 — SGE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="page-login">
+  <div id="app">
+    <section id="screen-login" class="screen screen--active" aria-label="Entrada">
+      <img class="bg-watermark" src="img/brasao-2rg.png" alt="" aria-hidden="true" />
+      <div class="brand-stripes" aria-hidden="true">
+        <div class="brand-stripes__red"></div>
+        <div class="brand-stripes__blue"></div>
+      </div>
+      <div class="login-content">
+        <div class="login-logos">
+          <figure>
+            <img src="img/logo-pmesp.png" alt="Polícia Militar de São Paulo" />
+          </figure>
+          <figure>
+            <img src="img/brasao-2rg.png" alt="Brasão ESSgt" />
+          </figure>
+        </div>
+        <div class="brand-mark">
+          <h1 class="brand-title">
+            <span class="brand-title__text">OBE</span>
+          </h1>
+          <div class="brand-mark__bar" aria-hidden="true"></div>
+        </div>
+        <p class="brand-subtitle">Operação Batalhão Escola</p>
+        <p class="brand-system">SGE — Sistema de Gestão Estratégica</p>
+
+        <form id="login-form" class="login-form" autocomplete="off">
+          <label class="field">
+            <span class="visually-hidden">Login</span>
+            <input type="text" id="login-user" name="user" placeholder="Login" required autocomplete="username" />
+          </label>
+          <label class="field">
+            <span class="visually-hidden">Senha</span>
+            <input type="password" id="login-pass" name="pass" placeholder="Senha" required autocomplete="current-password" />
+          </label>
+          <p id="login-error" class="login-error" hidden>Login ou senha inválidos</p>
+          <button type="submit" class="btn btn--primary">Entrar</button>
+        </form>
+        <p class="login-hint">Uso interno da operação</p>
+      </div>
+      <p class="year-footer">2026</p>
+      <div class="brand-stripes" aria-hidden="true">
+        <div class="brand-stripes__red"></div>
+        <div class="brand-stripes__blue"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
