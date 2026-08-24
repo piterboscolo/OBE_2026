@@ -55,6 +55,7 @@ window.OBE_DATA = {
       descricao: "Turnos e equipes do dia",
       sigla: "ES",
       icon: "calendar",
+      url: "https://docs.google.com/spreadsheets/d/1dGBMB1Ai6kU2BRO3LNY_4Ac7EJFZrHRs/edit?usp=drivesdk&ouid=102061352846729587790&rtpof=true&sd=true",
     },
     {
       id: "cpp",
@@ -62,6 +63,7 @@ window.OBE_DATA = {
       descricao: "Cartão de Prioridade de Patrulhamento",
       sigla: "CPP",
       icon: "shield",
+      url: "https://www.google.com/maps/d/edit?mid=1NTLGXMljSuRwja2TrJcGKlpBCVWL5j8",
     },
   ],
 

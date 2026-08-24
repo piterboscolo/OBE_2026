@@ -363,7 +363,17 @@
     /* cliques tratados por delegação no #main */
   }
 
+  function openModuleLink(route) {
+    const modulo = window.OBE_DATA?.modulos?.find((m) => m.id === route);
+    if (modulo?.url) {
+      window.open(modulo.url, "_blank", "noopener,noreferrer");
+      return true;
+    }
+    return false;
+  }
+
   function navigate(route, fromNav) {
+    if (openModuleLink(route)) return;
     if (!main) return;
     if (!routes[route]) route = "inicio";
     currentRoute = route;
