@@ -113,6 +113,7 @@
     const { modulos } = window.OBE_DATA;
     return `
       <div class="page page--cards-only">
+        <button type="button" class="btn-sair" id="btn-sair" title="Sair">Sair</button>
         <div class="access-grid">
           ${modulos.map(cardHtml).join("")}
         </div>

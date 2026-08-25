@@ -510,8 +510,9 @@ body.page-home #screen-app {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  width: 100%;
   min-height: auto;
-  padding: 12px 0 16px;
+  padding: 8px 0 16px;
   box-sizing: border-box;
 }
 
@@ -554,11 +555,8 @@ body.page-home #screen-app {
 }
 
 .page--cards-only .btn-sair {
-  position: absolute;
-  top: 8px;
-  right: 4px;
-  z-index: 6;
-  margin: 0;
+  align-self: stretch;
+  margin: 0 0 10px;
   border: 0;
   border-radius: 6px;
   background: transparent;
@@ -570,6 +568,7 @@ body.page-home #screen-app {
   text-transform: uppercase;
   padding: 0.2rem 0.4rem;
   line-height: 1.2;
+  text-align: right;
   cursor: pointer;
   opacity: 0.85;
 }
