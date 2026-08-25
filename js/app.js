@@ -17,6 +17,7 @@
       name: user.nome,
       setor: user.setor,
       setorCurto: user.setorCurto,
+      graduacao: user.graduacao,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
     return true;
@@ -29,6 +30,7 @@
       nome: currentUser?.name,
       setor: currentUser?.setor,
       setorCurto: currentUser?.setorCurto,
+      graduacao: currentUser?.graduacao,
     });
   }
 
