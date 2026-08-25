@@ -113,7 +113,6 @@
     const { modulos } = window.OBE_DATA;
     return `
       <div class="page page--cards-only">
-        <button type="button" class="btn-sair" id="btn-sair" title="Sair">Sair</button>
         <div class="access-grid">
           ${modulos.map(cardHtml).join("")}
         </div>
@@ -397,6 +396,8 @@
     localStorage.removeItem(STORAGE_KEY);
     window.location.replace("index.html");
   }
+
+  document.getElementById("btn-sair")?.addEventListener("click", logout);
 
   // Cards: hover/focus via CSS; toque vira; clique/Enter abre
   if (main) {
