@@ -1,6 +1,6 @@
 (function () {
   const STORAGE_KEY = "obe_sge_user_2026";
-  const AUTH_LOGIN = "admin";
+  const auth = window.OBE_AUTH;
 
   const main = document.getElementById("main");
   const userInitials = document.getElementById("user-initials");
@@ -9,27 +9,33 @@
   let currentUser = null;
   let currentRoute = "inicio";
 
-  function acceptUser(login) {
-    currentUser = { name: login, login: login };
+  function acceptUser(re) {
+    const user = auth.findByRe(re);
+    if (!user) return false;
+    currentUser = {
+      login: user.re,
+      name: user.nome,
+      setor: user.setor,
+    };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+    return true;
   }
 
-  // Autenticação flexível: URL, localStorage ou permite ver a home
   const authFromUrl = new URLSearchParams(window.location.search).get("auth");
-  if (authFromUrl === AUTH_LOGIN) {
-    acceptUser(authFromUrl);
+  if (authFromUrl && acceptUser(authFromUrl)) {
     history.replaceState({}, "", "home.html");
   } else {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-      if (saved?.login === AUTH_LOGIN) {
+      if (saved?.login && auth.findByRe(saved.login)) {
         currentUser = saved;
       } else {
-        // Mantém a home visível; marca visitante até logar de novo
-        currentUser = { name: "Operador", login: "guest" };
+        window.location.replace("index.html");
+        return;
       }
     } catch (_) {
-      currentUser = { name: "Operador", login: "guest" };
+      window.location.replace("index.html");
+      return;
     }
   }
 
