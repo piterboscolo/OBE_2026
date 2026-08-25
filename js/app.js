@@ -16,9 +16,25 @@
       login: user.re,
       name: user.nome,
       setor: user.setor,
+      setorCurto: user.setorCurto,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
     return true;
+  }
+
+  function userGreeting() {
+    const full = auth.findByRe(currentUser?.login);
+    if (full) return auth.greeting(full);
+    return auth.greeting({
+      nome: currentUser?.name,
+      setor: currentUser?.setor,
+      setorCurto: currentUser?.setorCurto,
+    });
+  }
+
+  function fillGreeting() {
+    const el = document.getElementById("home-greeting");
+    if (el) el.innerHTML = userGreeting();
   }
 
   const authFromUrl = new URLSearchParams(window.location.search).get("auth");
@@ -27,8 +43,8 @@
   } else {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-      if (saved?.login && auth.findByRe(saved.login)) {
-        currentUser = saved;
+      if (saved?.login && acceptUser(saved.login)) {
+        /* sessão válida */
       } else {
         window.location.replace("index.html");
         return;
@@ -119,7 +135,10 @@
     const { modulos } = window.OBE_DATA;
     return `
       <div class="page page--cards-only">
-        <button type="button" class="btn-sair" id="btn-sair" title="Sair">Sair</button>
+        <div class="home-top">
+          <p class="home-greeting" id="home-greeting">${userGreeting()}</p>
+          <button type="button" class="btn-sair" id="btn-sair" title="Sair">Sair</button>
+        </div>
         <div class="access-grid">
           ${modulos.map(cardHtml).join("")}
         </div>
@@ -473,12 +492,14 @@
     const grid = document.getElementById("access-grid");
     if (grid && window.OBE_DATA?.modulos) {
       grid.innerHTML = window.OBE_DATA.modulos.map(cardHtml).join("");
+      fillGreeting();
       return;
     }
     // se a home veio vazia, renderiza a página inteira
     if (main && !main.querySelector(".access-card") && window.OBE_DATA?.modulos) {
       main.innerHTML = renderInicio();
     }
+    fillGreeting();
   }
 
   mountHomeCards();
