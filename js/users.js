@@ -19,6 +19,10 @@
     { re: "136802", senha: "bezerra", nome: "BEZERRA", graduacao: "1º Ten PM", setor: "COMANDANTE DE PELOTÕES", setorCurto: "Cmt de Pel" },
     { re: "129361", senha: "braga", nome: "BRAGA", graduacao: "1º Sgt PM", setor: "SUPERVISOR OP", setorCurto: "Sup Op" },
     { re: "149756", senha: "russo", nome: "RUSSO", graduacao: "2º Sgt PM", setor: "SUPERVISOR OP", setorCurto: "Sup Op" },
+    { re: "910345", senha: "asaka", nome: "ASAKA", graduacao: "Cel PM", setor: "CMT DA ESSGT", setorCurto: "Cmt da ESSgt" },
+    { re: "981001", senha: "alex", nome: "ALEX", graduacao: "Ten Cel PM", setor: "SUBCMT DA ESSGT", setorCurto: "Subcmt da ESSgt" },
+    { re: "100295", senha: "flavia", nome: "FLAVIA", graduacao: "Maj PM", setor: "CMT DA ESSFAG", setorCurto: "Cmt da ESSFAG" },
+    { re: "118455", senha: "tania", nome: "TANIA", graduacao: "Cap PM", setor: "CMT DA 1ª CIA", setorCurto: "Cmt da 1ª Cia" },
   ];
 
   function normalize(value) {

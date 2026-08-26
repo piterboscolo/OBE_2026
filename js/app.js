@@ -304,33 +304,13 @@
     `;
   }
 
-  function renderCpp(fromNav) {
+  function renderCpp() {
+    const opcoes = window.OBE_DATA.cppOpcoes || [];
     return `
-      <div class="page">
-        ${pageHeader("CPP", "Cartão de Prioridade de Patrulhamento", !fromNav)}
-        <div class="list">
-          ${window.OBE_DATA.cpp
-            .map(
-              (c) => `
-            <article class="row">
-              <div>
-                <h3>
-                  <span class="prio-dot prio-dot--${c.cor}"></span>
-                  P${c.prioridade} · ${c.setor}
-                </h3>
-                <p>${c.locais}</p>
-                <p>Frequência: ${c.frequencia}</p>
-              </div>
-              <span class="badge ${
-                c.cor === "critica"
-                  ? "badge--danger"
-                  : c.cor === "alta"
-                    ? "badge--warn"
-                    : "badge--idle"
-              }">P${c.prioridade}</span>
-            </article>`
-            )
-            .join("")}
+      <div class="page page--subcards">
+        ${pageHeader("CPP", "Escolha o acesso desejado", true)}
+        <div class="access-grid access-grid--sub">
+          ${opcoes.map(cardHtml).join("")}
         </div>
       </div>
     `;
@@ -382,7 +362,7 @@
     rso: renderRso,
     abastecimento: renderAbastecimento,
     escala: () => renderEscala(false),
-    cpp: () => renderCpp(false),
+    cpp: renderCpp,
     mais: renderMais,
   };
 
@@ -391,11 +371,16 @@
   }
 
   function openModuleLink(route) {
-    const modulo = window.OBE_DATA?.modulos?.find((m) => m.id === route);
-    if (modulo?.url) {
+    const fromModulos = window.OBE_DATA?.modulos?.find((m) => m.id === route);
+    const fromCpp = window.OBE_DATA?.cppOpcoes?.find((m) => m.id === route);
+    const modulo = fromModulos || fromCpp;
+    if (!modulo) return false;
+    if (modulo.url) {
       window.open(modulo.url, "_blank", "noopener,noreferrer");
       return true;
     }
+    // opção conhecida sem link ainda (ex.: CPP Doc) — não troca de tela
+    if (fromCpp) return true;
     return false;
   }
 
@@ -407,7 +392,6 @@
     setActiveNav(route);
 
     if (route === "escala") main.innerHTML = renderEscala(!!fromNav);
-    else if (route === "cpp") main.innerHTML = renderCpp(!!fromNav);
     else main.innerHTML = routes[route]();
 
     main.scrollTop = 0;

@@ -1098,6 +1098,23 @@ body.page-home #screen-app {
   width: 100%;
 }
 
+.page--subcards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.page--subcards .access-grid--sub {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 148px));
+  gap: 10px;
+  justify-content: center;
+  width: max-content;
+  max-width: 100%;
+  margin: 8px auto 0;
+}
+
 .prio-dot {
   display: inline-block;
   width: 8px;

@@ -63,7 +63,25 @@ window.OBE_DATA = {
       descricao: "Cartão de Prioridade de Patrulhamento",
       sigla: "CPP",
       icon: "shield",
+    },
+  ],
+
+  cppOpcoes: [
+    {
+      id: "cpp-mapa",
+      titulo: "CPP Mapa",
+      descricao: "Mapa de prioridade de patrulhamento",
+      sigla: "MAP",
+      icon: "pin",
       url: "https://www.google.com/maps/d/edit?mid=1NTLGXMljSuRwja2TrJcGKlpBCVWL5j8",
+    },
+    {
+      id: "cpp-doc",
+      titulo: "CPP Doc",
+      descricao: "Documentação e cartões do CPP",
+      sigla: "DOC",
+      icon: "doc",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1678212823#gid=1678212823",
     },
   ],
 
