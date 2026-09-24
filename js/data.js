@@ -15,27 +15,6 @@ window.OBE_DATA = {
       icon: "users",
     },
     {
-      id: "locais-interesse",
-      titulo: "Locais de Interesse",
-      descricao: "Escolas e pontos sensíveis",
-      sigla: "LI",
-      icon: "pin",
-    },
-    {
-      id: "pontos-apoio",
-      titulo: "Pontos de Apoio",
-      descricao: "Bases e estruturas de apoio",
-      sigla: "PA",
-      icon: "base",
-    },
-    {
-      id: "pops",
-      titulo: "POP's",
-      descricao: "Procedimentos operacionais padrão",
-      sigla: "POP",
-      icon: "doc",
-    },
-    {
       id: "rso",
       titulo: "RSO",
       descricao: "Relatórios de serviço operacional",
@@ -44,10 +23,10 @@ window.OBE_DATA = {
     },
     {
       id: "abastecimento",
-      titulo: "Pontos de Abastecimento",
-      descricao: "Combustível e logística",
-      sigla: "PAb",
-      icon: "fuel",
+      titulo: "Ponto de Interesse",
+      descricao: "Postos, hospital, metrô e shopping",
+      sigla: "PI",
+      icon: "pin",
     },
     {
       id: "escala",
@@ -64,9 +43,24 @@ window.OBE_DATA = {
       sigla: "CPP",
       icon: "shield",
     },
+    {
+      id: "eventos",
+      titulo: "Eventos",
+      descricao: "Agenda e programação da operação",
+      sigla: "EVT",
+      icon: "event",
+    },
   ],
 
   cppOpcoes: [
+    {
+      id: "vtr",
+      titulo: "VTR",
+      descricao: "Viaturas e apoio operacional",
+      sigla: "VTR",
+      icon: "vtr",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1678212823#gid=1678212823",
+    },
     {
       id: "cpp-mapa",
       titulo: "CPP Mapa",
@@ -77,13 +71,142 @@ window.OBE_DATA = {
     },
     {
       id: "cpp-doc",
-      titulo: "CPP Doc",
-      descricao: "Documentação e cartões do CPP",
-      sigla: "DOC",
+      titulo: "POPs",
+      descricao: "Procedimentos operacionais padrão",
+      sigla: "POP",
       icon: "doc",
-      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1678212823#gid=1678212823",
     },
   ],
+
+  vtrOpcoes: [],
+
+  pontosInteresseOpcoes: [
+    {
+      id: "pi-postos",
+      titulo: "Postos de abastecimento",
+      descricao: "Postos de combustível da operação",
+      sigla: "POSTO",
+      icon: "fuel",
+    },
+    {
+      id: "pi-hospital",
+      titulo: "Hospital",
+      descricao: "Unidades hospitalares de apoio",
+      sigla: "HOSP",
+      icon: "hospital",
+    },
+    {
+      id: "pi-metro",
+      titulo: "Metro",
+      descricao: "Estações de metrô",
+      sigla: "METRO",
+      icon: "metro",
+    },
+    {
+      id: "pi-shopping",
+      titulo: "Shopping",
+      descricao: "Centros comerciais",
+      sigla: "SHOP",
+      icon: "shopping",
+    },
+  ],
+
+  // Destino do QR Code Metro → Google Maps (rota da localização atual até o metrô)
+  metroDestino: {
+    nome: "Metrô Tatuapé",
+    destino: "R. Melo Freire - Tatuapé, São Paulo - SP, 03307-005",
+    travelmode: "transit",
+  },
+
+  shoppingOpcoes: [
+    {
+      id: "shopping-metro-tatuape",
+      titulo: "Shopping Metrô Tatuapé",
+      descricao: "Rua Domingos Agostim, 91",
+      sigla: "SMT",
+      icon: "shopping",
+    },
+    {
+      id: "shopping-boulevard",
+      titulo: "Shopping Boulevard Tatuapé",
+      descricao: "R. Gonçalves Crespo, 78",
+      sigla: "SMB",
+      icon: "shopping",
+    },
+  ],
+
+  shoppingDestinos: {
+    "shopping-metro-tatuape": {
+      nome: "Shopping Metrô Tatuapé",
+      destino: "Rua Domingos Agostim, 91 - Tatuapé, São Paulo - SP",
+      telefone: "(11) 2090-7400",
+      travelmode: "driving",
+    },
+    "shopping-boulevard": {
+      nome: "Shopping Metrô Boulevard Tatuapé",
+      destino: "R. Gonçalves Crespo, 78 - Tatuapé, São Paulo - SP",
+      telefone: "(11) 2942-5800",
+      travelmode: "driving",
+    },
+  },
+
+  hospitalOpcoes: [
+    {
+      id: "hosp-upa-tatuape",
+      titulo: "UPA Tatuapé",
+      descricao: "Av. Celso Garcia, 4974",
+      sigla: "UPA",
+      icon: "hospital",
+    },
+    {
+      id: "hosp-silvio-romero",
+      titulo: "Hospital Sílvio Romero",
+      descricao: "R. Fernandes Pinheiro, 268",
+      sigla: "HSR",
+      icon: "hospital",
+    },
+    {
+      id: "hosp-central-tatuape",
+      titulo: "Hospital Central Tatuapé",
+      descricao: "R. Padre Adelino, 901",
+      sigla: "HCT",
+      icon: "hospital",
+    },
+    {
+      id: "hosp-santa-virginia",
+      titulo: "Hospital Santa Virgínia",
+      descricao: "Av. Celso Garcia, 2294",
+      sigla: "HSV",
+      icon: "hospital",
+    },
+  ],
+
+  hospitalDestinos: {
+    "hosp-upa-tatuape": {
+      nome: "UPA Tatuapé",
+      destino: "Av. Celso Garcia, 4974 - Tatuapé, São Paulo - SP",
+      telefone: "(11) 5239-4275",
+      travelmode: "driving",
+    },
+    "hosp-silvio-romero": {
+      nome: "Hospital Sílvio Romero",
+      destino: "R. Fernandes Pinheiro, 268 - Vila Azevedo, São Paulo - SP",
+      telefone: "(11) 2227-9040",
+      travelmode: "driving",
+    },
+    "hosp-central-tatuape": {
+      nome: "Hospital Central do Tatuapé",
+      destino: "R. Padre Adelino, 901 - Quarta Parada, São Paulo - SP",
+      telefone: "(11) 2602-0000",
+      travelmode: "driving",
+    },
+    "hosp-santa-virginia": {
+      nome: "Hospital Santa Virgínia",
+      destino: "Av. Celso Garcia, 2294 - Belenzinho, São Paulo - SP",
+      telefone: "",
+      travelmode: "driving",
+    },
+  },
 
   mapaForca: [
     { equipe: "Alfa-01", efetivo: 4, viatura: "PM-214", setor: "Centro", status: "em_campo" },
@@ -137,6 +260,8 @@ window.OBE_DATA = {
     { equipe: "Delta-04", turno: "14:00–22:00", funcao: "Apoio / reforço", responsavel: "Cb. Lima" },
     { equipe: "Echo-05", turno: "22:00–06:00", funcao: "Reserva operacional", responsavel: "Sgt. Alves" },
   ],
+
+  eventos: [],
 
   cpp: [
     {

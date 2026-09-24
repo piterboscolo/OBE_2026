@@ -99,21 +99,18 @@
     });
   }
 
-  function pageHeader(titulo, subtitulo, showBack) {
-    if (!showBack) {
-      return `
-        <header class="page-head">
-          <h2>${titulo}</h2>
-          <p>${subtitulo}</p>
-        </header>`;
-    }
+  function pageHeader(titulo, subtitulo) {
     return `
-      <div class="page-toolbar">
+      <header class="page-head">
+        <h2>${titulo}</h2>
+        <p>${subtitulo}</p>
+      </header>`;
+  }
+
+  function pageBack() {
+    return `
+      <div class="page-back">
         <button type="button" class="back-btn" data-action="back">← Voltar</button>
-        <header class="page-head">
-          <h2>${titulo}</h2>
-          <p>${subtitulo}</p>
-        </header>
       </div>`;
   }
 
@@ -121,14 +118,9 @@
     const icon = (window.obeIcon && window.obeIcon(m.icon)) || "";
     return `
       <div class="access-card" data-route="${m.id}" role="button" tabindex="0" aria-label="${m.titulo}">
-        <div class="access-card__inner">
-          <div class="access-card__face access-card__face--front">
-            <span class="access-card__icon">${icon}</span>
-            <h3 class="access-card__title">${m.titulo}</h3>
-          </div>
-          <div class="access-card__face access-card__face--back">
-            <p class="access-card__desc">${m.descricao}</p>
-          </div>
+        <div class="access-card__face">
+          <span class="access-card__icon">${icon}</span>
+          <h3 class="access-card__title">${m.titulo}</h3>
         </div>
       </div>`;
   }
@@ -151,7 +143,7 @@
   function renderMapaForca() {
     return `
       <div class="page">
-        ${pageHeader("Mapa Força", "Distribuição do efetivo em campo", true)}
+        ${pageHeader("Mapa Força", "Distribuição do efetivo em campo")}
         <div class="list">
           ${window.OBE_DATA.mapaForca
             .map(
@@ -166,6 +158,7 @@
             )
             .join("")}
         </div>
+        ${pageBack()}
       </div>
     `;
   }
@@ -173,7 +166,7 @@
   function renderLocaisInteresse() {
     return `
       <div class="page">
-        ${pageHeader("Locais de Interesse", "Escolas e pontos sensíveis", true)}
+        ${pageHeader("Locais de Interesse", "Escolas e pontos sensíveis")}
         <div class="list">
           ${window.OBE_DATA.locaisInteresse
             .map(
@@ -188,6 +181,7 @@
             )
             .join("")}
         </div>
+        ${pageBack()}
       </div>
     `;
   }
@@ -195,7 +189,7 @@
   function renderPontosApoio() {
     return `
       <div class="page">
-        ${pageHeader("Pontos de Apoio", "Bases e estruturas de apoio", true)}
+        ${pageHeader("Pontos de Apoio", "Bases e estruturas de apoio")}
         <div class="list">
           ${window.OBE_DATA.pontosApoio
             .map(
@@ -210,6 +204,7 @@
             )
             .join("")}
         </div>
+        ${pageBack()}
       </div>
     `;
   }
@@ -217,7 +212,7 @@
   function renderPops() {
     return `
       <div class="page">
-        ${pageHeader("POP's", "Procedimentos operacionais padrão", true)}
+        ${pageHeader("POP's", "Procedimentos operacionais padrão")}
         <div class="list">
           ${window.OBE_DATA.pops
             .map(
@@ -232,6 +227,7 @@
             )
             .join("")}
         </div>
+        ${pageBack()}
       </div>
     `;
   }
@@ -239,7 +235,7 @@
   function renderRso() {
     return `
       <div class="page">
-        ${pageHeader("RSO", "Relatórios de serviço operacional", true)}
+        ${pageHeader("RSO", "Relatórios de serviço operacional")}
         <div class="list">
           ${window.OBE_DATA.rso
             .map(
@@ -254,37 +250,143 @@
             )
             .join("")}
         </div>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderEventos() {
+    const lista = window.OBE_DATA.eventos || [];
+    const corpo =
+      lista.length > 0
+        ? `<div class="list">
+          ${lista
+            .map(
+              (e) => `
+            <article class="row">
+              <div>
+                <h3>${e.titulo}</h3>
+                <p>${e.data || ""}${e.hora ? ` · ${e.hora}` : ""}${e.local ? ` · ${e.local}` : ""}</p>
+              </div>
+              <span class="badge">${e.status || "Agenda"}</span>
+            </article>`
+            )
+            .join("")}
+        </div>`
+        : `<p class="empty">Nenhum evento cadastrado no momento.</p>`;
+
+    return `
+      <div class="page">
+        ${pageHeader("Eventos", "Agenda e programação da operação")}
+        ${corpo}
+        ${pageBack()}
       </div>
     `;
   }
 
   function renderAbastecimento() {
+    const opcoes = window.OBE_DATA.pontosInteresseOpcoes || [];
     return `
-      <div class="page">
-        ${pageHeader("Pontos de Abastecimento", "Combustível e logística", true)}
-        <div class="list">
-          ${window.OBE_DATA.abastecimento
-            .map(
-              (a) => `
-            <article class="row">
-              <div>
-                <h3>${a.nome}</h3>
-                <p>${a.tipo} · ${a.endereco}</p>
-                <p>Horário: ${a.horario}</p>
-              </div>
-              <span class="badge">${a.tipo}</span>
-            </article>`
-            )
-            .join("")}
+      <div class="page page--subcards">
+        ${pageHeader("Ponto de Interesse", "Escolha o tipo de ponto")}
+        <div class="access-grid access-grid--sub">
+          ${opcoes.map(cardHtml).join("")}
         </div>
+        ${pageBack()}
       </div>
     `;
+  }
+
+  function mapsDirectionsUrl(destino, travelmode) {
+    const params = new URLSearchParams({
+      api: "1",
+      destination: destino || "",
+      travelmode: travelmode || "driving",
+      dir_action: "navigate",
+    });
+    return `https://www.google.com/maps/dir/?${params.toString()}`;
+  }
+
+  function qrImageUrl(data) {
+    return (
+      "https://api.qrserver.com/v1/create-qr-code/?size=260x260&ecc=M&margin=8&data=" +
+      encodeURIComponent(data)
+    );
+  }
+
+  function renderDestinoQr(titulo, cfg) {
+    const nome = cfg?.nome || titulo;
+    const mapsUrl = mapsDirectionsUrl(cfg?.destino, cfg?.travelmode);
+    const qrSrc = qrImageUrl(mapsUrl);
+    const telefone = cfg?.telefone
+      ? `<p class="qr-box__phone">${cfg.telefone}</p>`
+      : "";
+    const endereco = cfg?.destino
+      ? `<p class="qr-box__addr">${cfg.destino}</p>`
+      : "";
+    return `
+      <div class="page page--qr">
+        ${pageHeader(titulo, "Escaneie para abrir a rota no Maps")}
+        <div class="qr-box">
+          <img
+            class="qr-box__img"
+            src="${qrSrc}"
+            alt="QR Code rota até ${nome}"
+          />
+        </div>
+        <p class="qr-box__hint">Ao escanear, o Maps abre a rota da sua localização até <strong>${nome}</strong>.</p>
+        ${endereco}
+        ${telefone}
+        <a class="qr-box__open" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Abrir no Maps</a>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderMetroQr() {
+    return renderDestinoQr("Metro", window.OBE_DATA?.metroDestino);
+  }
+
+  function renderShopping() {
+    const opcoes = window.OBE_DATA.shoppingOpcoes || [];
+    return `
+      <div class="page page--subcards">
+        ${pageHeader("Shopping", "Escolha o shopping")}
+        <div class="access-grid access-grid--sub">
+          ${opcoes.map(cardHtml).join("")}
+        </div>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderShoppingQr(id) {
+    const cfg = window.OBE_DATA?.shoppingDestinos?.[id];
+    return renderDestinoQr(cfg?.nome || "Shopping", cfg);
+  }
+
+  function renderHospital() {
+    const opcoes = window.OBE_DATA.hospitalOpcoes || [];
+    return `
+      <div class="page page--subcards">
+        ${pageHeader("Hospital", "Escolha a unidade")}
+        <div class="access-grid access-grid--sub">
+          ${opcoes.map(cardHtml).join("")}
+        </div>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderHospitalQr(id) {
+    const cfg = window.OBE_DATA?.hospitalDestinos?.[id];
+    return renderDestinoQr(cfg?.nome || "Hospital", cfg);
   }
 
   function renderEscala(fromNav) {
     return `
       <div class="page">
-        ${pageHeader("Escala de Serviço", "Turnos e equipes do dia", !fromNav)}
+        ${pageHeader("Escala de Serviço", "Turnos e equipes do dia")}
         <div class="list">
           ${window.OBE_DATA.escala
             .map(
@@ -300,6 +402,7 @@
             )
             .join("")}
         </div>
+        ${!fromNav ? pageBack() : ""}
       </div>
     `;
   }
@@ -308,10 +411,24 @@
     const opcoes = window.OBE_DATA.cppOpcoes || [];
     return `
       <div class="page page--subcards">
-        ${pageHeader("CPP", "Escolha o acesso desejado", true)}
+        ${pageHeader("CPP", "Escolha o acesso desejado")}
         <div class="access-grid access-grid--sub">
           ${opcoes.map(cardHtml).join("")}
         </div>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderVtr() {
+    const opcoes = window.OBE_DATA.vtrOpcoes || [];
+    return `
+      <div class="page page--subcards">
+        ${pageHeader("VTR", "Mapa e documentação do CPP")}
+        <div class="access-grid access-grid--sub">
+          ${opcoes.map(cardHtml).join("")}
+        </div>
+        ${pageBack()}
       </div>
     `;
   }
@@ -360,9 +477,20 @@
     "pontos-apoio": renderPontosApoio,
     pops: renderPops,
     rso: renderRso,
+    eventos: renderEventos,
     abastecimento: renderAbastecimento,
+    "pi-metro": renderMetroQr,
+    "pi-shopping": renderShopping,
+    "pi-hospital": renderHospital,
+    "shopping-metro-tatuape": () => renderShoppingQr("shopping-metro-tatuape"),
+    "shopping-boulevard": () => renderShoppingQr("shopping-boulevard"),
+    "hosp-upa-tatuape": () => renderHospitalQr("hosp-upa-tatuape"),
+    "hosp-silvio-romero": () => renderHospitalQr("hosp-silvio-romero"),
+    "hosp-central-tatuape": () => renderHospitalQr("hosp-central-tatuape"),
+    "hosp-santa-virginia": () => renderHospitalQr("hosp-santa-virginia"),
     escala: () => renderEscala(false),
     cpp: renderCpp,
+    vtr: renderVtr,
     mais: renderMais,
   };
 
@@ -373,14 +501,18 @@
   function openModuleLink(route) {
     const fromModulos = window.OBE_DATA?.modulos?.find((m) => m.id === route);
     const fromCpp = window.OBE_DATA?.cppOpcoes?.find((m) => m.id === route);
-    const modulo = fromModulos || fromCpp;
+    const fromVtr = window.OBE_DATA?.vtrOpcoes?.find((m) => m.id === route);
+    const fromPi = window.OBE_DATA?.pontosInteresseOpcoes?.find((m) => m.id === route);
+    const fromShop = window.OBE_DATA?.shoppingOpcoes?.find((m) => m.id === route);
+    const fromHosp = window.OBE_DATA?.hospitalOpcoes?.find((m) => m.id === route);
+    const modulo = fromModulos || fromCpp || fromVtr || fromPi || fromShop || fromHosp;
     if (!modulo) return false;
     if (modulo.url) {
       window.open(modulo.url, "_blank", "noopener,noreferrer");
       return true;
     }
-    // opção conhecida sem link ainda (ex.: CPP Doc) — não troca de tela
-    if (fromCpp) return true;
+    // card de submenu sem link e sem rota interna — permanece na tela
+    if ((fromCpp || fromVtr || fromPi || fromShop || fromHosp) && !routes[route]) return true;
     return false;
   }
 
@@ -411,26 +543,8 @@
 
   document.getElementById("btn-sair")?.addEventListener("click", logout);
 
-  // Cards: hover/focus via CSS; toque vira; clique/Enter abre
+  // Cards: clique/Enter abre o módulo
   if (main) {
-    main.addEventListener("mouseover", (e) => {
-      const card = e.target.closest(".access-card");
-      if (!card || !main.contains(card)) return;
-      if (window.matchMedia("(hover: hover)").matches) {
-        card.classList.add("is-flipped");
-      }
-    });
-
-    main.addEventListener("mouseout", (e) => {
-      const card = e.target.closest(".access-card");
-      if (!card || !main.contains(card)) return;
-      const to = e.relatedTarget;
-      if (to && card.contains(to)) return;
-      if (window.matchMedia("(hover: hover)").matches) {
-        card.classList.remove("is-flipped");
-      }
-    });
-
     main.addEventListener("click", (e) => {
       const sair = e.target.closest("#btn-sair, [data-action='logout']");
       if (sair) {
@@ -442,7 +556,29 @@
       const back = e.target.closest("[data-action='back']");
       if (back) {
         e.preventDefault();
-        navigate("inicio");
+        if (currentRoute === "vtr") {
+          navigate("cpp");
+        } else if (
+          currentRoute === "pi-metro" ||
+          currentRoute === "pi-shopping" ||
+          currentRoute === "pi-hospital"
+        ) {
+          navigate("abastecimento");
+        } else if (
+          currentRoute === "shopping-metro-tatuape" ||
+          currentRoute === "shopping-boulevard"
+        ) {
+          navigate("pi-shopping");
+        } else if (
+          currentRoute === "hosp-upa-tatuape" ||
+          currentRoute === "hosp-silvio-romero" ||
+          currentRoute === "hosp-central-tatuape" ||
+          currentRoute === "hosp-santa-virginia"
+        ) {
+          navigate("pi-hospital");
+        } else {
+          navigate("inicio");
+        }
         return;
       }
 
@@ -451,16 +587,6 @@
         const route = card.dataset.route;
         if (!route) return;
         e.preventDefault();
-
-        const canHover = window.matchMedia("(hover: hover)").matches;
-        if (!canHover && !card.classList.contains("is-flipped")) {
-          main.querySelectorAll(".access-card.is-flipped").forEach((c) => {
-            c.classList.remove("is-flipped");
-          });
-          card.classList.add("is-flipped");
-          return;
-        }
-
         navigate(route);
       }
     });
