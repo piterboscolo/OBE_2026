@@ -44,8 +44,9 @@
       return;
     }
 
-    if (!window.OBE_DB?.isConfigured()) {
-      showError("Configure a URL e a chave do Supabase em js/config.js");
+    const cfg = window.OBE_DB?.getConfig?.() || {};
+    if (!cfg.url || !cfg.anonKey) {
+      showError("Configuração do Supabase não carregou. Atualize a página (Ctrl+F5).");
       return;
     }
 
@@ -55,7 +56,6 @@
     }
 
     try {
-      // nome no banco usa o próprio RE (cadastro só pede RE + senha)
       await window.OBE_DB.criarUsuario(re, senha, re);
       showOk("Usuário criado com sucesso. Redirecionando…");
       form.reset();
@@ -66,6 +66,8 @@
       const msg = String(err?.message || err || "Erro ao cadastrar");
       if (/Já existe|duplicate|unique/i.test(msg)) {
         showError("Já existe um usuário com este RE.");
+      } else if (/Could not find the function|schema cache|404/i.test(msg)) {
+        showError("Função criar_usuario não encontrada. Execute o SQL usuarios.sql no Supabase.");
       } else {
         showError(msg);
       }

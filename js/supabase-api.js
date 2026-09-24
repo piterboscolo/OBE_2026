@@ -1,52 +1,81 @@
 (function () {
-  const cfg = window.OBE_SUPABASE || {};
-
-  function isConfigured() {
-    return Boolean(cfg.url && cfg.anonKey);
+  function getConfig() {
+    const cfg = window.OBE_SUPABASE || {};
+    return {
+      url: String(cfg.url || "").trim().replace(/\/$/, ""),
+      anonKey: String(cfg.anonKey || "").trim(),
+    };
   }
 
-  function getClient() {
-    if (!isConfigured()) return null;
-    if (!window.supabase || typeof window.supabase.createClient !== "function") {
-      return null;
+  function isConfigured() {
+    const { url, anonKey } = getConfig();
+    return Boolean(url && anonKey);
+  }
+
+  async function rpc(fnName, params) {
+    const { url, anonKey } = getConfig();
+    if (!url || !anonKey) {
+      throw new Error("Configure a URL e a chave do Supabase em js/config.js");
     }
-    if (!window.__obeSupabaseClient) {
-      window.__obeSupabaseClient = window.supabase.createClient(cfg.url, cfg.anonKey);
+
+    const endpoint = `${url}/rest/v1/rpc/${fnName}`;
+    let response;
+    try {
+      response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          apikey: anonKey,
+          Authorization: `Bearer ${anonKey}`,
+          "Content-Type": "application/json",
+          Prefer: "return=representation",
+        },
+        body: JSON.stringify(params),
+      });
+    } catch (_) {
+      throw new Error(
+        "Não foi possível conectar ao Supabase. Verifique a internet e a URL do projeto."
+      );
     }
-    return window.__obeSupabaseClient;
+
+    const text = await response.text();
+    let data = null;
+    try {
+      data = text ? JSON.parse(text) : null;
+    } catch (_) {
+      data = text;
+    }
+
+    if (!response.ok) {
+      const msg =
+        (data && (data.message || data.error || data.hint)) ||
+        text ||
+        `Erro HTTP ${response.status}`;
+      throw new Error(msg);
+    }
+
+    return data;
   }
 
   async function criarUsuario(login, senha, nome) {
-    const client = getClient();
-    if (!client) {
-      throw new Error("Configure a URL e a chave do Supabase em js/config.js");
-    }
-    const { data, error } = await client.rpc("criar_usuario", {
+    return rpc("criar_usuario", {
       p_login: login,
       p_senha: senha,
       p_nome: nome,
     });
-    if (error) throw new Error(error.message || "Não foi possível criar o usuário");
-    return data;
   }
 
   async function loginUsuario(login, senha) {
-    const client = getClient();
-    if (!client) {
-      throw new Error("Configure a URL e a chave do Supabase em js/config.js");
-    }
-    const { data, error } = await client.rpc("login_usuario", {
+    const data = await rpc("login_usuario", {
       p_login: login,
       p_senha: senha,
     });
-    if (error) throw new Error(error.message || "Falha no login");
-    if (!data || !data.length) return null;
-    return data[0];
+    if (!data || (Array.isArray(data) && !data.length)) return null;
+    return Array.isArray(data) ? data[0] : data;
   }
 
   window.OBE_DB = {
     isConfigured,
-    getClient,
+    getConfig,
     criarUsuario,
     loginUsuario,
   };
