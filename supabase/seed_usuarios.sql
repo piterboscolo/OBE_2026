@@ -38,7 +38,7 @@ begin
         ('118455', 'tania', 'TANIA'),
         ('980874', 'granero', 'GRANERO'),
         ('930633', 'helder', 'HELDER'),
-        ('118426', 'jose antonio', 'JOSE ANTONIO')
+        ('118426', 'jose', 'JOSE ANTONIO')
     ) as t(login, senha, nome)
   loop
     begin
