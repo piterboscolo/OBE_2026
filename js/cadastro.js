@@ -56,7 +56,11 @@
     }
 
     try {
-      await window.OBE_DB.criarUsuario(re, senha, re);
+      const id = await window.OBE_DB.criarUsuario(re, senha, re);
+      if (!id) {
+        showError("Cadastro não confirmado pelo banco. Verifique o Supabase.");
+        return;
+      }
       showOk("Usuário criado com sucesso. Redirecionando…");
       form.reset();
       setTimeout(() => {

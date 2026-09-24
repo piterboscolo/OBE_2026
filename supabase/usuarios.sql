@@ -3,8 +3,8 @@
 -- Cole no SQL Editor do Supabase e execute.
 -- ============================================================
 
--- Extensão para hash de senha (bcrypt)
-create extension if not exists pgcrypto;
+-- Extensão para hash de senha (bcrypt) — no Supabase fica em "extensions"
+create extension if not exists pgcrypto with schema extensions;
 
 -- ------------------------------------------------------------
 -- Tabela de usuários
@@ -60,7 +60,7 @@ create or replace function public.criar_usuario(
 returns uuid
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_id uuid;
@@ -83,7 +83,7 @@ begin
   insert into public.usuarios (login, senha_hash, nome)
   values (
     v_login,
-    crypt(p_senha, gen_salt('bf')),
+    extensions.crypt(p_senha, extensions.gen_salt('bf')),
     trim(p_nome)
   )
   returning id into v_id;
@@ -110,7 +110,7 @@ returns table (
 )
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_login text;
@@ -122,7 +122,7 @@ begin
   from public.usuarios u
   where u.login = v_login
     and u.ativo = true
-    and u.senha_hash = crypt(p_senha, u.senha_hash);
+    and u.senha_hash = extensions.crypt(p_senha, u.senha_hash);
 end;
 $$;
 
@@ -137,7 +137,7 @@ create or replace function public.alterar_senha(
 returns boolean
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_login text;
@@ -150,10 +150,10 @@ begin
   end if;
 
   update public.usuarios u
-  set senha_hash = crypt(p_senha_nova, gen_salt('bf'))
+  set senha_hash = extensions.crypt(p_senha_nova, extensions.gen_salt('bf'))
   where u.login = v_login
     and u.ativo = true
-    and u.senha_hash = crypt(p_senha_atual, u.senha_hash);
+    and u.senha_hash = extensions.crypt(p_senha_atual, u.senha_hash);
 
   get diagnostics v_ok = row_count;
   return v_ok > 0;

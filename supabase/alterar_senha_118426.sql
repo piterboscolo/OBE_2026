@@ -2,7 +2,7 @@
 -- Cole no SQL Editor do Supabase e execute.
 
 update public.usuarios
-set senha_hash = crypt('jose', gen_salt('bf'))
+set senha_hash = extensions.crypt('jose', extensions.gen_salt('bf'))
 where login = '118426';
 
 -- Conferir login

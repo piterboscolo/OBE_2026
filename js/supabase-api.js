@@ -12,6 +12,12 @@
     return Boolean(url && anonKey);
   }
 
+  function isUuid(value) {
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      String(value || "")
+    );
+  }
+
   async function rpc(fnName, params) {
     const { url, anonKey } = getConfig();
     if (!url || !anonKey) {
@@ -27,7 +33,6 @@
           apikey: anonKey,
           Authorization: `Bearer ${anonKey}`,
           "Content-Type": "application/json",
-          Prefer: "return=representation",
         },
         body: JSON.stringify(params),
       });
@@ -57,11 +62,20 @@
   }
 
   async function criarUsuario(login, senha, nome) {
-    return rpc("criar_usuario", {
+    const data = await rpc("criar_usuario", {
       p_login: login,
       p_senha: senha,
       p_nome: nome,
     });
+
+    // PostgREST pode devolver o uuid puro (string) ou entre aspas já parseado
+    const id = typeof data === "string" ? data.replace(/^"|"$/g, "") : data;
+    if (!isUuid(id)) {
+      throw new Error(
+        "O banco não confirmou o cadastro (sem ID). Execute o SQL fix_gravacao.sql no Supabase."
+      );
+    }
+    return id;
   }
 
   async function loginUsuario(login, senha) {
