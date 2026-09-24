@@ -23,9 +23,9 @@
     { re: "981001", senha: "alex", nome: "ALEX", graduacao: "Ten Cel PM", setor: "SUBCMT DA ESSGT", setorCurto: "Subcmt da ESSgt" },
     { re: "100295", senha: "flavia", nome: "FLAVIA", graduacao: "Maj PM", setor: "CMT DA ESSFAG", setorCurto: "Cmt da ESSFAG" },
     { re: "118455", senha: "tania", nome: "TANIA", graduacao: "Cap PM", setor: "CMT DA 1ª CIA", setorCurto: "Cmt da 1ª Cia" },
-    { re: "980874", senha: "granero", nome: "GRANERO", graduacao: "Ten Cel PM", setor: "OBE", setorCurto: "OBE" },
-    { re: "930633", senha: "helder", nome: "HELDER", graduacao: "Cel PM", setor: "OBE", setorCurto: "OBE" },
-    { re: "118426", senha: "jose", nome: "JOSE ANTONIO", graduacao: "Cap PM", setor: "OBE", setorCurto: "OBE" },
+    { re: "980874", senha: "granero", nome: "GRANERO", graduacao: "Ten Cel PM", setor: "SUBCMT DA ESSGT", setorCurto: "" },
+    { re: "930633", senha: "helder", nome: "HELDER", graduacao: "Cel PM", setor: "", setorCurto: "" },
+    { re: "118426", senha: "jose", nome: "JOSE ANTONIO", graduacao: "Cap PM", setor: "OBE", setorCurto: "" },
   ];
 
   function normalize(value) {
@@ -46,7 +46,9 @@
   function greeting(user) {
     if (!user) return "Olá.";
     const graduacao = user.graduacao || "";
-    const titulo = user.setorCurto || user.setor || "";
+    let titulo = user.setorCurto || user.setor || "";
+    // Não exibe "OBE" genérico após o nome
+    if (String(titulo).trim().toUpperCase() === "OBE") titulo = "";
     const nome = formatNome(user.nome);
     const nomeHtml = `<span class="home-greeting__name">${nome}</span>`;
     const prefixo = graduacao ? `${graduacao} ${nomeHtml}` : nomeHtml;
