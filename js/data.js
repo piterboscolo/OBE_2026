@@ -16,16 +16,16 @@ window.OBE_DATA = {
     },
     {
       id: "rso",
-      titulo: "RSO",
+      titulo: "QMO",
       descricao: "Relatórios de serviço operacional",
-      sigla: "RSO",
+      sigla: "QMO",
       icon: "report",
     },
     {
       id: "abastecimento",
-      titulo: "Ponto de Interesse",
-      descricao: "Postos, hospital, metrô e shopping",
-      sigla: "PI",
+      titulo: "Auxílio ao Público",
+      descricao: "Postos, hospital, metrô, shopping, parques, espaços e delegacias",
+      sigla: "AP",
       icon: "pin",
     },
     {
@@ -109,101 +109,288 @@ window.OBE_DATA = {
       sigla: "SHOP",
       icon: "shopping",
     },
+    {
+      id: "pi-parques",
+      titulo: "Parques",
+      descricao: "Parques e áreas verdes",
+      sigla: "PARQ",
+      icon: "park",
+    },
+    {
+      id: "pi-espacos",
+      titulo: "Espaços",
+      descricao: "Espaços públicos e pontos de apoio",
+      sigla: "ESP",
+      icon: "base",
+    },
+    {
+      id: "pi-delegacias",
+      titulo: "Delegacias",
+      descricao: "23º DP Perdizes e 7º DP Lapa",
+      sigla: "DEL",
+      icon: "shield",
+    },
   ],
 
   // Destino do QR Code Metro → Google Maps (rota da localização atual até o metrô)
   metroDestino: {
-    nome: "Metrô Tatuapé",
-    destino: "R. Melo Freire - Tatuapé, São Paulo - SP, 03307-005",
+    nome: "Metrô Barra Funda",
+    destino: "R. Dr. Bento Teobaldo Ferraz, 119 - Barra Funda, São Paulo - SP, 01140-070",
     travelmode: "transit",
   },
 
   shoppingOpcoes: [
     {
-      id: "shopping-metro-tatuape",
-      titulo: "Shopping Metrô Tatuapé",
-      descricao: "Rua Domingos Agostim, 91",
-      sigla: "SMT",
+      id: "shopping-west-plaza",
+      titulo: "Shopping West Plaza",
+      descricao: "Av. Francisco Matarazzo, s/n",
+      sigla: "SWP",
       icon: "shopping",
     },
     {
-      id: "shopping-boulevard",
-      titulo: "Shopping Boulevard Tatuapé",
-      descricao: "R. Gonçalves Crespo, 78",
-      sigla: "SMB",
+      id: "shopping-bourbon",
+      titulo: "Bourbon Shopping",
+      descricao: "R. Palestra Itália, 500",
+      sigla: "BOU",
       icon: "shopping",
     },
   ],
 
   shoppingDestinos: {
-    "shopping-metro-tatuape": {
-      nome: "Shopping Metrô Tatuapé",
-      destino: "Rua Domingos Agostim, 91 - Tatuapé, São Paulo - SP",
-      telefone: "(11) 2090-7400",
+    "shopping-west-plaza": {
+      nome: "Shopping West Plaza",
+      destino: "Av. Francisco Matarazzo, s/n - Água Branca, São Paulo - SP",
+      horario: "Seg–sáb 10h–22h · Dom 12h–22h (praça de alimentação)",
+      telefone: "(11) 3677-4000",
+      detalhes:
+        "Mais próximo do Metrô Barra Funda (~11–14 min a pé). Lojas, praça de alimentação, Villa Bowling e Mané Mercado. Estacionamento: R$ 28,00 nas primeiras 2 horas.",
       travelmode: "driving",
     },
-    "shopping-boulevard": {
-      nome: "Shopping Metrô Boulevard Tatuapé",
-      destino: "R. Gonçalves Crespo, 78 - Tatuapé, São Paulo - SP",
-      telefone: "(11) 2942-5800",
+    "shopping-bourbon": {
+      nome: "Bourbon Shopping São Paulo",
+      destino: "R. Palestra Itália, 500 - Perdizes, São Paulo - SP",
+      horario: "Seg–sáb 10h–22h · Dom 14h–20h (lojas)",
+      telefone: "",
+      detalhes:
+        "Ao lado do Allianz Parque, próximo à Barra Funda. Teatro Bradesco, cinemas e hipermercado Zaffari.",
       travelmode: "driving",
     },
   },
 
   hospitalOpcoes: [
     {
-      id: "hosp-upa-tatuape",
-      titulo: "UPA Tatuapé",
-      descricao: "Av. Celso Garcia, 4974",
-      sigla: "UPA",
+      id: "hosp-ps-barra-funda",
+      titulo: "PS Barra Funda",
+      descricao: "R. Vitorino Carmilo, 717",
+      sigla: "PS",
       icon: "hospital",
     },
     {
-      id: "hosp-silvio-romero",
-      titulo: "Hospital Sílvio Romero",
-      descricao: "R. Fernandes Pinheiro, 268",
-      sigla: "HSR",
+      id: "hosp-hapvida-barra-funda",
+      titulo: "Centro Clínico Hapvida",
+      descricao: "Av. Francisco Matarazzo, 612",
+      sigla: "HAP",
       icon: "hospital",
     },
     {
-      id: "hosp-central-tatuape",
-      titulo: "Hospital Central Tatuapé",
-      descricao: "R. Padre Adelino, 901",
-      sigla: "HCT",
+      id: "hosp-novamed-barra-funda",
+      titulo: "Meu Doutor Novamed",
+      descricao: "Av. Marquês de S. Vicente, 77",
+      sigla: "NOV",
       icon: "hospital",
     },
     {
-      id: "hosp-santa-virginia",
-      titulo: "Hospital Santa Virgínia",
-      descricao: "Av. Celso Garcia, 2294",
-      sigla: "HSV",
+      id: "hosp-clinicas",
+      titulo: "Hospital das Clínicas",
+      descricao: "Av. Dr. Enéas Carvalho Aguiar, 255",
+      sigla: "HC",
+      icon: "hospital",
+    },
+    {
+      id: "hosp-einstein-perdizes",
+      titulo: "Einstein Perdizes",
+      descricao: "Rua Apiacás, 85",
+      sigla: "EIN",
       icon: "hospital",
     },
   ],
 
   hospitalDestinos: {
-    "hosp-upa-tatuape": {
-      nome: "UPA Tatuapé",
-      destino: "Av. Celso Garcia, 4974 - Tatuapé, São Paulo - SP",
-      telefone: "(11) 5239-4275",
+    "hosp-ps-barra-funda": {
+      nome: "PS Barra Funda",
+      destino: "R. Vitorino Carmilo, 717 - Barra Funda, São Paulo - SP",
+      enderecoAlt: "Pronto Socorro Municipal Dr. Álvaro de Dino Almeida",
+      horario: "Funcionamento: 24 horas",
+      telefone: "(11) 4210-5425",
+      detalhes: "Atendimento Público / SUS — urgência e emergência",
       travelmode: "driving",
     },
-    "hosp-silvio-romero": {
-      nome: "Hospital Sílvio Romero",
-      destino: "R. Fernandes Pinheiro, 268 - Vila Azevedo, São Paulo - SP",
-      telefone: "(11) 2227-9040",
+    "hosp-hapvida-barra-funda": {
+      nome: "Centro Clínico Barra Funda | Hapvida NotreDame Intermédica",
+      destino: "Av. Francisco Matarazzo, 612 - Água Branca, São Paulo - SP",
+      horario: "Funcionamento: 24 horas (Pronto Atendimento)",
+      telefone: "(11) 4090-1740",
+      detalhes: "Particular / Convênios — consultas, exames e pronto atendimento",
       travelmode: "driving",
     },
-    "hosp-central-tatuape": {
-      nome: "Hospital Central do Tatuapé",
-      destino: "R. Padre Adelino, 901 - Quarta Parada, São Paulo - SP",
-      telefone: "(11) 2602-0000",
-      travelmode: "driving",
-    },
-    "hosp-santa-virginia": {
-      nome: "Hospital Santa Virgínia",
-      destino: "Av. Celso Garcia, 2294 - Belenzinho, São Paulo - SP",
+    "hosp-novamed-barra-funda": {
+      nome: "Meu Doutor Novamed - Unidade Barra Funda",
+      destino: "Av. Marquês de S. Vicente, 77 - Várzea da Barra Funda, São Paulo - SP",
+      horario: "Seg–sex 6h30–20h · Sáb 6h30–14h · Fechado aos domingos",
       telefone: "",
+      detalhes: "Particular / Convênios",
+      travelmode: "driving",
+    },
+    "hosp-clinicas": {
+      nome: "Hospital das Clínicas",
+      destino: "Av. Dr. Enéas de Carvalho Aguiar, 255 - Cerqueira César, São Paulo - SP",
+      telefone: "",
+      detalhes: "Hospital das Clínicas — Cerqueira César",
+      travelmode: "driving",
+    },
+    "hosp-einstein-perdizes": {
+      nome: "Einstein Perdizes",
+      destino: "Rua Apiacás, 85 - Perdizes, São Paulo - SP",
+      telefone: "",
+      detalhes: "Hospital Einstein — Unidade Perdizes",
+      travelmode: "driving",
+    },
+  },
+
+  parquesOpcoes: [
+    {
+      id: "parque-agua-branca",
+      titulo: "Parque da Água Branca",
+      descricao: "Av. Francisco Matarazzo, 455",
+      sigla: "PAB",
+      icon: "park",
+    },
+    {
+      id: "parque-jardim-perdizes",
+      titulo: "Parque Jardim das Perdizes",
+      descricao: "Passagem Quatro, S/N",
+      sigla: "PJP",
+      icon: "park",
+    },
+  ],
+
+  parquesDestinos: {
+    "parque-agua-branca": {
+      nome: "Parque da Água Branca (Parque Fernando Costa)",
+      destino: "Av. Francisco Matarazzo, 455 - Água Branca, São Paulo - SP",
+      horario: "Todos os dias, das 6h às 20h",
+      telefone: "",
+      detalhes: "Entrada gratuita. Próximo ao Metrô Barra Funda.",
+      travelmode: "driving",
+    },
+    "parque-jardim-perdizes": {
+      nome: "Parque Jardim das Perdizes",
+      destino: "Passagem Quatro, S/N - Água Branca, São Paulo - SP",
+      horario: "Todos os dias, das 6h às 10h",
+      telefone: "",
+      detalhes: "Entrada gratuita.",
+      travelmode: "driving",
+    },
+  },
+
+  espacosOpcoes: [
+    {
+      id: "espaco-expo-barra-funda",
+      titulo: "Expo Barra Funda",
+      descricao: "R. Tagipuru, 1001",
+      sigla: "EXP",
+      icon: "base",
+    },
+    {
+      id: "espaco-memorial",
+      titulo: "Memorial América Latina",
+      descricao: "Av. Mário de Andrade, 664",
+      sigla: "MAL",
+      icon: "base",
+    },
+    {
+      id: "espaco-usine",
+      titulo: "Espaço Usine",
+      descricao: "R. Barra Funda, 973",
+      sigla: "USI",
+      icon: "base",
+    },
+    {
+      id: "espaco-nubank",
+      titulo: "Espaço Nubank",
+      descricao: "Av. Francisco Matarazzo, 1705",
+      sigla: "NUB",
+      icon: "base",
+    },
+  ],
+
+  espacosDestinos: {
+    "espaco-expo-barra-funda": {
+      nome: "Expo Barra Funda",
+      destino: "R. Tagipuru, 1001 - Barra Funda, São Paulo - SP",
+      telefone: "",
+      detalhes:
+        "Área de ~3.980 m², até 6.400 pessoas. Feiras, congressos, convenções e shows. Buffet integrado, climatização e acessibilidade. Curta caminhada da Estação Palmeiras-Barra Funda.",
+      travelmode: "driving",
+    },
+    "espaco-memorial": {
+      nome: "Memorial da América Latina (Auditório Simón Bolívar)",
+      destino: "Av. Mário de Andrade, 664 - Barra Funda, São Paulo - SP",
+      telefone: "",
+      detalhes:
+        "Complexo cultural e de eventos — feiras, festivais gastronômicos e convenções. Praticamente ao lado da saída do terminal e metrô Barra Funda.",
+      travelmode: "driving",
+    },
+    "espaco-usine": {
+      nome: "Espaço Usine",
+      destino: "R. Barra Funda, 973 - Barra Funda, São Paulo - SP",
+      telefone: "",
+      detalhes:
+        "Galpão amplo e multifuncional — feiras, palestras e festas. Cerca de 6 minutos a pé da estação.",
+      travelmode: "driving",
+    },
+    "espaco-nubank": {
+      nome: "Espaço Nubank",
+      destino: "Av. Francisco Matarazzo, 1705 - Água Branca, São Paulo - SP",
+      telefone: "",
+      detalhes:
+        "Cerca de 800 m da Estação Palmeiras-Barra Funda. Tempo a pé: 10 a 15 minutos de caminhada.",
+      travelmode: "driving",
+    },
+  },
+
+  delegaciasOpcoes: [
+    {
+      id: "del-23dp-perdizes",
+      titulo: "23º DP Perdizes",
+      descricao: "Rua Itapicuru, 80",
+      sigla: "23º",
+      icon: "shield",
+    },
+    {
+      id: "del-7dp-lapa",
+      titulo: "7º DP Lapa",
+      descricao: "Rua Camilo, 317",
+      sigla: "7º",
+      icon: "shield",
+    },
+  ],
+
+  delegaciasDestinos: {
+    "del-23dp-perdizes": {
+      nome: "23º Distrito Policial (Perdizes)",
+      destino: "Rua Itapicuru, 80 - Perdizes, São Paulo - SP",
+      telefone: "(11) 3864-5265",
+      detalhes:
+        "Cerca de 10 a 15 minutos de carro ou transporte público da Estação Palmeiras-Barra Funda.",
+      travelmode: "driving",
+    },
+    "del-7dp-lapa": {
+      nome: "7º Distrito Policial (Lapa / Vila Romana)",
+      destino: "Rua Camilo, 317 - Lapa, São Paulo - SP",
+      telefone: "(11) 3864-7445",
+      detalhes:
+        "Região da Vila Romana/Lapa — cerca de 15 a 20 minutos de carro da Estação Barra Funda.",
       travelmode: "driving",
     },
   },

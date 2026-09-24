@@ -235,7 +235,7 @@
   function renderRso() {
     return `
       <div class="page">
-        ${pageHeader("RSO", "Relatórios de serviço operacional")}
+        ${pageHeader("QMO", "Relatórios de serviço operacional")}
         <div class="list">
           ${window.OBE_DATA.rso
             .map(
@@ -288,7 +288,7 @@
     const opcoes = window.OBE_DATA.pontosInteresseOpcoes || [];
     return `
       <div class="page page--subcards">
-        ${pageHeader("Ponto de Interesse", "Escolha o tipo de ponto")}
+        ${pageHeader("Auxílio ao Público", "Escolha o tipo de apoio")}
         <div class="access-grid access-grid--sub">
           ${opcoes.map(cardHtml).join("")}
         </div>
@@ -321,8 +321,17 @@
     const telefone = cfg?.telefone
       ? `<p class="qr-box__phone">${cfg.telefone}</p>`
       : "";
+    const horario = cfg?.horario
+      ? `<p class="qr-box__hours">${cfg.horario}</p>`
+      : "";
+    const detalhes = cfg?.detalhes
+      ? `<p class="qr-box__details">${cfg.detalhes}</p>`
+      : "";
     const endereco = cfg?.destino
       ? `<p class="qr-box__addr">${cfg.destino}</p>`
+      : "";
+    const enderecoAlt = cfg?.enderecoAlt
+      ? `<p class="qr-box__addr">${cfg.enderecoAlt}</p>`
       : "";
     return `
       <div class="page page--qr">
@@ -336,6 +345,9 @@
         </div>
         <p class="qr-box__hint">Ao escanear, o Maps abre a rota da sua localização até <strong>${nome}</strong>.</p>
         ${endereco}
+        ${enderecoAlt}
+        ${detalhes}
+        ${horario}
         ${telefone}
         <a class="qr-box__open" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Abrir no Maps</a>
         ${pageBack()}
@@ -381,6 +393,66 @@
   function renderHospitalQr(id) {
     const cfg = window.OBE_DATA?.hospitalDestinos?.[id];
     return renderDestinoQr(cfg?.nome || "Hospital", cfg);
+  }
+
+  function renderParques() {
+    const opcoes = window.OBE_DATA.parquesOpcoes || [];
+    const corpo =
+      opcoes.length > 0
+        ? `<div class="access-grid access-grid--sub">${opcoes.map(cardHtml).join("")}</div>`
+        : `<p class="empty">Nenhum parque cadastrado no momento.</p>`;
+    return `
+      <div class="page page--subcards">
+        ${pageHeader("Parques", "Escolha o parque")}
+        ${corpo}
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderParqueQr(id) {
+    const cfg = window.OBE_DATA?.parquesDestinos?.[id];
+    return renderDestinoQr(cfg?.nome || "Parque", cfg);
+  }
+
+  function renderEspacos() {
+    const opcoes = window.OBE_DATA.espacosOpcoes || [];
+    const corpo =
+      opcoes.length > 0
+        ? `<div class="access-grid access-grid--sub">${opcoes.map(cardHtml).join("")}</div>`
+        : `<p class="empty">Nenhum espaço cadastrado no momento.</p>`;
+    return `
+      <div class="page page--subcards">
+        ${pageHeader("Espaços", "Escolha o espaço")}
+        ${corpo}
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderEspacoQr(id) {
+    const cfg = window.OBE_DATA?.espacosDestinos?.[id];
+    return renderDestinoQr(cfg?.nome || "Espaço", cfg);
+  }
+
+  function renderDelegacias() {
+    const opcoes = window.OBE_DATA.delegaciasOpcoes || [];
+    const corpo =
+      opcoes.length > 0
+        ? `<div class="access-grid access-grid--sub">${opcoes.map(cardHtml).join("")}</div>`
+        : `<p class="empty">Nenhuma delegacia cadastrada no momento.</p>`;
+    return `
+      <div class="page page--subcards">
+        ${pageHeader("Delegacias", "Escolha o Distrito Policial")}
+        ${corpo}
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderDelegaciaQr(id) {
+    const cfg = window.OBE_DATA?.delegaciasDestinos?.[id];
+    return renderDestinoQr(cfg?.nome || "Delegacia", cfg);
   }
 
   function renderEscala(fromNav) {
@@ -482,12 +554,9 @@
     "pi-metro": renderMetroQr,
     "pi-shopping": renderShopping,
     "pi-hospital": renderHospital,
-    "shopping-metro-tatuape": () => renderShoppingQr("shopping-metro-tatuape"),
-    "shopping-boulevard": () => renderShoppingQr("shopping-boulevard"),
-    "hosp-upa-tatuape": () => renderHospitalQr("hosp-upa-tatuape"),
-    "hosp-silvio-romero": () => renderHospitalQr("hosp-silvio-romero"),
-    "hosp-central-tatuape": () => renderHospitalQr("hosp-central-tatuape"),
-    "hosp-santa-virginia": () => renderHospitalQr("hosp-santa-virginia"),
+    "pi-parques": renderParques,
+    "pi-espacos": renderEspacos,
+    "pi-delegacias": renderDelegacias,
     escala: () => renderEscala(false),
     cpp: renderCpp,
     vtr: renderVtr,
@@ -505,26 +574,60 @@
     const fromPi = window.OBE_DATA?.pontosInteresseOpcoes?.find((m) => m.id === route);
     const fromShop = window.OBE_DATA?.shoppingOpcoes?.find((m) => m.id === route);
     const fromHosp = window.OBE_DATA?.hospitalOpcoes?.find((m) => m.id === route);
-    const modulo = fromModulos || fromCpp || fromVtr || fromPi || fromShop || fromHosp;
+    const fromParq = window.OBE_DATA?.parquesOpcoes?.find((m) => m.id === route);
+    const fromEsp = window.OBE_DATA?.espacosOpcoes?.find((m) => m.id === route);
+    const fromDel = window.OBE_DATA?.delegaciasOpcoes?.find((m) => m.id === route);
+    const modulo =
+      fromModulos ||
+      fromCpp ||
+      fromVtr ||
+      fromPi ||
+      fromShop ||
+      fromHosp ||
+      fromParq ||
+      fromEsp ||
+      fromDel;
     if (!modulo) return false;
     if (modulo.url) {
       window.open(modulo.url, "_blank", "noopener,noreferrer");
       return true;
     }
-    // card de submenu sem link e sem rota interna — permanece na tela
-    if ((fromCpp || fromVtr || fromPi || fromShop || fromHosp) && !routes[route]) return true;
+    // card de submenu sem link e sem rota/destino interno — permanece na tela
+    const hasInternal =
+      !!routes[route] ||
+      !!window.OBE_DATA?.parquesDestinos?.[route] ||
+      !!window.OBE_DATA?.espacosDestinos?.[route] ||
+      !!window.OBE_DATA?.shoppingDestinos?.[route] ||
+      !!window.OBE_DATA?.hospitalDestinos?.[route] ||
+      !!window.OBE_DATA?.delegaciasDestinos?.[route];
+    if (
+      (fromCpp || fromVtr || fromPi || fromShop || fromHosp || fromParq || fromEsp || fromDel) &&
+      !hasInternal
+    )
+      return true;
     return false;
+  }
+
+  function getRouteRenderer(route) {
+    if (routes[route]) return routes[route];
+    if (window.OBE_DATA?.parquesDestinos?.[route]) return () => renderParqueQr(route);
+    if (window.OBE_DATA?.espacosDestinos?.[route]) return () => renderEspacoQr(route);
+    if (window.OBE_DATA?.shoppingDestinos?.[route]) return () => renderShoppingQr(route);
+    if (window.OBE_DATA?.hospitalDestinos?.[route]) return () => renderHospitalQr(route);
+    if (window.OBE_DATA?.delegaciasDestinos?.[route]) return () => renderDelegaciaQr(route);
+    return null;
   }
 
   function navigate(route, fromNav) {
     if (openModuleLink(route)) return;
     if (!main) return;
-    if (!routes[route]) route = "inicio";
+    const render = getRouteRenderer(route);
+    if (!render) route = "inicio";
     currentRoute = route;
     setActiveNav(route);
 
     if (route === "escala") main.innerHTML = renderEscala(!!fromNav);
-    else main.innerHTML = routes[route]();
+    else main.innerHTML = (getRouteRenderer(route) || routes.inicio)();
 
     main.scrollTop = 0;
     window.scrollTo(0, 0);
@@ -561,21 +664,22 @@
         } else if (
           currentRoute === "pi-metro" ||
           currentRoute === "pi-shopping" ||
-          currentRoute === "pi-hospital"
+          currentRoute === "pi-hospital" ||
+          currentRoute === "pi-parques" ||
+          currentRoute === "pi-espacos" ||
+          currentRoute === "pi-delegacias"
         ) {
           navigate("abastecimento");
-        } else if (
-          currentRoute === "shopping-metro-tatuape" ||
-          currentRoute === "shopping-boulevard"
-        ) {
+        } else if ((window.OBE_DATA?.shoppingOpcoes || []).some((o) => o.id === currentRoute)) {
           navigate("pi-shopping");
-        } else if (
-          currentRoute === "hosp-upa-tatuape" ||
-          currentRoute === "hosp-silvio-romero" ||
-          currentRoute === "hosp-central-tatuape" ||
-          currentRoute === "hosp-santa-virginia"
-        ) {
+        } else if ((window.OBE_DATA?.hospitalOpcoes || []).some((o) => o.id === currentRoute)) {
           navigate("pi-hospital");
+        } else if ((window.OBE_DATA?.parquesOpcoes || []).some((o) => o.id === currentRoute)) {
+          navigate("pi-parques");
+        } else if ((window.OBE_DATA?.espacosOpcoes || []).some((o) => o.id === currentRoute)) {
+          navigate("pi-espacos");
+        } else if ((window.OBE_DATA?.delegaciasOpcoes || []).some((o) => o.id === currentRoute)) {
+          navigate("pi-delegacias");
         } else {
           navigate("inicio");
         }

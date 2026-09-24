@@ -25,6 +25,8 @@ window.OBE_ICONS = {
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6h-2a4 4 0 0 0-8 0H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-6-2a2 2 0 0 1 2 2h-4a2 2 0 0 1 2-2zm6 16H6V8h2v2h2V8h4v2h2V8h2v12z"/></svg>',
   event:
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zM7 12h5v5H7v-5z"/></svg>',
+  park:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 12h2L12 2 5 12h2l-3 9h5.5l1-3h3l1 3H20l-3-9zm-5.25 3.5L10.5 12h3l-1.25 3.5zM12 5.9 14.5 10h-5L12 5.9z"/></svg>',
 };
 
 window.obeIcon = function (name) {
