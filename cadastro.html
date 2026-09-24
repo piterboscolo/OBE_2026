@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#ffffff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <title>OBE 2026 — SGE</title>
+  <title>Cadastro — OBE 2026 SGE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
@@ -14,7 +14,7 @@
 </head>
 <body class="page-login">
   <div id="app">
-    <section id="screen-login" class="screen screen--active" aria-label="Entrada">
+    <section id="screen-cadastro" class="screen screen--active" aria-label="Cadastro">
       <img class="bg-watermark" src="img/brasao-2rg.png" alt="" aria-hidden="true" />
       <div class="brand-stripes" aria-hidden="true">
         <div class="brand-stripes__red"></div>
@@ -24,23 +24,29 @@
         <img class="logo-topo__center" src="img/logo-obe.png" alt="OBE — Operação Batalhão Escola I-26" />
       </header>
       <div class="login-content">
-        <p class="brand-system">SGE — Sistema de Gestão Estratégica</p>
+        <p class="brand-system">Cadastro de usuário</p>
 
-        <form id="login-form" class="login-form" autocomplete="off">
+        <form id="cadastro-form" class="login-form" autocomplete="off">
           <label class="field">
-            <span class="visually-hidden">Login</span>
-            <input type="text" id="login-user" name="user" placeholder="Login" required autocomplete="username" />
+            <span class="visually-hidden">RE</span>
+            <input type="text" id="cad-login" name="login" placeholder="RE (sem dígito)" required inputmode="numeric" autocomplete="username" />
           </label>
           <label class="field">
             <span class="visually-hidden">Senha</span>
-            <input type="password" id="login-pass" name="pass" placeholder="Senha" required autocomplete="current-password" />
+            <input type="password" id="cad-senha" name="senha" placeholder="Senha" required autocomplete="new-password" minlength="4" />
           </label>
-          <p id="login-error" class="login-error" hidden>Login ou senha inválidos</p>
-          <button type="submit" class="btn btn--primary">Entrar</button>
+          <label class="field">
+            <span class="visually-hidden">Confirmar senha</span>
+            <input type="password" id="cad-senha2" name="senha2" placeholder="Confirmar senha" required autocomplete="new-password" minlength="4" />
+          </label>
+          <p id="cadastro-error" class="login-error" hidden></p>
+          <p id="cadastro-ok" class="login-success" hidden>Usuário criado com sucesso.</p>
+          <button type="submit" class="btn btn--primary" id="cad-submit">Cadastrar</button>
         </form>
+
         <p class="auth-link">
-          Não tem conta?
-          <a href="cadastro.html">Cadastre-se</a>
+          Já tem conta?
+          <a href="index.html">Entrar</a>
         </p>
       </div>
 
@@ -58,7 +64,9 @@
     </section>
   </div>
 
-  <script src="js/users.js"></script>
-  <script src="js/login.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-api.js"></script>
+  <script src="js/cadastro.js"></script>
 </body>
 </html>
