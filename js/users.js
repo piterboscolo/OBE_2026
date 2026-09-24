@@ -25,7 +25,7 @@
     { re: "118455", senha: "tania", nome: "TANIA", graduacao: "Cap PM", setor: "CMT DA 1ª CIA", setorCurto: "Cmt da 1ª Cia" },
     { re: "980874", senha: "granero", nome: "GRANERO", graduacao: "Al Sgt PM", setor: "OBE", setorCurto: "OBE" },
     { re: "930633", senha: "helder", nome: "HELDER", graduacao: "Al Sgt PM", setor: "OBE", setorCurto: "OBE" },
-    { re: "118426", senha: "jose antonio", nome: "JOSE ANTONIO", graduacao: "Al Sgt PM", setor: "OBE", setorCurto: "OBE" },
+    { re: "118426", senha: "jose", nome: "JOSE ANTONIO", graduacao: "Al Sgt PM", setor: "OBE", setorCurto: "OBE" },
   ];
 
   function normalize(value) {
