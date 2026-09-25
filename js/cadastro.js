@@ -64,7 +64,7 @@
       showOk("Usuário criado com sucesso. Redirecionando…");
       form.reset();
       setTimeout(() => {
-        window.location.href = "index.html";
+        window.location.replace("index.html");
       }, 1200);
     } catch (err) {
       const msg = String(err?.message || err || "Erro ao cadastrar");
@@ -81,5 +81,10 @@
         btn.textContent = "Cadastrar";
       }
     }
+  });
+
+  document.getElementById("link-entrar")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.replace("index.html");
   });
 })();

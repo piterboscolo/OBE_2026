@@ -246,24 +246,49 @@
     `;
   }
 
-  function renderRso() {
+  function renderResultadoQuantitativo() {
+    const campos = [
+      { id: "pessoas_abordadas", label: "Pessoas Abordadas", step: "1" },
+      { id: "veiculos_fiscalizados", label: "Veículos Fiscalizados", step: "1" },
+      { id: "apoio_ao_publico", label: "Apoio ao Público", step: "1" },
+      { id: "bopm", label: "BOPM", step: "1" },
+      { id: "conducao_ao_dp", label: "Condução ao DP", step: "1" },
+      { id: "flagrante_delito", label: "Flagrante Delito", step: "1" },
+      { id: "armas_apreendidas", label: "Armas Apreendidas", step: "1" },
+      { id: "drogas_kg", label: "Drogas (qtd em Kg)", step: "0.001" },
+    ];
+
+    const fields = campos
+      .map(
+        (c) => `
+      <label class="rq-row" for="rq-${c.id}">
+        <span class="rq-row__label">${c.label}</span>
+        <input
+          type="number"
+          class="rq-row__input"
+          id="rq-${c.id}"
+          name="${c.id}"
+          min="0"
+          step="${c.step}"
+          value="0"
+          inputmode="decimal"
+          required
+        />
+      </label>`
+      )
+      .join("");
+
     return `
-      <div class="page">
-        ${pageHeader("QMO", "Relatórios de serviço operacional")}
-        <div class="list">
-          ${window.OBE_DATA.rso
-            .map(
-              (r) => `
-            <article class="row">
-              <div>
-                <h3>${r.id}</h3>
-                <p>${r.equipe} · ${r.data} · Turno ${r.turno}</p>
-              </div>
-              ${badge(r.status)}
-            </article>`
-            )
-            .join("")}
-        </div>
+      <div class="page page--rq">
+        ${pageHeader("Resultado Quantitativo", "Preencha os dados do serviço")}
+        <form id="rq-form" class="rq-form" autocomplete="off">
+          <div class="rq-lista">
+            ${fields}
+          </div>
+          <p id="rq-error" class="login-error" hidden></p>
+          <p id="rq-ok" class="rq-ok" hidden>Resultado enviado com sucesso.</p>
+          <button type="submit" class="btn btn--primary" id="rq-submit">Enviar</button>
+        </form>
         ${pageBack()}
       </div>
     `;
@@ -562,7 +587,8 @@
     "locais-interesse": renderLocaisInteresse,
     "pontos-apoio": renderPontosApoio,
     pops: renderPops,
-    rso: renderRso,
+    rso: renderResultadoQuantitativo,
+    resultado: renderResultadoQuantitativo,
     eventos: renderEventos,
     abastecimento: renderAbastecimento,
     "pi-metro": renderMetroQr,
@@ -632,8 +658,38 @@
     return null;
   }
 
-  function navigate(route, fromNav) {
-    if (openModuleLink(route)) return;
+  function parentRouteOf(route) {
+    if (route === "inicio" || !route) return null;
+    if (route === "vtr") return "cpp";
+    if (
+      route === "pi-metro" ||
+      route === "pi-shopping" ||
+      route === "pi-hospital" ||
+      route === "pi-parques" ||
+      route === "pi-espacos" ||
+      route === "pi-delegacias"
+    ) {
+      return "abastecimento";
+    }
+    if ((window.OBE_DATA?.shoppingOpcoes || []).some((o) => o.id === route)) {
+      return "pi-shopping";
+    }
+    if ((window.OBE_DATA?.hospitalOpcoes || []).some((o) => o.id === route)) {
+      return "pi-hospital";
+    }
+    if ((window.OBE_DATA?.parquesOpcoes || []).some((o) => o.id === route)) {
+      return "pi-parques";
+    }
+    if ((window.OBE_DATA?.espacosOpcoes || []).some((o) => o.id === route)) {
+      return "pi-espacos";
+    }
+    if ((window.OBE_DATA?.delegaciasOpcoes || []).some((o) => o.id === route)) {
+      return "pi-delegacias";
+    }
+    return "inicio";
+  }
+
+  function applyRoute(route, fromNav) {
     if (!main) return;
     const render = getRouteRenderer(route);
     if (!render) route = "inicio";
@@ -645,12 +701,44 @@
 
     main.scrollTop = 0;
     window.scrollTo(0, 0);
+    fillGreeting();
 
     try {
       main.focus({ preventScroll: true });
     } catch (_) {
       /* ignore */
     }
+  }
+
+  function navigate(route, fromNav, fromHistory) {
+    if (openModuleLink(route)) return;
+    if (!main) return;
+    if (!getRouteRenderer(route)) route = "inicio";
+
+    applyRoute(route, fromNav);
+
+    if (fromHistory) return;
+
+    const url = route === "inicio" ? "home.html" : "home.html#" + encodeURIComponent(route);
+    const state = { obe: 1, route };
+    try {
+      if (route === "inicio") {
+        history.replaceState(state, "", url);
+      } else {
+        history.pushState(state, "", url);
+      }
+    } catch (_) {
+      /* ignore */
+    }
+  }
+
+  function goBackInApp() {
+    if (currentRoute === "inicio") return;
+    if (history.state?.obe) {
+      history.back();
+      return;
+    }
+    navigate(parentRouteOf(currentRoute) || "inicio");
   }
 
   function logout() {
@@ -662,6 +750,77 @@
 
   // Cards: clique/Enter abre o módulo
   if (main) {
+    main.addEventListener("submit", async (e) => {
+      const form = e.target.closest("#rq-form");
+      if (!form || !main.contains(form)) return;
+      e.preventDefault();
+
+      const errEl = document.getElementById("rq-error");
+      const okEl = document.getElementById("rq-ok");
+      const btn = document.getElementById("rq-submit");
+      if (errEl) errEl.hidden = true;
+      if (okEl) okEl.hidden = true;
+
+      if (!currentUser?.login) {
+        if (errEl) {
+          errEl.textContent = "Sessão inválida. Faça login novamente.";
+          errEl.hidden = false;
+        }
+        return;
+      }
+
+      if (!window.OBE_DB?.isConfigured?.()) {
+        if (errEl) {
+          errEl.textContent = "Supabase não configurado.";
+          errEl.hidden = false;
+        }
+        return;
+      }
+
+      const num = (id) => {
+        const v = Number(document.getElementById("rq-" + id)?.value);
+        return Number.isFinite(v) && v >= 0 ? v : 0;
+      };
+
+      const payload = {
+        login: currentUser.login,
+        nome: currentUser.name || currentUser.login,
+        pessoas_abordadas: num("pessoas_abordadas"),
+        veiculos_fiscalizados: num("veiculos_fiscalizados"),
+        apoio_ao_publico: num("apoio_ao_publico"),
+        bopm: num("bopm"),
+        conducao_ao_dp: num("conducao_ao_dp"),
+        flagrante_delito: num("flagrante_delito"),
+        armas_apreendidas: num("armas_apreendidas"),
+        drogas_kg: num("drogas_kg"),
+      };
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Enviando…";
+      }
+
+      try {
+        await window.OBE_DB.salvarResultadoQuantitativo(payload);
+        if (okEl) okEl.hidden = false;
+        form.reset();
+        ["pessoas_abordadas","veiculos_fiscalizados","apoio_ao_publico","bopm","conducao_ao_dp","flagrante_delito","armas_apreendidas","drogas_kg"].forEach((id) => {
+          const input = document.getElementById("rq-" + id);
+          if (input) input.value = "0";
+        });
+      } catch (err) {
+        if (errEl) {
+          errEl.textContent = String(err?.message || err || "Erro ao enviar");
+          errEl.hidden = false;
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Enviar";
+        }
+      }
+    });
+
     main.addEventListener("click", (e) => {
       const sair = e.target.closest("#btn-sair, [data-action='logout']");
       if (sair) {
@@ -673,30 +832,7 @@
       const back = e.target.closest("[data-action='back']");
       if (back) {
         e.preventDefault();
-        if (currentRoute === "vtr") {
-          navigate("cpp");
-        } else if (
-          currentRoute === "pi-metro" ||
-          currentRoute === "pi-shopping" ||
-          currentRoute === "pi-hospital" ||
-          currentRoute === "pi-parques" ||
-          currentRoute === "pi-espacos" ||
-          currentRoute === "pi-delegacias"
-        ) {
-          navigate("abastecimento");
-        } else if ((window.OBE_DATA?.shoppingOpcoes || []).some((o) => o.id === currentRoute)) {
-          navigate("pi-shopping");
-        } else if ((window.OBE_DATA?.hospitalOpcoes || []).some((o) => o.id === currentRoute)) {
-          navigate("pi-hospital");
-        } else if ((window.OBE_DATA?.parquesOpcoes || []).some((o) => o.id === currentRoute)) {
-          navigate("pi-parques");
-        } else if ((window.OBE_DATA?.espacosOpcoes || []).some((o) => o.id === currentRoute)) {
-          navigate("pi-espacos");
-        } else if ((window.OBE_DATA?.delegaciasOpcoes || []).some((o) => o.id === currentRoute)) {
-          navigate("pi-delegacias");
-        } else {
-          navigate("inicio");
-        }
+        goBackInApp();
         return;
       }
 
@@ -733,6 +869,34 @@
   }
 
   mountHomeCards();
+
+  // Home é a base após login: histórico interno + bloqueia voltar para cadastro/login
+  try {
+    const hashRoute = (location.hash || "").replace(/^#/, "");
+    const startRoute =
+      hashRoute && getRouteRenderer(hashRoute) ? hashRoute : "inicio";
+    history.replaceState({ obe: 1, route: startRoute }, "", startRoute === "inicio" ? "home.html" : "home.html#" + startRoute);
+    if (startRoute !== "inicio") applyRoute(startRoute, false);
+  } catch (_) {
+    /* ignore */
+  }
+
+  window.addEventListener("popstate", (e) => {
+    const state = e.state;
+    if (state?.obe && state.route) {
+      applyRoute(state.route, false);
+      return;
+    }
+    // Saiu do app logado (ex.: cadastro/login): permanece na home
+    if (currentUser) {
+      try {
+        history.pushState({ obe: 1, route: "inicio" }, "", "home.html");
+      } catch (_) {
+        /* ignore */
+      }
+      applyRoute("inicio", false);
+    }
+  });
 
   if (userInitials) {
     userInitials.textContent = initials(currentUser.name || currentUser.login);

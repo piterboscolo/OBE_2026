@@ -8,32 +8,32 @@ window.OBE_DATA = {
 
   modulos: [
     {
+      id: "resultado",
+      titulo: "Resultado Quantitativo",
+      descricao: "Questionário quantitativo operacional",
+      sigla: "RQ",
+      icon: "orgchart",
+    },
+    {
       id: "mapa-forca",
       titulo: "Mapa Força",
       descricao: "Distribuição do efetivo em campo",
       sigla: "MF",
-      icon: "users",
-    },
-    {
-      id: "rso",
-      titulo: "QMO",
-      descricao: "Relatórios de serviço operacional",
-      sigla: "QMO",
-      icon: "report",
+      icon: "mapforce",
     },
     {
       id: "abastecimento",
       titulo: "Auxílio ao Público",
       descricao: "Postos, hospital, metrô, shopping, parques, espaços e delegacias",
       sigla: "AP",
-      icon: "pin",
+      icon: "auxilio",
     },
     {
       id: "escala",
       titulo: "Escala de Serviço",
       descricao: "Turnos e equipes do dia",
       sigla: "ES",
-      icon: "calendar",
+      icon: "calendarcheck",
       url: "https://docs.google.com/spreadsheets/d/1dGBMB1Ai6kU2BRO3LNY_4Ac7EJFZrHRs/edit?usp=drivesdk&ouid=102061352846729587790&rtpof=true&sd=true",
     },
     {
@@ -41,14 +41,14 @@ window.OBE_DATA = {
       titulo: "CPP",
       descricao: "Cartão de Prioridade de Patrulhamento",
       sigla: "CPP",
-      icon: "shield",
+      icon: "booklaw",
     },
     {
       id: "eventos",
       titulo: "Eventos",
       descricao: "Agenda e programação da operação",
       sigla: "EVT",
-      icon: "event",
+      icon: "calendarstar",
     },
   ],
 

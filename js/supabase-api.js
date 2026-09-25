@@ -87,10 +87,43 @@
     return Array.isArray(data) ? data[0] : data;
   }
 
+  async function salvarResultadoQuantitativo(payload) {
+    const data = await rpc("salvar_resultado_quantitativo", {
+      p_login: payload.login,
+      p_nome: payload.nome || null,
+      p_pessoas_abordadas: Number(payload.pessoas_abordadas) || 0,
+      p_veiculos_fiscalizados: Number(payload.veiculos_fiscalizados) || 0,
+      p_apoio_ao_publico: Number(payload.apoio_ao_publico) || 0,
+      p_bopm: Number(payload.bopm) || 0,
+      p_conducao_ao_dp: Number(payload.conducao_ao_dp) || 0,
+      p_flagrante_delito: Number(payload.flagrante_delito) || 0,
+      p_armas_apreendidas: Number(payload.armas_apreendidas) || 0,
+      p_drogas_kg: Number(payload.drogas_kg) || 0,
+    });
+    const id = typeof data === "string" ? data.replace(/^"|"$/g, "") : data;
+    if (!isUuid(id)) {
+      throw new Error(
+        "O banco não confirmou o envio. Execute resultados_quantitativos.sql no Supabase."
+      );
+    }
+    return id;
+  }
+
+  async function listarResultadosQuantitativos(login, limite) {
+    const data = await rpc("listar_resultados_quantitativos", {
+      p_login: login || null,
+      p_limite: limite || 10,
+    });
+    if (!data) return [];
+    return Array.isArray(data) ? data : [data];
+  }
+
   window.OBE_DB = {
     isConfigured,
     getConfig,
     criarUsuario,
     loginUsuario,
+    salvarResultadoQuantitativo,
+    listarResultadosQuantitativos,
   };
 })();
