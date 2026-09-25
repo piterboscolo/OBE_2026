@@ -10,17 +10,31 @@
   let currentRoute = "inicio";
 
   function acceptUser(re) {
-    const user = auth.findByRe(re);
-    if (!user) return false;
-    currentUser = {
-      login: user.re,
-      name: user.nome,
-      setor: user.setor,
-      setorCurto: user.setorCurto,
-      graduacao: user.graduacao,
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
-    return true;
+    const key = String(re || "").trim();
+    const user = auth.findByRe(key);
+    if (user) {
+      currentUser = {
+        login: user.re,
+        name: user.nome,
+        setor: user.setor,
+        setorCurto: user.setorCurto,
+        graduacao: user.graduacao,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+      return true;
+    }
+
+    // Usuário cadastrado no Supabase (sessão gravada no login)
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (saved?.login && String(saved.login) === key) {
+        currentUser = saved;
+        return true;
+      }
+    } catch (_) {
+      /* ignora */
+    }
+    return false;
   }
 
   function userGreeting() {
