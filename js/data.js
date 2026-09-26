@@ -15,11 +15,11 @@ window.OBE_DATA = {
       icon: "orgchart",
     },
     {
-      id: "mapa-forca",
-      titulo: "Mapa Força",
-      descricao: "Distribuição do efetivo em campo",
-      sigla: "MF",
-      icon: "mapforce",
+      id: "ponto-apoio",
+      titulo: "Ponto Apoio",
+      descricao: "Bases e pontos de apoio com localização",
+      sigla: "PA",
+      icon: "base",
     },
     {
       id: "abastecimento",
@@ -38,9 +38,9 @@ window.OBE_DATA = {
     },
     {
       id: "cpp",
-      titulo: "CPP",
+      titulo: "Área Policial",
       descricao: "Cartão de Prioridade de Patrulhamento",
-      sigla: "CPP",
+      sigla: "AP",
       icon: "booklaw",
     },
     {
@@ -55,7 +55,7 @@ window.OBE_DATA = {
   cppOpcoes: [
     {
       id: "vtr",
-      titulo: "VTR",
+      titulo: "CPP VTR",
       descricao: "Viaturas e apoio operacional",
       sigla: "VTR",
       icon: "vtr",
@@ -81,13 +81,6 @@ window.OBE_DATA = {
   vtrOpcoes: [],
 
   pontosInteresseOpcoes: [
-    {
-      id: "pi-postos",
-      titulo: "Postos de abastecimento",
-      descricao: "Postos de combustível da operação",
-      sigla: "POSTO",
-      icon: "fuel",
-    },
     {
       id: "pi-hospital",
       titulo: "Hospital",
@@ -395,13 +388,47 @@ window.OBE_DATA = {
     },
   },
 
-  mapaForca: [
-    { equipe: "Alfa-01", efetivo: 4, viatura: "PM-214", setor: "Centro", status: "em_campo" },
-    { equipe: "Bravo-02", efetivo: 3, viatura: "PM-331", setor: "Vila Nova", status: "em_campo" },
-    { equipe: "Charlie-03", efetivo: 4, viatura: "PM-118", setor: "Boa Vista", status: "deslocamento" },
-    { equipe: "Delta-04", efetivo: 2, viatura: "PM-402", setor: "Industrial", status: "base" },
-    { equipe: "Echo-05", efetivo: 5, viatura: "PM-055", setor: "São José", status: "em_campo" },
+  pontoApoioOpcoes: [
+    {
+      id: "pa-bcs-praca-carmo",
+      titulo: "BCS - Pça do Carmo",
+      descricao: "Praça do Carmo, s/n - Centro, Santo André - SP",
+      sigla: "BCS",
+      icon: "base",
+    },
+    {
+      id: "pa-bcs-celso-daniel",
+      titulo: "BCS - Estação Celso Daniel",
+      descricao: "Rua Itambé, 40 - Centro, Santo André - SP",
+      sigla: "ECD",
+      icon: "base",
+    },
+    {
+      id: "pa-catedral-carmo",
+      titulo: "Catedral N. Sra. do Carmo",
+      descricao: "Praça do Carmo, s/n - Centro, Santo André - SP",
+      sigla: "CAT",
+      icon: "base",
+    },
   ],
+
+  pontoApoioDestinos: {
+    "pa-bcs-praca-carmo": {
+      nome: "BCS - Pça do Carmo",
+      destino: "Praça do Carmo, s/n - Centro, Santo André - SP",
+      travelmode: "driving",
+    },
+    "pa-bcs-celso-daniel": {
+      nome: "BCS - Estação Celso Daniel",
+      destino: "Rua Itambé, 40 - Centro, Santo André - SP",
+      travelmode: "driving",
+    },
+    "pa-catedral-carmo": {
+      nome: "Catedral Nossa Senhora do Carmo",
+      destino: "Praça do Carmo, s/n - Centro, Santo André - SP",
+      travelmode: "driving",
+    },
+  },
 
   locaisInteresse: [
     { nome: "EMEF Dom Pedro II", tipo: "Escola", endereco: "Rua das Palmeiras, 120", prioridade: "alta" },
@@ -448,7 +475,16 @@ window.OBE_DATA = {
     { equipe: "Echo-05", turno: "22:00–06:00", funcao: "Reserva operacional", responsavel: "Sgt. Alves" },
   ],
 
-  eventos: [],
+  eventos: [
+    {
+      titulo: "Palmeiras-Barra Funda",
+      data: "09/10/2026",
+      local: "Eixos de entretenimento junto ao Metrô Palmeiras-Barra Funda",
+      status: "Informativo",
+      descricao:
+        "Não há grandes megashows ou festivais de grande porte agendados para os principais eixos de entretenimento colados à estação de metrô Palmeiras-Barra Funda especificamente na sexta-feira, 9 de outubro de 2026.",
+    },
+  ],
 
   cpp: [
     {

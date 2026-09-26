@@ -154,27 +154,22 @@
     `;
   }
 
-  function renderMapaForca() {
+  function renderPontoApoio() {
+    const opcoes = window.OBE_DATA.pontoApoioOpcoes || [];
     return `
-      <div class="page">
-        ${pageHeader("Mapa Força", "Distribuição do efetivo em campo")}
-        <div class="list">
-          ${window.OBE_DATA.mapaForca
-            .map(
-              (e) => `
-            <article class="row">
-              <div>
-                <h3>${e.equipe}</h3>
-                <p>${e.viatura} · ${e.efetivo} PMs · Setor ${e.setor}</p>
-              </div>
-              ${badge(e.status)}
-            </article>`
-            )
-            .join("")}
+      <div class="page page--subcards">
+        ${pageHeader("Ponto Apoio", "Policial, abaixo seus pontos de apoio")}
+        <div class="access-grid access-grid--sub">
+          ${opcoes.map(cardHtml).join("")}
         </div>
         ${pageBack()}
       </div>
     `;
+  }
+
+  function renderPontoApoioQr(id) {
+    const cfg = window.OBE_DATA?.pontoApoioDestinos?.[id];
+    return renderDestinoQr(cfg?.nome || "Ponto Apoio", cfg);
   }
 
   function renderLocaisInteresse() {
@@ -302,10 +297,11 @@
           ${lista
             .map(
               (e) => `
-            <article class="row">
+            <article class="row row--evento">
               <div>
                 <h3>${e.titulo}</h3>
-                <p>${e.data || ""}${e.hora ? ` · ${e.hora}` : ""}${e.local ? ` · ${e.local}` : ""}</p>
+                <p class="row__meta">${e.data || ""}${e.hora ? ` · ${e.hora}` : ""}${e.local ? ` · ${e.local}` : ""}</p>
+                ${e.descricao ? `<p class="row__desc">${e.descricao}</p>` : ""}
               </div>
               <span class="badge">${e.status || "Agenda"}</span>
             </article>`
@@ -522,7 +518,7 @@
     const opcoes = window.OBE_DATA.cppOpcoes || [];
     return `
       <div class="page page--subcards">
-        ${pageHeader("CPP", "Escolha o acesso desejado")}
+        ${pageHeader("Área Policial", "Escolha o acesso desejado")}
         <div class="access-grid access-grid--sub">
           ${opcoes.map(cardHtml).join("")}
         </div>
@@ -535,7 +531,7 @@
     const opcoes = window.OBE_DATA.vtrOpcoes || [];
     return `
       <div class="page page--subcards">
-        ${pageHeader("VTR", "Mapa e documentação do CPP")}
+        ${pageHeader("CPP VTR", "Mapa e documentação do CPP")}
         <div class="access-grid access-grid--sub">
           ${opcoes.map(cardHtml).join("")}
         </div>
@@ -583,7 +579,8 @@
 
   const routes = {
     inicio: renderInicio,
-    "mapa-forca": renderMapaForca,
+    "ponto-apoio": renderPontoApoio,
+    "mapa-forca": renderPontoApoio,
     "locais-interesse": renderLocaisInteresse,
     "pontos-apoio": renderPontosApoio,
     pops: renderPops,
@@ -617,6 +614,7 @@
     const fromParq = window.OBE_DATA?.parquesOpcoes?.find((m) => m.id === route);
     const fromEsp = window.OBE_DATA?.espacosOpcoes?.find((m) => m.id === route);
     const fromDel = window.OBE_DATA?.delegaciasOpcoes?.find((m) => m.id === route);
+    const fromPa = window.OBE_DATA?.pontoApoioOpcoes?.find((m) => m.id === route);
     const modulo =
       fromModulos ||
       fromCpp ||
@@ -626,7 +624,8 @@
       fromHosp ||
       fromParq ||
       fromEsp ||
-      fromDel;
+      fromDel ||
+      fromPa;
     if (!modulo) return false;
     if (modulo.url) {
       window.open(modulo.url, "_blank", "noopener,noreferrer");
@@ -639,9 +638,10 @@
       !!window.OBE_DATA?.espacosDestinos?.[route] ||
       !!window.OBE_DATA?.shoppingDestinos?.[route] ||
       !!window.OBE_DATA?.hospitalDestinos?.[route] ||
-      !!window.OBE_DATA?.delegaciasDestinos?.[route];
+      !!window.OBE_DATA?.delegaciasDestinos?.[route] ||
+      !!window.OBE_DATA?.pontoApoioDestinos?.[route];
     if (
-      (fromCpp || fromVtr || fromPi || fromShop || fromHosp || fromParq || fromEsp || fromDel) &&
+      (fromCpp || fromVtr || fromPi || fromShop || fromHosp || fromParq || fromEsp || fromDel || fromPa) &&
       !hasInternal
     )
       return true;
@@ -655,6 +655,7 @@
     if (window.OBE_DATA?.shoppingDestinos?.[route]) return () => renderShoppingQr(route);
     if (window.OBE_DATA?.hospitalDestinos?.[route]) return () => renderHospitalQr(route);
     if (window.OBE_DATA?.delegaciasDestinos?.[route]) return () => renderDelegaciaQr(route);
+    if (window.OBE_DATA?.pontoApoioDestinos?.[route]) return () => renderPontoApoioQr(route);
     return null;
   }
 
@@ -670,6 +671,9 @@
       route === "pi-delegacias"
     ) {
       return "abastecimento";
+    }
+    if ((window.OBE_DATA?.pontoApoioOpcoes || []).some((o) => o.id === route)) {
+      return "ponto-apoio";
     }
     if ((window.OBE_DATA?.shoppingOpcoes || []).some((o) => o.id === route)) {
       return "pi-shopping";

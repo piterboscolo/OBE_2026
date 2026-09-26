@@ -867,6 +867,27 @@ body.page-home #screen-app {
   color: var(--text-muted);
 }
 
+.row__desc {
+  margin: 10px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text);
+  text-align: left;
+}
+
+.row--evento {
+  justify-items: stretch;
+  text-align: left;
+}
+
+.row--evento > div {
+  width: 100%;
+}
+
+.row--evento .badge {
+  justify-self: center;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
