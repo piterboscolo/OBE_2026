@@ -32,6 +32,10 @@ window.OBE_ICONS = {
     '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2 4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3zm0 4.2 4.5 1.7v3.6c0 3.4-2.2 6.6-4.5 7.8-2.3-1.2-4.5-4.4-4.5-7.8V8l4.5-1.8z"/></svg>',
   vtr:
     '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>',
+  quartel:
+    '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2 3 7v13h6v-5h6v5h6V7l-9-5zm0 2.4 6.5 3.6V18h-2.5v-5H8v5H5.5V8l6.5-3.6zM11 9h2v2h-2V9zm0 3h2v2h-2v-2z"/></svg>',
+  igreja:
+    '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2 10.5 4.5H9v2h1.2L9 9.5V11H6v11h5v-5h2v5h5V11h-3V9.5L13.8 6.5H15v-2h-1.5L12 2zm0 3.2.7 1.3h-.7v1.2h.9L14 10h-4l1.1-2.3H12V6.5h-.7L12 5.2zM8 13h8v7h-1.5v-4H9.5v4H8v-7z"/></svg>',
   hospital:
     '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-2 12h-3v3h-4v-3H7v-4h3V8h4v3h3v4z"/></svg>',
   metro:

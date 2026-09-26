@@ -1067,8 +1067,8 @@ body.page-home #screen-app {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   border-radius: 0;
   background: transparent;
   color: #fff;
@@ -1076,8 +1076,8 @@ body.page-home #screen-app {
 }
 
 .access-card__icon svg {
-  width: 32px;
-  height: 32px;
+  width: 32px !important;
+  height: 32px !important;
   display: block;
 }
 

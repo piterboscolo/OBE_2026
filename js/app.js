@@ -129,7 +129,13 @@
   }
 
   function cardHtml(m) {
-    const icon = (window.obeIcon && window.obeIcon(m.icon)) || "";
+    let icon = (window.obeIcon && window.obeIcon(m.icon)) || "";
+    if (icon) {
+      icon = icon.replace(
+        /<svg\b/,
+        '<svg width="32" height="32"'
+      );
+    }
     return `
       <div class="access-card" data-route="${m.id}" role="button" tabindex="0" aria-label="${m.titulo}">
         <div class="access-card__face">
