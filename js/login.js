@@ -25,6 +25,7 @@
         setor: user.setor,
         setorCurto: user.setorCurto,
         graduacao: user.graduacao,
+        supervisor: true,
       })
     );
     window.location.replace(
@@ -34,6 +35,7 @@
 
   function goHomeDb(user) {
     const login = String(user.login || "").trim();
+    const supervisor = Boolean(auth.isNaListaSupervisor?.(login) || auth.findByRe?.(login));
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
@@ -43,6 +45,7 @@
         setorCurto: "",
         graduacao: "",
         fromDb: true,
+        supervisor,
       })
     );
     window.location.replace(

@@ -60,8 +60,9 @@
   }
 
   function findByRe(re) {
-    const key = String(re).trim();
-    return users.find((u) => u.re === key) || null;
+    const key = String(re || "").trim().replace(/\D/g, "");
+    if (!key) return null;
+    return users.find((u) => String(u.re).replace(/\D/g, "") === key) || null;
   }
 
   function validateCredentials(re, senha) {
@@ -71,10 +72,15 @@
     return user;
   }
 
+  function isNaListaSupervisor(re) {
+    return Boolean(findByRe(re));
+  }
+
   window.OBE_AUTH = {
     users,
     findByRe,
     validateCredentials,
+    isNaListaSupervisor,
     normalize,
     formatNome,
     greeting,

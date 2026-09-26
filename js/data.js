@@ -76,6 +76,13 @@ window.OBE_DATA = {
       sigla: "CPP",
       icon: "pin",
     },
+    {
+      id: "painel-supervisor",
+      titulo: "Painel do Supervisor",
+      descricao: "Acesso restrito à lista autorizada",
+      sigla: "SUP",
+      icon: "shield",
+    },
   ],
 
   popOpcoes: Array.from({ length: 15 }, (_, i) => {

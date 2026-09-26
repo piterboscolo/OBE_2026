@@ -1332,6 +1332,104 @@ body.page-home #screen-app {
   white-space: nowrap;
 }
 
+.rq-sup-user {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(0, 35, 85, 0.06);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.rq-sup-user strong {
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.sup-totais {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+
+.sup-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 96px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.sup-card__label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  opacity: 0.92;
+  color: #fff;
+}
+
+.sup-card__val {
+  font-size: clamp(1.75rem, 7vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.sup-card--blue {
+  background: #1565c0;
+}
+
+.sup-card--teal {
+  background: #00838f;
+}
+
+.sup-card--green {
+  background: #2e7d32;
+}
+
+.sup-card--navy {
+  background: #0033a0;
+}
+
+.sup-card--amber {
+  background: #c47a12;
+}
+
+.sup-card--red {
+  background: #c8102e;
+}
+
+.sup-card--slate {
+  background: #455a64;
+}
+
+.sup-card--violet {
+  background: #111111;
+}
+
+.sup-card--black {
+  background: #111111;
+}
+
+.sup-totais-meta {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
 .page-back {
   display: flex;
   justify-content: center;

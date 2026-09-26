@@ -19,6 +19,7 @@
         setor: user.setor,
         setorCurto: user.setorCurto,
         graduacao: user.graduacao,
+        supervisor: true,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
       return true;
@@ -27,14 +28,33 @@
     // Usuário cadastrado no Supabase (sessão gravada no login)
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-      if (saved?.login && String(saved.login) === key) {
-        currentUser = saved;
+      const savedRe = String(saved?.login || "").replace(/\D/g, "");
+      const keyRe = key.replace(/\D/g, "");
+      if (saved?.login && savedRe && savedRe === keyRe) {
+        const naLista = Boolean(auth.findByRe(saved.login));
+        currentUser = {
+          ...saved,
+          supervisor: naLista,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
         return true;
       }
     } catch (_) {
       /* ignora */
     }
     return false;
+  }
+
+  function isSupervisorAtual() {
+    const re = String(currentUser?.login || "").replace(/\D/g, "");
+    if (!re) return false;
+    // Checagem direta na lista de users.js (fonte da verdade)
+    const lista = (window.OBE_AUTH && window.OBE_AUTH.users) || [];
+    if (lista.some((u) => String(u.re || "").replace(/\D/g, "") === re)) {
+      return true;
+    }
+    if (currentUser?.supervisor === true) return true;
+    return Boolean(window.OBE_AUTH?.findByRe?.(re));
   }
 
   function userGreeting() {
@@ -68,6 +88,16 @@
     } catch (_) {
       window.location.replace("index.html");
       return;
+    }
+  }
+
+  // Garante flag de supervisor alinhada à lista users.js
+  if (currentUser?.login && isSupervisorAtual()) {
+    currentUser.supervisor = true;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+    } catch (_) {
+      /* ignore */
     }
   }
 
@@ -526,7 +556,9 @@
   }
 
   function renderCpp() {
-    const opcoes = window.OBE_DATA.cppOpcoes || [];
+    const opcoes = (window.OBE_DATA.cppOpcoes || []).filter(
+      (o) => o.id !== "painel-supervisor" || isSupervisorAtual()
+    );
     return `
       <div class="page page--subcards">
         ${pageHeader("Área Policial", "Escolha o acesso desejado")}
@@ -536,6 +568,99 @@
         ${pageBack()}
       </div>
     `;
+  }
+
+  function formatRqDate(iso) {
+    try {
+      const d = new Date(iso);
+      return d.toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch (_) {
+      return iso || "";
+    }
+  }
+
+  function renderPainelSupervisor() {
+    if (!isSupervisorAtual()) {
+      return `
+        <div class="page">
+          ${pageHeader("Acesso restrito", "Painel do Supervisor")}
+          <p class="empty">Seu RE não está autorizado a acessar este painel.</p>
+          ${pageBack()}
+        </div>
+      `;
+    }
+    return `
+      <div class="page page--rq">
+        ${pageHeader("Painel do Supervisor", "Totais da operação")}
+        <div id="sup-resultados">
+          <p class="empty">Carregando totais…</p>
+        </div>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  async function loadPainelSupervisor() {
+    const box = document.getElementById("sup-resultados");
+    if (!box || !isSupervisorAtual()) return;
+    if (!window.OBE_DB?.listarResultadosQuantitativos) {
+      box.innerHTML = `<p class="empty">API do Supabase indisponível.</p>`;
+      return;
+    }
+    try {
+      const rows = await window.OBE_DB.listarResultadosQuantitativos(null, 100);
+      if (!rows.length) {
+        box.innerHTML = `<p class="empty">Nenhum resultado quantitativo enviado ainda.</p>`;
+        return;
+      }
+      const campos = [
+        ["pessoas_abordadas", "Pessoas Abordadas", "sup-card--blue"],
+        ["veiculos_fiscalizados", "Veículos Fiscalizados", "sup-card--teal"],
+        ["apoio_ao_publico", "Apoio ao Público", "sup-card--green"],
+        ["bopm", "BOPM", "sup-card--navy"],
+        ["conducao_ao_dp", "Condução ao DP", "sup-card--amber"],
+        ["flagrante_delito", "Flagrante Delito", "sup-card--red"],
+        ["armas_apreendidas", "Armas Apreendidas", "sup-card--slate"],
+        ["drogas_kg", "Drogas (Kg)", "sup-card--black"],
+      ];
+      const totais = {};
+      campos.forEach(([key]) => {
+        totais[key] = 0;
+      });
+      rows.forEach((r) => {
+        campos.forEach(([key]) => {
+          totais[key] += Number(r[key] || 0);
+        });
+      });
+      const formatVal = (key, n) => {
+        if (key === "drogas_kg") {
+          const v = Math.round(n * 1000) / 1000;
+          return Number.isInteger(v) ? String(v) : String(v);
+        }
+        return String(Math.round(n));
+      };
+      box.innerHTML = `
+        <div class="sup-totais">
+          ${campos
+            .map(
+              ([key, label, cor]) => `
+            <article class="sup-card ${cor}">
+              <span class="sup-card__label">${label}</span>
+              <span class="sup-card__val">${formatVal(key, totais[key])}</span>
+            </article>`
+            )
+            .join("")}
+        </div>
+        <p class="sup-totais-meta">${rows.length} envio${rows.length === 1 ? "" : "s"} somado${rows.length === 1 ? "" : "s"}</p>
+      `;
+    } catch (err) {
+      box.innerHTML = `<p class="empty">${String(err?.message || err || "Erro ao carregar")}</p>`;
+    }
   }
 
   function renderVtr() {
@@ -608,6 +733,7 @@
     "pi-delegacias": renderDelegacias,
     escala: () => renderEscala(false),
     cpp: renderCpp,
+    "painel-supervisor": renderPainelSupervisor,
     vtr: renderVtr,
     mais: renderMais,
   };
@@ -678,6 +804,7 @@
   function parentRouteOf(route) {
     if (route === "inicio" || !route) return null;
     if (route === "vtr") return "cpp";
+    if (route === "painel-supervisor") return "cpp";
     if (route === "cpp-doc" || route === "pops") return "cpp";
     if ((window.OBE_DATA?.popOpcoes || []).some((o) => o.id === route)) {
       return "cpp-doc";
@@ -715,6 +842,9 @@
 
   function applyRoute(route, fromNav) {
     if (!main) return;
+    if (route === "painel-supervisor" && !isSupervisorAtual()) {
+      route = "cpp";
+    }
     const render = getRouteRenderer(route);
     if (!render) route = "inicio";
     currentRoute = route;
@@ -726,6 +856,10 @@
     main.scrollTop = 0;
     window.scrollTo(0, 0);
     fillGreeting();
+
+    if (route === "painel-supervisor") {
+      loadPainelSupervisor();
+    }
 
     try {
       main.focus({ preventScroll: true });
