@@ -71,12 +71,116 @@ window.OBE_DATA = {
     },
     {
       id: "cpp-doc",
-      titulo: "POPs",
-      descricao: "Procedimentos operacionais padrão",
-      sigla: "POP",
-      icon: "doc",
+      titulo: "CPP - POP",
+      descricao: "Áreas CPP 01 a 15",
+      sigla: "CPP",
+      icon: "pin",
     },
   ],
+
+  popOpcoes: Array.from({ length: 15 }, (_, i) => {
+    const n = String(i + 1).padStart(2, "0");
+    return {
+      id: "pop-" + n,
+      titulo: "CPP " + n,
+      descricao: "Área policial CPP " + n,
+      sigla: n,
+      icon: "pin",
+    };
+  }),
+
+  popDestinos: {
+    "pop-01": {
+      nome: "CPP 01",
+      destino: "Rua Dr. Alfredo Castro x Av. Mário de Andrade, São Paulo - SP",
+      detalhes: "Cruzamento: Rua Dr. Alfredo Castro × Av. Mário de Andrade",
+      travelmode: "driving",
+    },
+    "pop-02": {
+      nome: "CPP 02 — Museu da Inclusão",
+      destino: "Av. Mário de Andrade, 564 - São Paulo - SP",
+      detalhes: "Museu da Inclusão",
+      travelmode: "driving",
+    },
+    "pop-03": {
+      nome: "CPP 03 — Lado Universidade",
+      destino: "Av. Mário de Andrade, 784 - São Paulo - SP",
+      detalhes: "Lado Universidade",
+      travelmode: "driving",
+    },
+    "pop-04": {
+      nome: "CPP 04 — Porto",
+      destino: "Rua Faud Naufel, 165 - São Paulo - SP",
+      detalhes: "Porto",
+      travelmode: "driving",
+    },
+    "pop-05": {
+      nome: "CPP 05",
+      destino: "Rua Faud Naufel x Rua Tagipuru, São Paulo - SP",
+      detalhes: "Cruzamento: Rua Faud Naufel × Tagipuru",
+      travelmode: "driving",
+    },
+    "pop-06": {
+      nome: "CPP 06 — Portão 09",
+      destino: "Av. Mário de Andrade - Portão 09, Memorial da América Latina, São Paulo - SP",
+      detalhes: "Portão 09 — Memorial da América Latina",
+      travelmode: "driving",
+    },
+    "pop-07": {
+      nome: "CPP 07 — Portão 07",
+      destino: "Av. Mário de Andrade - Portão 07, Memorial da América Latina, São Paulo - SP",
+      detalhes: "Portão 07 — Memorial da América Latina",
+      travelmode: "driving",
+    },
+    "pop-08": {
+      nome: "CPP 08 — Ponto de ônibus",
+      destino: "Av. Mário de Andrade - ponto de ônibus, São Paulo - SP",
+      detalhes: "Ponto de ônibus — Av. Mário de Andrade",
+      travelmode: "driving",
+    },
+    "pop-09": {
+      nome: "CPP 09 — Lado Terminal",
+      destino: "Av. Mário de Andrade, 817 - São Paulo - SP",
+      detalhes: "Lado Terminal",
+      travelmode: "driving",
+    },
+    "pop-10": {
+      nome: "CPP 10 — Faixa de pedestres",
+      destino: "Av. Mário de Andrade, 956 - São Paulo - SP",
+      detalhes: "Faixa de pedestres",
+      travelmode: "driving",
+    },
+    "pop-11": {
+      nome: "CPP 11",
+      destino: "Rua Deputado Salvador Julianelli x Av. Mário de Andrade, São Paulo - SP",
+      detalhes: "Cruzamento: Rua Deputado Salvador Julianelli × Av. Mário de Andrade",
+      travelmode: "driving",
+    },
+    "pop-12": {
+      nome: "CPP 12 — Sob passarela",
+      destino: "Av. Mário de Andrade - sob passarela de pedestres, lado terminal, São Paulo - SP",
+      detalhes: "Sob passarela de pedestres, lado terminal",
+      travelmode: "driving",
+    },
+    "pop-13": {
+      nome: "CPP 13",
+      destino: "Av. Mário de Andrade x Rua Faud Naufel, São Paulo - SP",
+      detalhes: "Cruzamento: Av. Mário de Andrade × Rua Faud Naufel",
+      travelmode: "driving",
+    },
+    "pop-14": {
+      nome: "CPP 14",
+      destino: "Av. Mário de Andrade x Rua Professor Wilfrides Alves de Lima, São Paulo - SP",
+      detalhes: "Cruzamento: Av. Mário de Andrade × Rua Professor Wilfrides Alves de Lima",
+      travelmode: "driving",
+    },
+    "pop-15": {
+      nome: "CPP 15",
+      destino: "Praça Dr. Osmar de Oliveira x Rua Tagipuru, São Paulo - SP",
+      detalhes: "Cruzamento: Praça Dr. Osmar de Oliveira × Rua Tagipuru",
+      travelmode: "driving",
+    },
+  },
 
   vtrOpcoes: [],
 

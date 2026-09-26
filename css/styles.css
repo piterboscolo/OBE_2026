@@ -93,18 +93,28 @@ input {
   background: var(--blue);
 }
 
-/* Marca d'água ESSgt na lateral */
-.bg-watermark {
-  position: absolute;
-  right: -20%;
-  top: 48%;
-  width: min(82vw, 380px);
-  height: auto;
-  transform: translateY(-50%);
-  opacity: 0.12;
+/* Marca d'água ESSgt — centro da tela */
+.bg-watermark,
+#screen-login > .bg-watermark,
+#screen-app > .bg-watermark,
+body.page-home .bg-watermark,
+body.page-login .bg-watermark {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  width: min(70vw, 320px) !important;
+  max-width: 320px;
+  height: auto !important;
+  transform: translate(-50%, -50%) !important;
+  opacity: 0.14;
   pointer-events: none;
   z-index: 0;
   user-select: none;
+  object-fit: contain;
+  object-position: center;
 }
 
 #screen-login,
@@ -1251,6 +1261,75 @@ body.page-home #screen-app {
   font-size: 0.78rem;
   color: var(--text-muted);
   text-align: left;
+}
+
+.page--pops {
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.pop-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.pop-chip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: #002355;
+  color: #fff;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pop-chip:active {
+  filter: brightness(1.1);
+  transform: scale(0.98);
+}
+
+.pop-chip:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.pop-chip__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.pop-chip__icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: currentColor;
+}
+
+.pop-chip__text {
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .page-back {

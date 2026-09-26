@@ -172,6 +172,11 @@
     return renderDestinoQr(cfg?.nome || "Ponto Apoio", cfg);
   }
 
+  function renderCppPopQr(id) {
+    const cfg = window.OBE_DATA?.popDestinos?.[id];
+    return renderDestinoQr(cfg?.nome || "CPP", cfg);
+  }
+
   function renderLocaisInteresse() {
     return `
       <div class="page">
@@ -219,22 +224,22 @@
   }
 
   function renderPops() {
+    const opcoes = window.OBE_DATA.popOpcoes || [];
+    const pin = (window.obeIcon && window.obeIcon("pin")) || "";
+    const rows = opcoes
+      .map(
+        (m) => `
+      <div class="pop-chip" data-route="${m.id}" role="button" tabindex="0" aria-label="${m.titulo}">
+        <span class="pop-chip__icon">${pin}</span>
+        <span class="pop-chip__text">${m.titulo}</span>
+      </div>`
+      )
+      .join("");
     return `
-      <div class="page">
-        ${pageHeader("POP's", "Procedimentos operacionais padrão")}
-        <div class="list">
-          ${window.OBE_DATA.pops
-            .map(
-              (p) => `
-            <article class="row">
-              <div>
-                <h3>${p.codigo} — ${p.titulo}</h3>
-                <p>Versão ${p.versao} · Atualizado em ${p.atualizado}</p>
-              </div>
-              <span class="badge">Abrir</span>
-            </article>`
-            )
-            .join("")}
+      <div class="page page--pops">
+        ${pageHeader("CPP - POP", "Áreas de prioridade de patrulhamento")}
+        <div class="pop-list">
+          ${rows}
         </div>
         ${pageBack()}
       </div>
@@ -584,6 +589,7 @@
     "locais-interesse": renderLocaisInteresse,
     "pontos-apoio": renderPontosApoio,
     pops: renderPops,
+    "cpp-doc": renderPops,
     rso: renderResultadoQuantitativo,
     resultado: renderResultadoQuantitativo,
     eventos: renderEventos,
@@ -615,6 +621,7 @@
     const fromEsp = window.OBE_DATA?.espacosOpcoes?.find((m) => m.id === route);
     const fromDel = window.OBE_DATA?.delegaciasOpcoes?.find((m) => m.id === route);
     const fromPa = window.OBE_DATA?.pontoApoioOpcoes?.find((m) => m.id === route);
+    const fromPop = window.OBE_DATA?.popOpcoes?.find((m) => m.id === route);
     const modulo =
       fromModulos ||
       fromCpp ||
@@ -625,7 +632,8 @@
       fromParq ||
       fromEsp ||
       fromDel ||
-      fromPa;
+      fromPa ||
+      fromPop;
     if (!modulo) return false;
     if (modulo.url) {
       window.open(modulo.url, "_blank", "noopener,noreferrer");
@@ -639,9 +647,10 @@
       !!window.OBE_DATA?.shoppingDestinos?.[route] ||
       !!window.OBE_DATA?.hospitalDestinos?.[route] ||
       !!window.OBE_DATA?.delegaciasDestinos?.[route] ||
-      !!window.OBE_DATA?.pontoApoioDestinos?.[route];
+      !!window.OBE_DATA?.pontoApoioDestinos?.[route] ||
+      !!window.OBE_DATA?.popDestinos?.[route];
     if (
-      (fromCpp || fromVtr || fromPi || fromShop || fromHosp || fromParq || fromEsp || fromDel || fromPa) &&
+      (fromCpp || fromVtr || fromPi || fromShop || fromHosp || fromParq || fromEsp || fromDel || fromPa || fromPop) &&
       !hasInternal
     )
       return true;
@@ -656,12 +665,17 @@
     if (window.OBE_DATA?.hospitalDestinos?.[route]) return () => renderHospitalQr(route);
     if (window.OBE_DATA?.delegaciasDestinos?.[route]) return () => renderDelegaciaQr(route);
     if (window.OBE_DATA?.pontoApoioDestinos?.[route]) return () => renderPontoApoioQr(route);
+    if (window.OBE_DATA?.popDestinos?.[route]) return () => renderCppPopQr(route);
     return null;
   }
 
   function parentRouteOf(route) {
     if (route === "inicio" || !route) return null;
     if (route === "vtr") return "cpp";
+    if (route === "cpp-doc" || route === "pops") return "cpp";
+    if ((window.OBE_DATA?.popOpcoes || []).some((o) => o.id === route)) {
+      return "cpp-doc";
+    }
     if (
       route === "pi-metro" ||
       route === "pi-shopping" ||
@@ -840,7 +854,7 @@
         return;
       }
 
-      const card = e.target.closest(".access-card[data-route]");
+      const card = e.target.closest(".access-card[data-route], .pop-chip[data-route]");
       if (card && main.contains(card)) {
         const route = card.dataset.route;
         if (!route) return;
@@ -851,7 +865,7 @@
 
     main.addEventListener("keydown", (e) => {
       if (e.key !== "Enter" && e.key !== " ") return;
-      const card = e.target.closest(".access-card[data-route]");
+      const card = e.target.closest(".access-card[data-route], .pop-chip[data-route]");
       if (!card) return;
       e.preventDefault();
       navigate(card.dataset.route);
