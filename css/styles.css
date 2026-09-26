@@ -1430,6 +1430,16 @@ body.page-home #screen-app {
   color: var(--text-muted);
 }
 
+.sup-acoes {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0 4px;
+}
+
+.sup-acoes .btn {
+  min-width: 180px;
+}
+
 .page-back {
   display: flex;
   justify-content: center;

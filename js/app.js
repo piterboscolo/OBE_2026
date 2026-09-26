@@ -600,66 +600,246 @@
         <div id="sup-resultados">
           <p class="empty">Carregando totais…</p>
         </div>
+        <div class="sup-acoes">
+          <button type="button" class="btn btn--primary" id="sup-gerar-pdf">Gerar PDF</button>
+        </div>
         ${pageBack()}
       </div>
     `;
   }
 
+  let supTotaisCache = null;
+
+  const SUP_CAMPOS = [
+    ["pessoas_abordadas", "Pessoas Abordadas", "sup-card--blue"],
+    ["veiculos_fiscalizados", "Veículos Fiscalizados", "sup-card--teal"],
+    ["apoio_ao_publico", "Apoio ao Público", "sup-card--green"],
+    ["bopm", "BOPM", "sup-card--navy"],
+    ["conducao_ao_dp", "Condução ao DP", "sup-card--amber"],
+    ["flagrante_delito", "Flagrante Delito", "sup-card--red"],
+    ["armas_apreendidas", "Armas Apreendidas", "sup-card--slate"],
+    ["drogas_kg", "Drogas (Kg)", "sup-card--black"],
+  ];
+
+  function formatSupVal(key, n) {
+    const num = Number(n) || 0;
+    if (key === "drogas_kg") {
+      const v = Math.round(num * 1000) / 1000;
+      return Number.isInteger(v) ? String(v) : String(v);
+    }
+    return String(Math.round(num));
+  }
+
+  async function assetDataUrl(relPath) {
+    try {
+      const url = new URL(relPath, window.location.href).href;
+      const res = await fetch(url);
+      const blob = await res.blob();
+      return await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } catch (_) {
+      try {
+        return new URL(relPath, window.location.href).href;
+      } catch (e) {
+        return relPath;
+      }
+    }
+  }
+
+  async function gerarPdfResultadoOperacao() {
+    const totais =
+      supTotaisCache?.totais || Object.fromEntries(SUP_CAMPOS.map(([k]) => [k, 0]));
+    const envios = Number(supTotaisCache?.envios || 0);
+    const dataStr = new Date().toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const linhas = SUP_CAMPOS.map(
+      ([key, label]) =>
+        `<tr><td>${label}</td><td>${formatSupVal(key, totais[key])}</td></tr>`
+    ).join("");
+
+    const cabecalhoImg = await assetDataUrl("img/cabecalho-pdf.png");
+
+    const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Resultado da Operação — OBE 2026</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 15mm 18mm;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #000;
+      font-family: "Times New Roman", Times, serif;
+      line-height: 1.3;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .folha {
+      width: 100%;
+      max-width: 174mm;
+      margin: 0 auto;
+      padding: 0;
+      overflow: hidden;
+    }
+    .cabecalho {
+      width: 100%;
+      margin: 0 0 12mm;
+      padding: 0 0 3mm;
+      border-bottom: 1.5pt solid #000;
+      text-align: center;
+    }
+    .cabecalho img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+      object-fit: contain;
+    }
+    .meta {
+      margin: 0 0 6mm;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 10pt;
+      color: #333;
+    }
+    table.resultado {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+    table.resultado td {
+      padding: 3.5mm 2mm;
+      border-bottom: 0.5pt solid #bbb;
+      font-size: 11pt;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    table.resultado td:first-child {
+      width: 72%;
+    }
+    table.resultado td:last-child {
+      width: 28%;
+      text-align: right;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .rodape {
+      margin-top: 10mm;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 9pt;
+      color: #666;
+      text-align: center;
+    }
+    @media print {
+      html, body {
+        width: auto;
+        margin: 0;
+        padding: 0;
+      }
+      .folha {
+        max-width: none;
+        width: 100%;
+      }
+      .cabecalho,
+      table.resultado,
+      .meta,
+      .rodape {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="folha">
+    <header class="cabecalho">
+      <img src="${cabecalhoImg}" alt="Cabeçalho OBE 2026" />
+    </header>
+    <p class="meta">Emitido em ${dataStr} · Envios somados: ${envios}</p>
+    <table class="resultado">
+      <tbody>
+        ${linhas}
+      </tbody>
+    </table>
+    <p class="rodape">Documento gerado pelo Painel do Supervisor — OBE 2026 SGE</p>
+  </div>
+  <script>
+    window.onload = function () {
+      setTimeout(function () {
+        window.focus();
+        window.print();
+      }, 350);
+    };
+  <\/script>
+</body>
+</html>`;
+
+    const win = window.open("", "_blank");
+    if (!win) {
+      alert("Permita pop-ups para gerar o PDF.");
+      return;
+    }
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+  }
+
   async function loadPainelSupervisor() {
     const box = document.getElementById("sup-resultados");
     if (!box || !isSupervisorAtual()) return;
+
+    const renderTotais = (totais, envios) => {
+      supTotaisCache = { totais, envios };
+      box.innerHTML = `
+        <div class="sup-totais">
+          ${SUP_CAMPOS.map(
+            ([key, label, cor]) => `
+            <article class="sup-card ${cor}">
+              <span class="sup-card__label">${label}</span>
+              <span class="sup-card__val">${formatSupVal(key, totais[key] || 0)}</span>
+            </article>`
+          ).join("")}
+        </div>
+        <p class="sup-totais-meta">${envios} envio${envios === 1 ? "" : "s"} somado${envios === 1 ? "" : "s"}</p>
+      `;
+    };
+
+    const zeros = {};
+    SUP_CAMPOS.forEach(([key]) => {
+      zeros[key] = 0;
+    });
+
     if (!window.OBE_DB?.listarResultadosQuantitativos) {
-      box.innerHTML = `<p class="empty">API do Supabase indisponível.</p>`;
+      renderTotais(zeros, 0);
       return;
     }
     try {
       const rows = await window.OBE_DB.listarResultadosQuantitativos(null, 100);
-      if (!rows.length) {
-        box.innerHTML = `<p class="empty">Nenhum resultado quantitativo enviado ainda.</p>`;
-        return;
-      }
-      const campos = [
-        ["pessoas_abordadas", "Pessoas Abordadas", "sup-card--blue"],
-        ["veiculos_fiscalizados", "Veículos Fiscalizados", "sup-card--teal"],
-        ["apoio_ao_publico", "Apoio ao Público", "sup-card--green"],
-        ["bopm", "BOPM", "sup-card--navy"],
-        ["conducao_ao_dp", "Condução ao DP", "sup-card--amber"],
-        ["flagrante_delito", "Flagrante Delito", "sup-card--red"],
-        ["armas_apreendidas", "Armas Apreendidas", "sup-card--slate"],
-        ["drogas_kg", "Drogas (Kg)", "sup-card--black"],
-      ];
-      const totais = {};
-      campos.forEach(([key]) => {
-        totais[key] = 0;
-      });
-      rows.forEach((r) => {
-        campos.forEach(([key]) => {
+      const totais = { ...zeros };
+      (rows || []).forEach((r) => {
+        SUP_CAMPOS.forEach(([key]) => {
           totais[key] += Number(r[key] || 0);
         });
       });
-      const formatVal = (key, n) => {
-        if (key === "drogas_kg") {
-          const v = Math.round(n * 1000) / 1000;
-          return Number.isInteger(v) ? String(v) : String(v);
-        }
-        return String(Math.round(n));
-      };
-      box.innerHTML = `
-        <div class="sup-totais">
-          ${campos
-            .map(
-              ([key, label, cor]) => `
-            <article class="sup-card ${cor}">
-              <span class="sup-card__label">${label}</span>
-              <span class="sup-card__val">${formatVal(key, totais[key])}</span>
-            </article>`
-            )
-            .join("")}
-        </div>
-        <p class="sup-totais-meta">${rows.length} envio${rows.length === 1 ? "" : "s"} somado${rows.length === 1 ? "" : "s"}</p>
-      `;
-    } catch (err) {
-      box.innerHTML = `<p class="empty">${String(err?.message || err || "Erro ao carregar")}</p>`;
+      renderTotais(totais, (rows || []).length);
+    } catch (_) {
+      renderTotais(zeros, 0);
     }
   }
 
@@ -1029,6 +1209,13 @@
       if (back) {
         e.preventDefault();
         goBackInApp();
+        return;
+      }
+
+      const pdfBtn = e.target.closest("#sup-gerar-pdf");
+      if (pdfBtn) {
+        e.preventDefault();
+        gerarPdfResultadoOperacao();
         return;
       }
 
