@@ -900,9 +900,47 @@
   }
 
   function logout() {
+    stopIdleWatch();
     localStorage.removeItem(STORAGE_KEY);
     window.location.replace("index.html");
   }
+
+  const IDLE_MS = 5 * 60 * 1000;
+  let idleTimer = null;
+
+  function stopIdleWatch() {
+    if (idleTimer) {
+      clearTimeout(idleTimer);
+      idleTimer = null;
+    }
+  }
+
+  function resetIdleTimer() {
+    stopIdleWatch();
+    idleTimer = setTimeout(logout, IDLE_MS);
+  }
+
+  function startIdleWatch() {
+    const events = [
+      "pointerdown",
+      "pointermove",
+      "keydown",
+      "touchstart",
+      "scroll",
+      "click",
+      "visibilitychange",
+    ];
+    const onActivity = () => {
+      if (document.visibilityState === "hidden") return;
+      resetIdleTimer();
+    };
+    events.forEach((ev) => {
+      document.addEventListener(ev, onActivity, { passive: true, capture: true });
+    });
+    resetIdleTimer();
+  }
+
+  startIdleWatch();
 
   document.getElementById("btn-sair")?.addEventListener("click", logout);
 
