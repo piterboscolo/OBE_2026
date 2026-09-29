@@ -22,6 +22,8 @@ window.OBE_ICONS = {
     '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3 3 9v12h6v-6h6v6h6V9l-9-6zm0 3.2L18 10v2h-3v-2h-2v2H9v-2H6v-1.8L12 6.2z"/></svg>',
   doc:
     '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1 7V3.5L19.5 9H15zM8 13h8v2H8v-2zm0 4h8v2H8v-2zm0-8h4v2H8V9z"/></svg>',
+  sheet:
+    '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 12h2v2H8v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2zM8 15h2v2H8v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2zM8 18h2v2H8v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2z"/></svg>',
   report:
     '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v16l-7-3-7 3V5a2 2 0 0 1 2-2zm2 5v2h6V8H9zm0 4v2h6v-2H9zm0 4v2h4v-2H9z"/></svg>',
   fuel:

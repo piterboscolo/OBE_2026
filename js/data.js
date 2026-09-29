@@ -56,10 +56,9 @@ window.OBE_DATA = {
     {
       id: "vtr",
       titulo: "CPP VTR",
-      descricao: "Viaturas e apoio operacional",
+      descricao: "CPP e RSO das viaturas",
       sigla: "VTR",
       icon: "vtr",
-      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1678212823#gid=1678212823",
     },
     {
       id: "cpp-mapa",
@@ -72,7 +71,7 @@ window.OBE_DATA = {
     {
       id: "cpp-doc",
       titulo: "CPP - POP",
-      descricao: "Áreas CPP 01 a 15",
+      descricao: "Local e RSO das áreas CPP",
       sigla: "CPP",
       icon: "pin",
     },
@@ -82,6 +81,23 @@ window.OBE_DATA = {
       descricao: "Acesso restrito à lista autorizada",
       sigla: "SUP",
       icon: "shield",
+    },
+  ],
+
+  cppPopOpcoes: [
+    {
+      id: "cpp-pop-local",
+      titulo: "Local",
+      descricao: "Endereços e QR das áreas CPP 01 a 15",
+      sigla: "LOC",
+      icon: "pin",
+    },
+    {
+      id: "cpp-pop-rso",
+      titulo: "RSO",
+      descricao: "Relatórios de serviço operacional",
+      sigla: "RSO",
+      icon: "sheet",
     },
   ],
 
@@ -95,6 +111,43 @@ window.OBE_DATA = {
       icon: "pin",
     };
   }),
+
+  rsoOpcoes: (() => {
+    const sheetId = "1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98";
+    // gid de cada aba "RSO POP XX" na planilha (cole o link da aba para completar)
+    const gids = {
+      "01": "1633603721",
+      "02": "884383562",
+      "03": "1892205958",
+      "04": "203063964",
+      "05": "1708563610",
+      "06": "53387421",
+      "07": "411128561",
+      "08": "1142434674",
+      "09": "1542823028",
+      "10": "1027463295",
+      "11": "411208293",
+      "12": "1296744888",
+      "13": "813957668",
+      "14": "910485153",
+      "15": "1627903963",
+    };
+    return Array.from({ length: 15 }, (_, i) => {
+      const n = String(i + 1).padStart(2, "0");
+      const gid = String(gids[n] || "").trim();
+      const url = gid
+        ? `https://docs.google.com/spreadsheets/d/${sheetId}/edit?gid=${gid}#gid=${gid}`
+        : `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;
+      return {
+        id: "rso-" + n,
+        titulo: "RSO " + n,
+        descricao: "Planilha RSO POP " + n,
+        sigla: n,
+        icon: "sheet",
+        url,
+      };
+    });
+  })(),
 
   popDestinos: {
     "pop-01": {
@@ -189,7 +242,122 @@ window.OBE_DATA = {
     },
   },
 
-  vtrOpcoes: [],
+  vtrOpcoes: [
+    {
+      id: "vtr-cpp",
+      titulo: "CPP",
+      descricao: "Planilha e documentação CPP VTR",
+      sigla: "CPP",
+      icon: "vtr",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1678212823#gid=1678212823",
+    },
+    {
+      id: "vtr-rso",
+      titulo: "RSO",
+      descricao: "Relatórios de serviço operacional VTR",
+      sigla: "RSO",
+      icon: "sheet",
+    },
+  ],
+
+  vtrRsoOpcoes: [
+    {
+      id: "vtr-rso-cmt-cia",
+      titulo: "Cmt de Cia",
+      descricao: "RSO VTR Cmt de Cia",
+      sigla: "CMT",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=1944622959#gid=1944622959",
+    },
+    {
+      id: "vtr-rso-scmt-cia",
+      titulo: "SCmt de Cia",
+      descricao: "RSO VTR SCmt de Cia",
+      sigla: "SCM",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=1924236897#gid=1924236897",
+    },
+    {
+      id: "vtr-rso-cmt-obe",
+      titulo: "Cmt da OBE",
+      descricao: "RSO VTR Cmt da OBE",
+      sigla: "OBE",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=844058780#gid=844058780",
+    },
+    {
+      id: "vtr-rso-scmt-obe",
+      titulo: "SCmt da OBE",
+      descricao: "RSO VTR SCmt da OBE",
+      sigla: "SCM",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=895860818#gid=895860818",
+    },
+    {
+      id: "vtr-rso-cgp-i",
+      titulo: "CGP I",
+      descricao: "RSO VTR CGP I",
+      sigla: "CGP",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=1358595620#gid=1358595620",
+    },
+    {
+      id: "vtr-rso-cgp-ii",
+      titulo: "CGP II",
+      descricao: "RSO VTR CGP II",
+      sigla: "CGP",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=2140855512#gid=2140855512",
+    },
+    {
+      id: "vtr-rso-cgp-iii",
+      titulo: "CGP III",
+      descricao: "RSO VTR CGP III",
+      sigla: "CGP",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=943511111#gid=943511111",
+    },
+    {
+      id: "vtr-rso-rp-01",
+      titulo: "RP 01",
+      descricao: "RSO VTR Radiopatrulhamento 01",
+      sigla: "RP",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=1322875542#gid=1322875542",
+    },
+    {
+      id: "vtr-rso-rp-02",
+      titulo: "RP 02",
+      descricao: "RSO VTR Radiopatrulhamento 02",
+      sigla: "RP",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=1674450667#gid=1674450667",
+    },
+    {
+      id: "vtr-rso-rp-03",
+      titulo: "RP 03",
+      descricao: "RSO VTR Radiopatrulhamento 03",
+      sigla: "RP",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=896228136#gid=896228136",
+    },
+    {
+      id: "vtr-rso-rp-04",
+      titulo: "RP 04",
+      descricao: "RSO VTR Radiopatrulhamento 04",
+      sigla: "RP",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=655050157#gid=655050157",
+    },
+    {
+      id: "vtr-rso-p4",
+      titulo: "VTR P4",
+      descricao: "RSO VTR Apoio P4",
+      sigla: "P4",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=750106562#gid=750106562",
+    },
+  ],
 
   pontosInteresseOpcoes: [
     {

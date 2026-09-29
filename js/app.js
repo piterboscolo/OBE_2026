@@ -260,6 +260,19 @@
   }
 
   function renderPops() {
+    const opcoes = window.OBE_DATA.cppPopOpcoes || [];
+    return `
+      <div class="page page--subcards">
+        ${pageHeader("CPP - POP", "Escolha Local ou RSO")}
+        <div class="access-grid access-grid--sub">
+          ${opcoes.map(cardHtml).join("")}
+        </div>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderCppPopLocal() {
     const opcoes = window.OBE_DATA.popOpcoes || [];
     const pin = (window.obeIcon && window.obeIcon("pin")) || "";
     const rows = opcoes
@@ -273,10 +286,45 @@
       .join("");
     return `
       <div class="page page--pops">
-        ${pageHeader("CPP - POP", "Áreas de prioridade de patrulhamento")}
+        ${pageHeader("Local", "Áreas de prioridade de patrulhamento")}
         <div class="pop-list">
           ${rows}
         </div>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderCppPopRso() {
+    const opcoes = window.OBE_DATA.rsoOpcoes || [];
+    const sheet = (window.obeIcon && window.obeIcon("sheet")) || "";
+    const rows = opcoes
+      .map(
+        (m) => `
+      <div class="pop-chip" data-route="${m.id}" role="button" tabindex="0" aria-label="${m.titulo}">
+        <span class="pop-chip__icon">${sheet}</span>
+        <span class="pop-chip__text">${m.titulo}</span>
+      </div>`
+      )
+      .join("");
+    return `
+      <div class="page page--pops">
+        ${pageHeader("RSO", "Relatórios de serviço operacional")}
+        <div class="pop-list">
+          ${rows}
+        </div>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderRsoItem(id) {
+    const item = (window.OBE_DATA.rsoOpcoes || []).find((o) => o.id === id);
+    const titulo = item?.titulo || String(id || "RSO").toUpperCase();
+    return `
+      <div class="page">
+        ${pageHeader(titulo, "Relatório de serviço operacional")}
+        <p class="empty">Conteúdo do ${titulo} em breve.</p>
         ${pageBack()}
       </div>
     `;
@@ -847,9 +895,41 @@
     const opcoes = window.OBE_DATA.vtrOpcoes || [];
     return `
       <div class="page page--subcards">
-        ${pageHeader("CPP VTR", "Mapa e documentação do CPP")}
+        ${pageHeader("CPP VTR", "Escolha CPP ou RSO")}
         <div class="access-grid access-grid--sub">
           ${opcoes.map(cardHtml).join("")}
+        </div>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderVtrRso() {
+    const opcoes = window.OBE_DATA.vtrRsoOpcoes || [];
+    const sheet = (window.obeIcon && window.obeIcon("sheet")) || "";
+    if (!opcoes.length) {
+      return `
+        <div class="page">
+          ${pageHeader("RSO", "Relatórios VTR")}
+          <p class="empty">Links das planilhas RSO VTR em breve.</p>
+          ${pageBack()}
+        </div>
+      `;
+    }
+    const rows = opcoes
+      .map(
+        (m) => `
+      <div class="pop-chip" data-route="${m.id}" role="button" tabindex="0" aria-label="${m.titulo}">
+        <span class="pop-chip__icon">${sheet}</span>
+        <span class="pop-chip__text">${m.titulo}</span>
+      </div>`
+      )
+      .join("");
+    return `
+      <div class="page page--pops">
+        ${pageHeader("RSO", "Relatórios de serviço operacional VTR")}
+        <div class="pop-list">
+          ${rows}
         </div>
         ${pageBack()}
       </div>
@@ -901,6 +981,8 @@
     "pontos-apoio": renderPontosApoio,
     pops: renderPops,
     "cpp-doc": renderPops,
+    "cpp-pop-local": renderCppPopLocal,
+    "cpp-pop-rso": renderCppPopRso,
     rso: renderResultadoQuantitativo,
     resultado: renderResultadoQuantitativo,
     eventos: renderEventos,
@@ -915,6 +997,7 @@
     cpp: renderCpp,
     "painel-supervisor": renderPainelSupervisor,
     vtr: renderVtr,
+    "vtr-rso": renderVtrRso,
     mais: renderMais,
   };
 
@@ -926,6 +1009,7 @@
     const fromModulos = window.OBE_DATA?.modulos?.find((m) => m.id === route);
     const fromCpp = window.OBE_DATA?.cppOpcoes?.find((m) => m.id === route);
     const fromVtr = window.OBE_DATA?.vtrOpcoes?.find((m) => m.id === route);
+    const fromVtrRso = window.OBE_DATA?.vtrRsoOpcoes?.find((m) => m.id === route);
     const fromPi = window.OBE_DATA?.pontosInteresseOpcoes?.find((m) => m.id === route);
     const fromShop = window.OBE_DATA?.shoppingOpcoes?.find((m) => m.id === route);
     const fromHosp = window.OBE_DATA?.hospitalOpcoes?.find((m) => m.id === route);
@@ -934,10 +1018,13 @@
     const fromDel = window.OBE_DATA?.delegaciasOpcoes?.find((m) => m.id === route);
     const fromPa = window.OBE_DATA?.pontoApoioOpcoes?.find((m) => m.id === route);
     const fromPop = window.OBE_DATA?.popOpcoes?.find((m) => m.id === route);
+    const fromRso = window.OBE_DATA?.rsoOpcoes?.find((m) => m.id === route);
+    const fromCppPop = window.OBE_DATA?.cppPopOpcoes?.find((m) => m.id === route);
     const modulo =
       fromModulos ||
       fromCpp ||
       fromVtr ||
+      fromVtrRso ||
       fromPi ||
       fromShop ||
       fromHosp ||
@@ -945,7 +1032,9 @@
       fromEsp ||
       fromDel ||
       fromPa ||
-      fromPop;
+      fromPop ||
+      fromRso ||
+      fromCppPop;
     if (!modulo) return false;
     if (modulo.url) {
       window.open(modulo.url, "_blank", "noopener,noreferrer");
@@ -960,9 +1049,11 @@
       !!window.OBE_DATA?.hospitalDestinos?.[route] ||
       !!window.OBE_DATA?.delegaciasDestinos?.[route] ||
       !!window.OBE_DATA?.pontoApoioDestinos?.[route] ||
-      !!window.OBE_DATA?.popDestinos?.[route];
+      !!window.OBE_DATA?.popDestinos?.[route] ||
+      !!(window.OBE_DATA?.rsoOpcoes || []).some((o) => o.id === route) ||
+      !!(window.OBE_DATA?.vtrRsoOpcoes || []).some((o) => o.id === route);
     if (
-      (fromCpp || fromVtr || fromPi || fromShop || fromHosp || fromParq || fromEsp || fromDel || fromPa || fromPop) &&
+      (fromCpp || fromVtr || fromVtrRso || fromPi || fromShop || fromHosp || fromParq || fromEsp || fromDel || fromPa || fromPop || fromRso || fromCppPop) &&
       !hasInternal
     )
       return true;
@@ -978,16 +1069,27 @@
     if (window.OBE_DATA?.delegaciasDestinos?.[route]) return () => renderDelegaciaQr(route);
     if (window.OBE_DATA?.pontoApoioDestinos?.[route]) return () => renderPontoApoioQr(route);
     if (window.OBE_DATA?.popDestinos?.[route]) return () => renderCppPopQr(route);
+    if ((window.OBE_DATA?.rsoOpcoes || []).some((o) => o.id === route)) {
+      return () => renderRsoItem(route);
+    }
     return null;
   }
 
   function parentRouteOf(route) {
     if (route === "inicio" || !route) return null;
     if (route === "vtr") return "cpp";
+    if (route === "vtr-cpp" || route === "vtr-rso") return "vtr";
+    if ((window.OBE_DATA?.vtrRsoOpcoes || []).some((o) => o.id === route)) {
+      return "vtr-rso";
+    }
     if (route === "painel-supervisor") return "cpp";
     if (route === "cpp-doc" || route === "pops") return "cpp";
+    if (route === "cpp-pop-local" || route === "cpp-pop-rso") return "cpp-doc";
     if ((window.OBE_DATA?.popOpcoes || []).some((o) => o.id === route)) {
-      return "cpp-doc";
+      return "cpp-pop-local";
+    }
+    if ((window.OBE_DATA?.rsoOpcoes || []).some((o) => o.id === route)) {
+      return "cpp-pop-rso";
     }
     if (
       route === "pi-metro" ||
