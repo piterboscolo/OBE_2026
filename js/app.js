@@ -11,7 +11,11 @@
 
   function acceptUser(re) {
     const key = String(re || "").trim();
-    const user = auth.findByRe(key);
+    const keyRe = key.replace(/\D/g, "");
+    if (!keyRe) return false;
+
+    // 1) Lista local users.js
+    const user = auth.findByRe(keyRe);
     if (user) {
       currentUser = {
         login: user.re,
@@ -25,21 +29,20 @@
       return true;
     }
 
-    // Usuário cadastrado no Supabase (tabela usuarios)
+    // 2) Sessão de usuário autenticado na tabela usuarios
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
       const savedRe = String(saved?.login || "").replace(/\D/g, "");
-      const keyRe = key.replace(/\D/g, "");
-      if (saved?.login && savedRe && savedRe === keyRe) {
-        const naLista = auth.findByRe(saved.login);
+      if (saved?.fromDb && savedRe && savedRe === keyRe) {
         currentUser = {
           ...saved,
-          name: naLista?.nome || saved.name || saved.login,
-          setor: naLista?.setor || saved.setor || "",
-          setorCurto: naLista?.setorCurto || saved.setorCurto || "",
-          graduacao: naLista?.graduacao || saved.graduacao || "",
+          login: savedRe,
+          name: saved.name || saved.login,
+          setor: saved.setor || "",
+          setorCurto: saved.setorCurto || "",
+          graduacao: saved.graduacao || "",
           fromDb: true,
-          supervisor: Boolean(naLista),
+          supervisor: false,
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
         return true;
