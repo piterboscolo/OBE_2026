@@ -3,6 +3,7 @@
   const errEl = document.getElementById("cadastro-error");
   const okEl = document.getElementById("cadastro-ok");
   const btn = document.getElementById("cad-submit");
+  const auth = window.OBE_AUTH;
 
   function showError(msg) {
     if (okEl) okEl.hidden = true;
@@ -44,6 +45,12 @@
       return;
     }
 
+    const efetivo = auth?.findByRe?.(re);
+    if (!efetivo) {
+      showError("RE não autorizado. Procure o administrador do Sistema.");
+      return;
+    }
+
     const cfg = window.OBE_DB?.getConfig?.() || {};
     if (!cfg.url || !cfg.anonKey) {
       showError("Configuração do Supabase não carregou. Atualize a página (Ctrl+F5).");
@@ -56,7 +63,8 @@
     }
 
     try {
-      const id = await window.OBE_DB.criarUsuario(re, senha, re);
+      const nome = efetivo.nome || re;
+      const id = await window.OBE_DB.criarUsuario(re, senha, nome);
       if (!id) {
         showError("Cadastro não confirmado pelo banco. Verifique o Supabase.");
         return;

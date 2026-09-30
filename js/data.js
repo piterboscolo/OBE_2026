@@ -34,7 +34,6 @@ window.OBE_DATA = {
       descricao: "Turnos e equipes do dia",
       sigla: "ES",
       icon: "calendarcheck",
-      bloqueado: true,
       url: "https://docs.google.com/spreadsheets/d/1dGBMB1Ai6kU2BRO3LNY_4Ac7EJFZrHRs/edit?usp=drivesdk&ouid=102061352846729587790&rtpof=true&sd=true",
     },
     {

@@ -35,17 +35,17 @@
 
   function goHomeDb(user) {
     const login = String(user.login || "").trim();
-    const supervisor = Boolean(auth.isNaListaSupervisor?.(login) || auth.findByRe?.(login));
+    const efetivo = auth.findByRe?.(login);
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
         login,
-        name: user.nome || login,
-        setor: "",
-        setorCurto: "",
-        graduacao: "",
+        name: efetivo?.nome || user.nome || login,
+        setor: efetivo?.setor || "",
+        setorCurto: efetivo?.setorCurto || "",
+        graduacao: efetivo?.graduacao || "",
         fromDb: true,
-        supervisor,
+        supervisor: true,
       })
     );
     window.location.replace(
@@ -57,14 +57,10 @@
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
     if (saved?.login) {
       const localUser = auth.findByRe(saved.login);
-      if (localUser) {
+      if (!localUser) {
+        localStorage.removeItem(STORAGE_KEY);
+      } else {
         goHomeLocal(localUser);
-        return;
-      }
-      if (saved.fromDb) {
-        window.location.replace(
-          "home.html?auth=" + encodeURIComponent(saved.login)
-        );
         return;
       }
     }
@@ -78,7 +74,16 @@
 
     const login = document.getElementById("login-user").value.trim();
     const senha = document.getElementById("login-pass").value;
+    const re = String(login || "").replace(/\D/g, "");
 
+    // Acesso só para efetivo do EM já lançado (users.js)
+    const efetivo = auth.findByRe?.(re);
+    if (!efetivo) {
+      showError("Acesso não autorizado. RE não consta no efetivo do EM.");
+      return;
+    }
+
+    // Efetivo EM com senha local já lançada
     const localUser = auth.validateCredentials(login, senha);
     if (localUser) {
       goHomeLocal(localUser);
@@ -105,9 +110,13 @@
     }
 
     try {
+      // Conta gravada no banco (cadastro) — ainda exige estar no efetivo EM
       const dbUser = await window.OBE_DB.loginUsuario(login, senha);
       if (dbUser) {
-        goHomeDb(dbUser);
+        goHomeDb({
+          ...dbUser,
+          nome: efetivo.nome || dbUser.nome,
+        });
         return;
       }
       showError("Login ou senha inválidos");

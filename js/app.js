@@ -25,16 +25,21 @@
       return true;
     }
 
-    // Usuário cadastrado no Supabase (sessão gravada no login)
+    // Usuário cadastrado no Supabase — só entra se também estiver no efetivo EM
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
       const savedRe = String(saved?.login || "").replace(/\D/g, "");
       const keyRe = key.replace(/\D/g, "");
       if (saved?.login && savedRe && savedRe === keyRe) {
-        const naLista = Boolean(auth.findByRe(saved.login));
+        const naLista = auth.findByRe(saved.login);
+        if (!naLista) return false;
         currentUser = {
           ...saved,
-          supervisor: naLista,
+          name: naLista.nome || saved.name,
+          setor: naLista.setor || saved.setor || "",
+          setorCurto: naLista.setorCurto || saved.setorCurto || "",
+          graduacao: naLista.graduacao || saved.graduacao || "",
+          supervisor: true,
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
         return true;
