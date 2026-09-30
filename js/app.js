@@ -166,8 +166,13 @@
         '<svg width="32" height="32"'
       );
     }
+    const blocked = !!m.bloqueado;
+    const blockedClass = blocked ? " access-card--blocked" : "";
+    const blockedAttrs = blocked
+      ? ' aria-disabled="true" data-bloqueado="1"'
+      : ' tabindex="0"';
     return `
-      <div class="access-card" data-route="${m.id}" role="button" tabindex="0" aria-label="${m.titulo}">
+      <div class="access-card${blockedClass}" data-route="${m.id}" role="button"${blockedAttrs} aria-label="${m.titulo}">
         <div class="access-card__face">
           <span class="access-card__icon">${icon}</span>
           <h3 class="access-card__title">${m.titulo}</h3>
@@ -1005,7 +1010,32 @@
     /* cliques tratados por delegação no #main */
   }
 
+  function isModuloBloqueado(route) {
+    const lists = [
+      window.OBE_DATA?.modulos,
+      window.OBE_DATA?.cppOpcoes,
+      window.OBE_DATA?.vtrOpcoes,
+      window.OBE_DATA?.vtrRsoOpcoes,
+      window.OBE_DATA?.pontosInteresseOpcoes,
+      window.OBE_DATA?.shoppingOpcoes,
+      window.OBE_DATA?.hospitalOpcoes,
+      window.OBE_DATA?.parquesOpcoes,
+      window.OBE_DATA?.espacosOpcoes,
+      window.OBE_DATA?.delegaciasOpcoes,
+      window.OBE_DATA?.pontoApoioOpcoes,
+      window.OBE_DATA?.popOpcoes,
+      window.OBE_DATA?.rsoOpcoes,
+      window.OBE_DATA?.cppPopOpcoes,
+    ];
+    for (const list of lists) {
+      const item = list?.find((m) => m.id === route);
+      if (item?.bloqueado) return true;
+    }
+    return false;
+  }
+
   function openModuleLink(route) {
+    if (isModuloBloqueado(route)) return true;
     const fromModulos = window.OBE_DATA?.modulos?.find((m) => m.id === route);
     const fromCpp = window.OBE_DATA?.cppOpcoes?.find((m) => m.id === route);
     const fromVtr = window.OBE_DATA?.vtrOpcoes?.find((m) => m.id === route);
@@ -1151,6 +1181,7 @@
   }
 
   function navigate(route, fromNav, fromHistory) {
+    if (isModuloBloqueado(route)) return;
     if (openModuleLink(route)) return;
     if (!main) return;
     if (!getRouteRenderer(route)) route = "inicio";

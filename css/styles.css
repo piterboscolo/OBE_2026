@@ -1055,6 +1055,21 @@ body.page-home #screen-app {
   filter: brightness(1.08);
 }
 
+.access-card--blocked {
+  cursor: not-allowed;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.access-card--blocked .access-card__face {
+  filter: grayscale(0.35);
+}
+
+.access-card--blocked:active .access-card__face {
+  transform: none;
+  filter: grayscale(0.35);
+}
+
 .access-card:focus-visible {
   outline: none;
 }
