@@ -880,14 +880,18 @@
     if (!box || !isSupervisorAtual()) return;
 
     const renderTotais = (totais, envios) => {
-      supTotaisCache = { totais, envios };
+      const data = {};
+      SUP_CAMPOS.forEach(([key]) => {
+        data[key] = Number(totais?.[key] || 0);
+      });
+      supTotaisCache = { totais: data, envios: Number(envios) || 0 };
       box.innerHTML = `
         <div class="sup-totais">
           ${SUP_CAMPOS.map(
             ([key, label, cor]) => `
             <article class="sup-card ${cor}">
               <span class="sup-card__label">${label}</span>
-              <span class="sup-card__val">${formatSupVal(key, totais[key] || 0)}</span>
+              <span class="sup-card__val">${formatSupVal(key, data[key])}</span>
             </article>`
           ).join("")}
         </div>
@@ -900,21 +904,41 @@
       zeros[key] = 0;
     });
 
-    if (!window.OBE_DB?.listarResultadosQuantitativos) {
+    if (!window.OBE_DB?.isConfigured?.()) {
       renderTotais(zeros, 0);
       return;
     }
+
     try {
-      const rows = await window.OBE_DB.listarResultadosQuantitativos(null, 100);
+      // Preferência: agregação no banco (todos os registros + campos novos)
+      if (window.OBE_DB.totaisResultadosQuantitativos) {
+        try {
+          const agg = await window.OBE_DB.totaisResultadosQuantitativos();
+          if (agg && typeof agg === "object") {
+            const envios = Number(agg.envios || 0);
+            renderTotais(agg, envios);
+            return;
+          }
+        } catch (_) {
+          /* cai no fallback listar */
+        }
+      }
+
+      const rows = await window.OBE_DB.listarResultadosQuantitativos(null, 500);
       const totais = { ...zeros };
       (rows || []).forEach((r) => {
         SUP_CAMPOS.forEach(([key]) => {
-          totais[key] += Number(r[key] || 0);
+          const raw =
+            r[key] ??
+            r[key.toLowerCase?.() || key] ??
+            0;
+          totais[key] += Number(raw) || 0;
         });
       });
       renderTotais(totais, (rows || []).length);
-    } catch (_) {
-      renderTotais(zeros, 0);
+    } catch (err) {
+      box.innerHTML = `<p class="empty">Erro ao carregar totais. Execute fix_painel_supervisor_totais.sql no Supabase.<br><small>${String(err?.message || err || "")}</small></p>`;
+      supTotaisCache = { totais: zeros, envios: 0 };
     }
   }
 

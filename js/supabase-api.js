@@ -124,6 +124,20 @@
     return Array.isArray(data) ? data : [data];
   }
 
+  async function totaisResultadosQuantitativos() {
+    const data = await rpc("totais_resultados_quantitativos", {});
+    if (!data) return null;
+    // PostgREST pode devolver o json direto ou encapsulado
+    if (typeof data === "string") {
+      try {
+        return JSON.parse(data);
+      } catch (_) {
+        return null;
+      }
+    }
+    return data;
+  }
+
   window.OBE_DB = {
     isConfigured,
     getConfig,
@@ -131,5 +145,6 @@
     loginUsuario,
     salvarResultadoQuantitativo,
     listarResultadosQuantitativos,
+    totaisResultadosQuantitativos,
   };
 })();
