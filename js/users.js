@@ -15,7 +15,7 @@
     { re: "104221", senha: "passos", nome: "PASSOS", graduacao: "Al Sgt PM", setor: "P4", setorCurto: "P4" },
     { re: "191906", senha: "jessica", nome: "JESSICA", graduacao: "Al Sgt PM", setor: "P5", setorCurto: "P5" },
     { re: "191042", senha: "rayane", nome: "RAYANE", graduacao: "Al Sgt PM", setor: "P5", setorCurto: "P5" },
-    { re: "152709", senha: "marcella", nome: "MARCELLA", graduacao: "1º Ten PM", setor: "COMANDANTE DE CIA", setorCurto: "Cmt de Cia" },
+    { re: "122507", senha: "henriques", nome: "HENRIQUES", graduacao: "Subten PM", setor: "SUPERVISOR OP", setorCurto: "Sup Op" },
     { re: "136802", senha: "bezerra", nome: "BEZERRA", graduacao: "1º Ten PM", setor: "COMANDANTE DE PELOTÕES", setorCurto: "Cmt de Pel" },
     { re: "129361", senha: "braga", nome: "BRAGA", graduacao: "1º Sgt PM", setor: "SUPERVISOR OP", setorCurto: "Sup Op" },
     { re: "982648", senha: "gonsaga", nome: "GONSAGA", graduacao: "Subten PM", setor: "SUPERVISOR OP", setorCurto: "Sup Op" },

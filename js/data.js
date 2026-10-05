@@ -654,32 +654,39 @@ window.OBE_DATA = {
 
   pontoApoioOpcoes: [
     {
-      id: "pa-bcs-praca-carmo",
-      titulo: "BCSM - Pça do Carmo",
-      descricao: "Praça do Carmo, s/n - Centro, Santo André - SP",
-      sigla: "BCSM",
-      icon: "vtr",
+      id: "pa-terminal-barra-funda",
+      titulo: "Terminal Barra Funda",
+      descricao: "Terminal Rodoviário Barra Funda - Barra Funda",
+      sigla: "TBF",
+      icon: "base",
     },
     {
-      id: "pa-bcs-celso-daniel",
-      titulo: "BCSM - Estação Celso Daniel",
-      descricao: "Rua Itambé, 40 - Centro, Santo André - SP",
-      sigla: "BCSM",
-      icon: "vtr",
+      id: "pa-memorial-america-latina",
+      titulo: "Memorial da América Latina",
+      descricao: "Av. Mário de Andrade, 664",
+      sigla: "MAL",
+      icon: "base",
     },
     {
-      id: "pa-catedral-carmo",
-      titulo: "Catedral N. Sra. do Carmo",
-      descricao: "Praça do Carmo, s/n - Centro, Santo André - SP",
-      sigla: "CAT",
-      icon: "igreja",
+      id: "pa-museu-inclusao",
+      titulo: "Museu da Inclusão",
+      descricao: "Memorial da América Latina - Av. Mário de Andrade, 564 - Portão 10",
+      sigla: "MI",
+      icon: "base",
     },
     {
-      id: "pa-3cia-4btl",
-      titulo: "3ª Cia do 4º BPM/M",
-      descricao: "R. Itapicuru, 80 - Perdizes, São Paulo - SP",
-      sigla: "3ª",
-      icon: "quartel",
+      id: "pa-uninove-memorial",
+      titulo: "UNINOVE - Campus Memorial",
+      descricao: "Prédio D - Rua Deputado Salvador Julianelli, s/n - Barra Funda",
+      sigla: "UNI",
+      icon: "base",
+    },
+    {
+      id: "pa-acs-barra-funda",
+      titulo: "Associação dos Cabos e Soldados",
+      descricao: "Av. Marquês de S. Vicente, 531 - Barra Funda",
+      sigla: "ACS",
+      icon: "base",
     },
     {
       id: "pa-bcsm-4bpmm",
@@ -691,25 +698,34 @@ window.OBE_DATA = {
   ],
 
   pontoApoioDestinos: {
-    "pa-bcs-praca-carmo": {
-      nome: "BCSM - Pça do Carmo",
-      destino: "Praça do Carmo, s/n - Centro, Santo André - SP",
+    "pa-terminal-barra-funda": {
+      nome: "Terminal Barra Funda",
+      destino: "Terminal Rodoviário Barra Funda - Barra Funda, São Paulo - SP",
+      detalhes: "Terminal Rodoviário Barra Funda - Barra Funda",
       travelmode: "driving",
     },
-    "pa-bcs-celso-daniel": {
-      nome: "BCSM - Estação Celso Daniel",
-      destino: "Rua Itambé, 40 - Centro, Santo André - SP",
+    "pa-memorial-america-latina": {
+      nome: "Memorial da América Latina",
+      destino: "Av. Mário de Andrade, 664 - Barra Funda, São Paulo - SP",
+      detalhes: "Av. Mário de Andrade, 664",
       travelmode: "driving",
     },
-    "pa-catedral-carmo": {
-      nome: "Catedral Nossa Senhora do Carmo",
-      destino: "Praça do Carmo, s/n - Centro, Santo André - SP",
+    "pa-museu-inclusao": {
+      nome: "Museu da Inclusão",
+      destino: "Av. Mário de Andrade, 564 - Portão 10, Memorial da América Latina, São Paulo - SP",
+      detalhes: "Memorial da América Latina - Av. Mário de Andrade, 564 - Portão 10",
       travelmode: "driving",
     },
-    "pa-3cia-4btl": {
-      nome: "3ª Cia do 4º BPM/M",
-      destino: "R. Itapicuru, 80 - Perdizes, São Paulo - SP, 01235-000",
-      telefone: "+55 11 3834-6730",
+    "pa-uninove-memorial": {
+      nome: "UNINOVE - Campus Memorial (Prédio D)",
+      destino: "Rua Deputado Salvador Julianelli, s/n - Barra Funda, São Paulo - SP",
+      detalhes: "Campus Memorial - Prédio D",
+      travelmode: "driving",
+    },
+    "pa-acs-barra-funda": {
+      nome: "Associação dos Cabos e Soldados",
+      destino: "Av. Marquês de São Vicente, 531 - Barra Funda, São Paulo - SP",
+      detalhes: "Av. Marquês de S. Vicente, 531 - Barra Funda",
       travelmode: "driving",
     },
     "pa-bcsm-4bpmm": {
