@@ -56,9 +56,10 @@ window.OBE_DATA = {
     {
       id: "vtr",
       titulo: "CPP VTR",
-      descricao: "CPP e RSO das viaturas",
+      descricao: "CPP das viaturas",
       sigla: "VTR",
       icon: "vtr",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1678212823#gid=1678212823",
     },
     {
       id: "cpp-mapa",
@@ -242,23 +243,7 @@ window.OBE_DATA = {
     },
   },
 
-  vtrOpcoes: [
-    {
-      id: "vtr-cpp",
-      titulo: "CPP",
-      descricao: "Planilha e documentação CPP VTR",
-      sigla: "CPP",
-      icon: "vtr",
-      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1678212823#gid=1678212823",
-    },
-    {
-      id: "vtr-rso",
-      titulo: "RSO",
-      descricao: "Relatórios de serviço operacional VTR",
-      sigla: "RSO",
-      icon: "sheet",
-    },
-  ],
+  vtrOpcoes: [],
 
   vtrRsoOpcoes: [
     {

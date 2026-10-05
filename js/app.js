@@ -908,7 +908,7 @@
     const opcoes = window.OBE_DATA.vtrOpcoes || [];
     return `
       <div class="page page--subcards">
-        ${pageHeader("CPP VTR", "Escolha CPP ou RSO")}
+        ${pageHeader("CPP VTR", "Planilha CPP das viaturas")}
         <div class="access-grid access-grid--sub">
           ${opcoes.map(cardHtml).join("")}
         </div>

@@ -18,7 +18,7 @@
     { re: "152709", senha: "marcella", nome: "MARCELLA", graduacao: "1º Ten PM", setor: "COMANDANTE DE CIA", setorCurto: "Cmt de Cia" },
     { re: "136802", senha: "bezerra", nome: "BEZERRA", graduacao: "1º Ten PM", setor: "COMANDANTE DE PELOTÕES", setorCurto: "Cmt de Pel" },
     { re: "129361", senha: "braga", nome: "BRAGA", graduacao: "1º Sgt PM", setor: "SUPERVISOR OP", setorCurto: "Sup Op" },
-    { re: "149756", senha: "russo", nome: "RUSSO", graduacao: "2º Sgt PM", setor: "SUPERVISOR OP", setorCurto: "Sup Op" },
+    { re: "982648", senha: "gonsaga", nome: "GONSAGA", graduacao: "Subten PM", setor: "SUPERVISOR OP", setorCurto: "Sup Op" },
     { re: "910345", senha: "asaka", nome: "ASAKA", graduacao: "Cel PM", setor: "CMT DA ESSGT", setorCurto: "Cmt da ESSgt" },
     { re: "981001", senha: "alex", nome: "ALEX", graduacao: "Ten Cel PM", setor: "SUBCMT DA ESSGT", setorCurto: "Subcmt da ESSgt" },
     { re: "100295", senha: "flavia", nome: "FLAVIA", graduacao: "Maj PM", setor: "CMT DA ESSFAG", setorCurto: "Cmt da ESSFAG" },
