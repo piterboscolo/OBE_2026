@@ -683,15 +683,15 @@
     ["armas_apreendidas", "Armas Apreendidas (fogo/branca)", "sup-card--slate"],
     ["automoveis_fiscalizados", "Automóveis Fiscalizados", "sup-card--navy"],
     ["automoveis_removidos", "Automóveis Removidos", "sup-card--amber"],
-    ["bopm", "BOPM Elaborados", "sup-card--navy"],
-    ["conducao_ao_dp", "Condução ao DP", "sup-card--amber"],
+    ["bopm", "BOPM Elaborados", "sup-card--indigo"],
+    ["conducao_ao_dp", "Condução ao DP", "sup-card--orange"],
     ["drogas_kg", "Drogas (Kg)", "sup-card--black"],
-    ["flagrante_delito", "Flagrante Delito", "sup-card--red"],
-    ["motocicletas_vistoriadas", "Motocicletas Vistoriadas", "sup-card--green"],
-    ["motos_removidas", "Motos Removidas", "sup-card--slate"],
-    ["pessoas_abordadas", "Pessoas Abordadas", "sup-card--blue"],
+    ["flagrante_delito", "Flagrante Delito", "sup-card--crimson"],
+    ["motocicletas_vistoriadas", "Motocicletas Vistoriadas", "sup-card--olive"],
+    ["motos_removidas", "Motos Removidas", "sup-card--brown"],
+    ["pessoas_abordadas", "Pessoas Abordadas", "sup-card--sky"],
     ["pessoas_presa_detida", "Pessoas Presas/Detidas e Recapturadas", "sup-card--violet"],
-    ["veiculos_fiscalizados", "Veículos Fiscalizados", "sup-card--teal"],
+    ["veiculos_fiscalizados", "Veículos Fiscalizados", "sup-card--rose"],
   ];
 
   const RQ_IDS = SUP_CAMPOS.map(([key]) => key);

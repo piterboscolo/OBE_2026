@@ -1366,76 +1366,79 @@ body.page-home #screen-app {
 .sup-totais {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
   margin: 0 0 8px;
 }
 
 .sup-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 10px;
-  min-height: 96px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  color: #fff;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  gap: 14px;
+  min-height: 104px;
+  padding: 14px 14px 12px;
+  border-radius: 14px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #002355;
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(0, 35, 85, 0.06);
+  overflow: hidden;
+}
+
+.sup-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #002355;
+  opacity: 0.95;
 }
 
 .sup-card__label {
-  font-size: 0.72rem;
-  font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: 0.02em;
-  opacity: 0.92;
-  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  opacity: 0.72;
+  color: inherit;
+  max-width: 100%;
 }
 
 .sup-card__val {
-  font-size: clamp(1.75rem, 7vw, 2.35rem);
+  font-size: clamp(1.65rem, 6.5vw, 2.15rem);
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.02em;
-  color: #fff;
+  letter-spacing: -0.03em;
+  color: inherit;
   font-variant-numeric: tabular-nums;
+  align-self: flex-end;
 }
 
-.sup-card--blue {
-  background: #1565c0;
-}
-
-.sup-card--teal {
-  background: #00838f;
-}
-
-.sup-card--green {
-  background: #2e7d32;
-}
-
-.sup-card--navy {
-  background: #0033a0;
-}
-
-.sup-card--amber {
-  background: #c47a12;
-}
-
-.sup-card--red {
-  background: #c8102e;
-}
-
-.sup-card--slate {
-  background: #455a64;
-}
-
-.sup-card--violet {
-  background: #111111;
-}
-
-.sup-card--black {
-  background: #111111;
+.sup-card--blue,
+.sup-card--teal,
+.sup-card--green,
+.sup-card--navy,
+.sup-card--amber,
+.sup-card--red,
+.sup-card--slate,
+.sup-card--violet,
+.sup-card--black,
+.sup-card--cyan,
+.sup-card--indigo,
+.sup-card--orange,
+.sup-card--rose,
+.sup-card--olive,
+.sup-card--brown,
+.sup-card--sky,
+.sup-card--crimson {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #002355;
 }
 
 .sup-totais-meta {
