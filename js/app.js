@@ -345,14 +345,20 @@
 
   function renderResultadoQuantitativo() {
     const campos = [
-      { id: "pessoas_abordadas", label: "Pessoas Abordadas", step: "1" },
-      { id: "veiculos_fiscalizados", label: "Veículos Fiscalizados", step: "1" },
+      { id: "ait_lavrados", label: "AIT Lavrados", step: "1" },
       { id: "apoio_ao_publico", label: "Apoio ao Público", step: "1" },
-      { id: "bopm", label: "BOPM", step: "1" },
+      { id: "armas_apreendidas", label: "Armas Apreendidas (fogo/branca)", step: "1" },
+      { id: "automoveis_fiscalizados", label: "Automóveis Fiscalizados", step: "1" },
+      { id: "automoveis_removidos", label: "Automóveis Removidos", step: "1" },
+      { id: "bopm", label: "BOPM Elaborados", step: "1" },
       { id: "conducao_ao_dp", label: "Condução ao DP", step: "1" },
+      { id: "drogas_kg", label: "Drogas (Kg)", step: "0.001" },
       { id: "flagrante_delito", label: "Flagrante Delito", step: "1" },
-      { id: "armas_apreendidas", label: "Armas Apreendidas", step: "1" },
-      { id: "drogas_kg", label: "Drogas (qtd em Kg)", step: "0.001" },
+      { id: "motocicletas_vistoriadas", label: "Motocicletas Vistoriadas", step: "1" },
+      { id: "motos_removidas", label: "Motos Removidas", step: "1" },
+      { id: "pessoas_abordadas", label: "Pessoas Abordadas", step: "1" },
+      { id: "pessoas_presa_detida", label: "Pessoas Presas/Detidas e Recapturadas", step: "1" },
+      { id: "veiculos_fiscalizados", label: "Veículos Fiscalizados", step: "1" },
     ];
 
     const fields = campos
@@ -672,15 +678,23 @@
   let supTotaisCache = null;
 
   const SUP_CAMPOS = [
-    ["pessoas_abordadas", "Pessoas Abordadas", "sup-card--blue"],
-    ["veiculos_fiscalizados", "Veículos Fiscalizados", "sup-card--teal"],
+    ["ait_lavrados", "AIT Lavrados", "sup-card--teal"],
     ["apoio_ao_publico", "Apoio ao Público", "sup-card--green"],
-    ["bopm", "BOPM", "sup-card--navy"],
+    ["armas_apreendidas", "Armas Apreendidas (fogo/branca)", "sup-card--slate"],
+    ["automoveis_fiscalizados", "Automóveis Fiscalizados", "sup-card--navy"],
+    ["automoveis_removidos", "Automóveis Removidos", "sup-card--amber"],
+    ["bopm", "BOPM Elaborados", "sup-card--navy"],
     ["conducao_ao_dp", "Condução ao DP", "sup-card--amber"],
-    ["flagrante_delito", "Flagrante Delito", "sup-card--red"],
-    ["armas_apreendidas", "Armas Apreendidas", "sup-card--slate"],
     ["drogas_kg", "Drogas (Kg)", "sup-card--black"],
+    ["flagrante_delito", "Flagrante Delito", "sup-card--red"],
+    ["motocicletas_vistoriadas", "Motocicletas Vistoriadas", "sup-card--green"],
+    ["motos_removidas", "Motos Removidas", "sup-card--slate"],
+    ["pessoas_abordadas", "Pessoas Abordadas", "sup-card--blue"],
+    ["pessoas_presa_detida", "Pessoas Presas/Detidas e Recapturadas", "sup-card--violet"],
+    ["veiculos_fiscalizados", "Veículos Fiscalizados", "sup-card--teal"],
   ];
+
+  const RQ_IDS = SUP_CAMPOS.map(([key]) => key);
 
   function formatSupVal(key, n) {
     const num = Number(n) || 0;
@@ -1303,11 +1317,17 @@
         login: currentUser.login,
         nome: currentUser.name || currentUser.login,
         pessoas_abordadas: num("pessoas_abordadas"),
+        pessoas_presa_detida: num("pessoas_presa_detida"),
         veiculos_fiscalizados: num("veiculos_fiscalizados"),
+        automoveis_fiscalizados: num("automoveis_fiscalizados"),
+        motocicletas_vistoriadas: num("motocicletas_vistoriadas"),
+        automoveis_removidos: num("automoveis_removidos"),
+        motos_removidas: num("motos_removidas"),
         apoio_ao_publico: num("apoio_ao_publico"),
         bopm: num("bopm"),
         conducao_ao_dp: num("conducao_ao_dp"),
         flagrante_delito: num("flagrante_delito"),
+        ait_lavrados: num("ait_lavrados"),
         armas_apreendidas: num("armas_apreendidas"),
         drogas_kg: num("drogas_kg"),
       };
@@ -1321,7 +1341,7 @@
         await window.OBE_DB.salvarResultadoQuantitativo(payload);
         if (okEl) okEl.hidden = false;
         form.reset();
-        ["pessoas_abordadas","veiculos_fiscalizados","apoio_ao_publico","bopm","conducao_ao_dp","flagrante_delito","armas_apreendidas","drogas_kg"].forEach((id) => {
+        RQ_IDS.forEach((id) => {
           const input = document.getElementById("rq-" + id);
           if (input) input.value = "0";
         });

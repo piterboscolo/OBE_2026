@@ -1,49 +1,22 @@
 -- ============================================================
--- Resultado Quantitativo — OBE 2026 SGE
--- Cole no SQL Editor do Supabase e execute.
+-- Migração: novos campos do Resultado Quantitativo
+-- Execute no SQL Editor do Supabase (projeto já em uso).
 -- ============================================================
 
-create table if not exists public.resultados_quantitativos (
-  id uuid primary key default gen_random_uuid(),
-  login text not null,
-  nome text,
-  pessoas_abordadas integer not null default 0 check (pessoas_abordadas >= 0),
-  pessoas_presa_detida integer not null default 0 check (pessoas_presa_detida >= 0),
-  veiculos_fiscalizados integer not null default 0 check (veiculos_fiscalizados >= 0),
-  automoveis_fiscalizados integer not null default 0 check (automoveis_fiscalizados >= 0),
-  motocicletas_vistoriadas integer not null default 0 check (motocicletas_vistoriadas >= 0),
-  automoveis_removidos integer not null default 0 check (automoveis_removidos >= 0),
-  motos_removidas integer not null default 0 check (motos_removidas >= 0),
-  apoio_ao_publico integer not null default 0 check (apoio_ao_publico >= 0),
-  bopm integer not null default 0 check (bopm >= 0),
-  conducao_ao_dp integer not null default 0 check (conducao_ao_dp >= 0),
-  flagrante_delito integer not null default 0 check (flagrante_delito >= 0),
-  ait_lavrados integer not null default 0 check (ait_lavrados >= 0),
-  armas_apreendidas integer not null default 0 check (armas_apreendidas >= 0),
-  drogas_kg numeric(12, 3) not null default 0 check (drogas_kg >= 0),
-  criado_em timestamptz not null default now()
-);
+alter table public.resultados_quantitativos
+  add column if not exists pessoas_presa_detida integer not null default 0;
+alter table public.resultados_quantitativos
+  add column if not exists automoveis_fiscalizados integer not null default 0;
+alter table public.resultados_quantitativos
+  add column if not exists motocicletas_vistoriadas integer not null default 0;
+alter table public.resultados_quantitativos
+  add column if not exists automoveis_removidos integer not null default 0;
+alter table public.resultados_quantitativos
+  add column if not exists motos_removidas integer not null default 0;
+alter table public.resultados_quantitativos
+  add column if not exists ait_lavrados integer not null default 0;
 
--- Colunas novas (banco já existente)
-alter table public.resultados_quantitativos
-  add column if not exists pessoas_presa_detida integer not null default 0 check (pessoas_presa_detida >= 0);
-alter table public.resultados_quantitativos
-  add column if not exists automoveis_fiscalizados integer not null default 0 check (automoveis_fiscalizados >= 0);
-alter table public.resultados_quantitativos
-  add column if not exists motocicletas_vistoriadas integer not null default 0 check (motocicletas_vistoriadas >= 0);
-alter table public.resultados_quantitativos
-  add column if not exists automoveis_removidos integer not null default 0 check (automoveis_removidos >= 0);
-alter table public.resultados_quantitativos
-  add column if not exists motos_removidas integer not null default 0 check (motos_removidas >= 0);
-alter table public.resultados_quantitativos
-  add column if not exists ait_lavrados integer not null default 0 check (ait_lavrados >= 0);
-
-create index if not exists idx_rq_login on public.resultados_quantitativos (login);
-create index if not exists idx_rq_criado on public.resultados_quantitativos (criado_em desc);
-
-alter table public.resultados_quantitativos enable row level security;
-
--- Remove assinatura antiga (evita overload)
+-- Remove funções antigas (assinatura antiga)
 drop function if exists public.salvar_resultado_quantitativo(text, text, integer, integer, integer, integer, integer, integer, integer, numeric);
 drop function if exists public.listar_resultados_quantitativos(text, integer);
 
@@ -185,7 +158,5 @@ begin
 end;
 $$;
 
-revoke all on function public.salvar_resultado_quantitativo(text, text, integer, integer, integer, integer, integer, integer, integer, integer, integer, integer, integer, integer, integer, numeric) from public;
-revoke all on function public.listar_resultados_quantitativos(text, integer) from public;
 grant execute on function public.salvar_resultado_quantitativo(text, text, integer, integer, integer, integer, integer, integer, integer, integer, integer, integer, integer, integer, integer, numeric) to anon, authenticated;
 grant execute on function public.listar_resultados_quantitativos(text, integer) to anon, authenticated;
