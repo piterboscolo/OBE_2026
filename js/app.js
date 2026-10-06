@@ -663,7 +663,7 @@
     }
     return `
       <div class="page page--rq">
-        ${pageHeader("Painel do Supervisor", "Totais da operação")}
+        ${pageHeader("Painel do Supervisor", "Quantitativo")}
         <div id="sup-resultados">
           <p class="empty">Carregando totais…</p>
         </div>

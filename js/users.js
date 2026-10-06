@@ -3,7 +3,7 @@
     { re: "171204", senha: "soriano", nome: "SORIANO", graduacao: "Al Sgt PM", setor: "CMT", setorCurto: "Cmt da OBE" },
     { re: "200183", senha: "alyson", nome: "ALYSON", graduacao: "Al Sgt PM", setor: "SUBCMT", setorCurto: "Subcmt da OBE" },
     { re: "102525", senha: "murilo", nome: "MURILO", graduacao: "Al Sgt PM", setor: "TELEMATICA", setorCurto: "Telemática" },
-    { re: "104032", senha: "roberto brito", nome: "ROBERTO BRITO", graduacao: "Al Sgt PM", setor: "SALA DE SITUAÇÕES", setorCurto: "Sala Sit" },
+    { re: "104032", senha: "roberto", nome: "ROBERTO", graduacao: "Al Sgt PM", setor: "SALA DE SITUAÇÕES", setorCurto: "Sala Sit" },
     { re: "150912", senha: "reis", nome: "REIS", graduacao: "Al Sgt PM", setor: "P1", setorCurto: "P1" },
     { re: "146472", senha: "castro", nome: "CASTRO", graduacao: "Al Sgt PM", setor: "P1", setorCurto: "P1" },
     { re: "103971", senha: "terin", nome: "TERIN", graduacao: "Al Sgt PM", setor: "P2", setorCurto: "P2" },
@@ -20,12 +20,14 @@
     { re: "129361", senha: "braga", nome: "BRAGA", graduacao: "1º Sgt PM", setor: "SUPERVISOR OP", setorCurto: "Sup Op" },
     { re: "982648", senha: "gonsaga", nome: "GONSAGA", graduacao: "Subten PM", setor: "SUPERVISOR OP", setorCurto: "Sup Op" },
     { re: "910345", senha: "asaka", nome: "ASAKA", graduacao: "Cel PM", setor: "CMT DA ESSGT", setorCurto: "Cmt da ESSgt" },
-    { re: "981001", senha: "alex", nome: "ALEX", graduacao: "Ten Cel PM", setor: "SUBCMT DA ESSGT", setorCurto: "Subcmt da ESSgt" },
     { re: "100295", senha: "flavia", nome: "FLAVIA", graduacao: "Maj PM", setor: "CMT DA ESSFAG", setorCurto: "Cmt da ESSFAG" },
-    { re: "118455", senha: "tania", nome: "TANIA", graduacao: "Cap PM", setor: "CMT DA 1ª CIA", setorCurto: "Cmt da 1ª Cia" },
+    { re: "118455", senha: "tania", nome: "TANIA", graduacao: "Cap PM", setor: "CMT DA 1ª CIA", setorCurto: "Cmt da 1ª Cia Es" },
     { re: "980874", senha: "granero", nome: "GRANERO", graduacao: "Ten Cel PM", setor: "SUBCMT DA ESSGT", setorCurto: "" },
     { re: "930633", senha: "helder", nome: "HELDER", graduacao: "Cel PM", setor: "", setorCurto: "" },
     { re: "118426", senha: "jose", nome: "JOSE ANTONIO", graduacao: "Cap PM", setor: "OBE", setorCurto: "" },
+    { re: "116134", senha: "sanches", nome: "Sanches", graduacao: "Cap PM", setor: "OBE", setorCurto: "Cmt da 2ª Cia Es" },
+    { re: "973654", senha: "soares", nome: "SOARES", graduacao: "Maj PM", setor: "CH DIV DA ESSGT", setorCurto: "Cmt da ESSgt" },
+    { re: "127845", senha: "dene", nome: "DENE", graduacao: "Cap PM", setor: "OBE", setorCurto: "Cmt da 3ª Cia Es" },
   ];
 
   function normalize(value) {

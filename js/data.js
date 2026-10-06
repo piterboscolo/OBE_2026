@@ -77,6 +77,14 @@ window.OBE_DATA = {
       icon: "pin",
     },
     {
+      id: "abordados",
+      titulo: "Abordados",
+      descricao: "Pessoas e veículos abordados OBE",
+      sigla: "AB",
+      icon: "users",
+      url: "https://docs.google.com/forms/d/e/1FAIpQLSdckd9cz0f-XYfiOMeGolq0rwEoMuWy_E4a3DcCDThg1AkWeg/viewform?usp=publish-editor",
+    },
+    {
       id: "painel-supervisor",
       titulo: "Painel do Supervisor",
       descricao: "Acesso restrito à lista autorizada",
