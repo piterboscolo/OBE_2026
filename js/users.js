@@ -26,7 +26,7 @@
     { re: "930633", senha: "helder", nome: "HELDER", graduacao: "Cel PM", setor: "", setorCurto: "" },
     { re: "118426", senha: "jose", nome: "JOSE ANTONIO", graduacao: "Cap PM", setor: "OBE", setorCurto: "" },
     { re: "116134", senha: "sanches", nome: "Sanches", graduacao: "Cap PM", setor: "OBE", setorCurto: "Cmt da 2ª Cia Es" },
-    { re: "973654", senha: "soares", nome: "SOARES", graduacao: "Maj PM", setor: "CH DIV DA ESSGT", setorCurto: "Cmt da ESSgt" },
+    { re: "973654", senha: "soares", nome: "SOARES", graduacao: "Maj PM", setor: "CH DIV DA ESSGT", setorCurto: "Ch Div da ESSgt" },
     { re: "127845", senha: "dene", nome: "DENE", graduacao: "Cap PM", setor: "OBE", setorCurto: "Cmt da 3ª Cia Es" },
   ];
 
