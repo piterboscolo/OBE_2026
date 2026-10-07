@@ -1114,6 +1114,42 @@
     return false;
   }
 
+  function normalizeSheetUrl(url) {
+    try {
+      const u = new URL(String(url || "").trim());
+      if (!/docs\.google\.com$/i.test(u.hostname) || !/\/spreadsheets\//i.test(u.pathname)) {
+        return String(url || "");
+      }
+      let gid = u.searchParams.get("gid");
+      if (!gid && u.hash) {
+        const m = String(u.hash).match(/gid=(\d+)/i);
+        if (m) gid = m[1];
+      }
+      if (!gid) return u.toString();
+      // Mantém gid na query e no hash — melhora abertura da aba correta no celular
+      u.searchParams.set("gid", gid);
+      u.searchParams.set("single", "true");
+      u.hash = "gid=" + gid;
+      return u.toString();
+    } catch (_) {
+      return String(url || "");
+    }
+  }
+
+  function openExternalUrl(url) {
+    const href = normalizeSheetUrl(url);
+    if (!href) return;
+    // <a>.click() preserva #gid= no mobile melhor que window.open
+    const a = document.createElement("a");
+    a.href = href;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
   function openModuleLink(route) {
     if (isModuloBloqueado(route)) return true;
     const fromModulos = window.OBE_DATA?.modulos?.find((m) => m.id === route);
@@ -1149,7 +1185,7 @@
       fromCppPop;
     if (!modulo) return false;
     if (modulo.url) {
-      window.open(modulo.url, "_blank", "noopener,noreferrer");
+      openExternalUrl(modulo.url);
       return true;
     }
     // card de submenu sem link e sem rota/destino interno — permanece na tela
