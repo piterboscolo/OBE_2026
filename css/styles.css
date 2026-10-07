@@ -1293,6 +1293,13 @@ body.page-home #screen-app {
   margin: 0 auto;
 }
 
+a.pop-chip {
+  text-decoration: none;
+  color: #fff;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .pop-chip {
   display: flex;
   flex-direction: row;
@@ -1345,6 +1352,7 @@ body.page-home #screen-app {
   letter-spacing: 0.02em;
   line-height: 1;
   white-space: nowrap;
+  color: #fff;
 }
 
 .rq-sup-user {

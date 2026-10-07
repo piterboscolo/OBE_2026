@@ -311,15 +311,7 @@
   function renderCppPopRso() {
     const opcoes = window.OBE_DATA.rsoOpcoes || [];
     const sheet = (window.obeIcon && window.obeIcon("sheet")) || "";
-    const rows = opcoes
-      .map(
-        (m) => `
-      <div class="pop-chip" data-route="${m.id}" role="button" tabindex="0" aria-label="${m.titulo}">
-        <span class="pop-chip__icon">${sheet}</span>
-        <span class="pop-chip__text">${m.titulo}</span>
-      </div>`
-      )
-      .join("");
+    const rows = opcoes.map((m) => sheetChipHtml(m, sheet)).join("");
     return `
       <div class="page page--pops">
         ${pageHeader("RSO", "Relatórios de serviço operacional")}
@@ -967,15 +959,7 @@
         </div>
       `;
     }
-    const rows = opcoes
-      .map(
-        (m) => `
-      <div class="pop-chip" data-route="${m.id}" role="button" tabindex="0" aria-label="${m.titulo}">
-        <span class="pop-chip__icon">${sheet}</span>
-        <span class="pop-chip__text">${m.titulo}</span>
-      </div>`
-      )
-      .join("");
+    const rows = opcoes.map((m) => sheetChipHtml(m, sheet)).join("");
     return `
       <div class="page page--pops">
         ${pageHeader("CPP", "Cartão de prioridade de patrulhamento VTR")}
@@ -999,15 +983,7 @@
         </div>
       `;
     }
-    const rows = opcoes
-      .map(
-        (m) => `
-      <div class="pop-chip" data-route="${m.id}" role="button" tabindex="0" aria-label="${m.titulo}">
-        <span class="pop-chip__icon">${sheet}</span>
-        <span class="pop-chip__text">${m.titulo}</span>
-      </div>`
-      )
-      .join("");
+    const rows = opcoes.map((m) => sheetChipHtml(m, sheet)).join("");
     return `
       <div class="page page--pops">
         ${pageHeader("RSO", "Relatórios de serviço operacional VTR")}
@@ -1116,21 +1092,28 @@
 
   function normalizeSheetUrl(url) {
     try {
-      const u = new URL(String(url || "").trim());
+      const raw = String(url || "").trim();
+      const u = new URL(raw);
       if (!/docs\.google\.com$/i.test(u.hostname) || !/\/spreadsheets\//i.test(u.pathname)) {
-        return String(url || "");
+        return raw;
       }
+      const idMatch = u.pathname.match(/\/spreadsheets\/d\/([^/]+)/i);
+      const sheetId = idMatch?.[1];
       let gid = u.searchParams.get("gid");
       if (!gid && u.hash) {
         const m = String(u.hash).match(/gid=(\d+)/i);
         if (m) gid = m[1];
       }
-      if (!gid) return u.toString();
-      // Mantém gid na query e no hash — melhora abertura da aba correta no celular
-      u.searchParams.set("gid", gid);
-      u.searchParams.set("single", "true");
-      u.hash = "gid=" + gid;
-      return u.toString();
+      if (!sheetId || !gid) return u.toString();
+      // Formato limpo (mesmo do "Copiar link" da aba no Google Sheets)
+      return (
+        "https://docs.google.com/spreadsheets/d/" +
+        sheetId +
+        "/edit?gid=" +
+        encodeURIComponent(gid) +
+        "&single=true#gid=" +
+        encodeURIComponent(gid)
+      );
     } catch (_) {
       return String(url || "");
     }
@@ -1139,7 +1122,34 @@
   function openExternalUrl(url) {
     const href = normalizeSheetUrl(url);
     if (!href) return;
-    // <a>.click() preserva #gid= no mobile melhor que window.open
+
+    const ua = navigator.userAgent || "";
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isSheet = /docs\.google\.com\/spreadsheets\//i.test(href);
+
+    // App Planilhas no celular ignora o gid e abre a 1ª aba.
+    // Força o Chrome (Intent URI não pode ter '#' antes de #Intent).
+    if (isSheet && isAndroid) {
+      const noHash = href.split("#")[0];
+      const path = noHash.replace(/^https?:\/\//i, "");
+      window.location.href =
+        "intent://" +
+        path +
+        "#Intent;scheme=https;package=com.android.chrome;" +
+        "S.browser_fallback_url=" +
+        encodeURIComponent(href) +
+        ";end";
+      return;
+    }
+
+    if (isSheet && isIOS) {
+      // Evita Universal Link do app Sheets (descarta #gid)
+      window.location.href =
+        "https://www.google.com/url?q=" + encodeURIComponent(href) + "&sa=D&ust=" + Date.now();
+      return;
+    }
+
     const a = document.createElement("a");
     a.href = href;
     a.target = "_blank";
@@ -1148,6 +1158,23 @@
     document.body.appendChild(a);
     a.click();
     a.remove();
+  }
+
+  function sheetChipHtml(m, iconHtml) {
+    const titulo = String(m?.titulo || "");
+    const href = normalizeSheetUrl(m?.url || "");
+    if (href) {
+      return `
+      <a class="pop-chip pop-chip--link" href="${href}" target="_blank" rel="noopener noreferrer" data-external-sheet="1" aria-label="${titulo}">
+        <span class="pop-chip__icon">${iconHtml}</span>
+        <span class="pop-chip__text">${titulo}</span>
+      </a>`;
+    }
+    return `
+      <div class="pop-chip" data-route="${m.id}" role="button" tabindex="0" aria-label="${titulo}">
+        <span class="pop-chip__icon">${iconHtml}</span>
+        <span class="pop-chip__text">${titulo}</span>
+      </div>`;
   }
 
   function openModuleLink(route) {
@@ -1480,6 +1507,13 @@
         return;
       }
 
+      const sheetLink = e.target.closest("a.pop-chip[data-external-sheet]");
+      if (sheetLink && main.contains(sheetLink)) {
+        e.preventDefault();
+        openExternalUrl(sheetLink.getAttribute("href") || sheetLink.href);
+        return;
+      }
+
       const card = e.target.closest(".access-card[data-route], .pop-chip[data-route]");
       if (card && main.contains(card)) {
         const route = card.dataset.route;
@@ -1491,6 +1525,12 @@
 
     main.addEventListener("keydown", (e) => {
       if (e.key !== "Enter" && e.key !== " ") return;
+      const sheetLink = e.target.closest("a.pop-chip[data-external-sheet]");
+      if (sheetLink) {
+        e.preventDefault();
+        openExternalUrl(sheetLink.getAttribute("href") || sheetLink.href);
+        return;
+      }
       const card = e.target.closest(".access-card[data-route], .pop-chip[data-route]");
       if (!card) return;
       e.preventDefault();
