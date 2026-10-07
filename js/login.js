@@ -127,7 +127,7 @@
         return;
       }
       showError(
-        "Acesso negado. Use um RE cadastrado no sistema (users.js ou tabela usuarios) com a senha correta."
+        "Acesso negado. RE não cadastrado no sistema!"
       );
     } catch (err) {
       const msg = String(err?.message || err || "");
