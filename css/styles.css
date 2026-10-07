@@ -898,6 +898,126 @@ body.page-home #screen-app {
   justify-self: center;
 }
 
+.eventos-bot {
+  width: 100%;
+  margin: 18px 0 8px;
+  padding: 12px 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(0, 35, 85, 0.06), rgba(0, 35, 85, 0.02));
+  border: 1px solid rgba(0, 35, 85, 0.12);
+  box-sizing: border-box;
+}
+
+.eventos-bot__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.eventos-bot__avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #002355;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.eventos-bot__pulse {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 35, 85, 0.35);
+  animation: eventosBotPulse 1.6s ease-out infinite;
+}
+
+.eventos-bot__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.eventos-bot__titles strong {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #002355;
+  line-height: 1.2;
+}
+
+.eventos-bot__titles span {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.eventos-bot__status {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
+  min-height: 1.35em;
+}
+
+.eventos-bot__source {
+  margin: 0 0 10px;
+  font-size: 0.68rem;
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  color: var(--text-muted);
+  line-height: 1.3;
+  min-height: 1.3em;
+  word-break: break-word;
+}
+
+.eventos-loading__track {
+  position: relative;
+  width: 100%;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(0, 35, 85, 0.12);
+}
+
+.eventos-loading__bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 40%;
+  border-radius: 999px;
+  background: #002355;
+  animation: eventosLoading 1.4s ease-in-out infinite;
+}
+
+@keyframes eventosLoading {
+  0% {
+    left: -40%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes eventosBotPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
 .badge {
   display: inline-flex;
   align-items: center;

@@ -884,12 +884,22 @@ window.OBE_DATA = {
 
   eventos: [
     {
-      titulo: "Palmeiras-Barra Funda",
-      data: "09/10/2026",
-      local: "Eixos de entretenimento junto ao Metrô Palmeiras-Barra Funda",
+      titulo: "Urias — Turnê Carranca 1 Ano",
+      data: "Sexta-feira, 9 de outubro de 2026",
+      hora: "21h",
+      local: "Audio, Avenida Francisco Matarazzo, 694, Barra Funda, São Paulo, SP",
       status: "Informativo",
       descricao:
-        "Não há grandes megashows ou festivais de grande porte agendados para os principais eixos de entretenimento colados à estação de metrô Palmeiras-Barra Funda especificamente na sexta-feira, 9 de outubro de 2026.",
+        "Show de grande apelo na cena pop nacional com a artista Urias celebrando um ano do projeto Carranca.",
+    },
+    {
+      titulo: "Gregorio Duvivier — O Céu da Língua",
+      data: "Sexta-feira, 9 de outubro de 2026",
+      hora: "19h",
+      local: "Espaço Unimed, Rua Tagipuru, 795, Barra Funda, São Paulo, SP",
+      status: "Informativo",
+      descricao:
+        "Monólogo e show de humor ácido e crítico sobre a língua portuguesa e o cotidiano, com grande capacidade de público sentado.",
     },
   ],
 

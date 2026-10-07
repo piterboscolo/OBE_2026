@@ -414,9 +414,62 @@
       <div class="page">
         ${pageHeader("Eventos", "Agenda e programação da operação")}
         ${corpo}
+        <div class="eventos-bot" id="eventos-bot" aria-hidden="true">
+          <div class="eventos-bot__head">
+            <span class="eventos-bot__avatar" aria-hidden="true">
+              <span class="eventos-bot__pulse"></span>
+              BOT
+            </span>
+            <div class="eventos-bot__titles">
+              <strong>Agente de monitoramento</strong>
+              <span>Buscando eventos na internet</span>
+            </div>
+          </div>
+          <p class="eventos-bot__status" id="eventos-bot-status">Iniciando varredura…</p>
+          <p class="eventos-bot__source" id="eventos-bot-source">fonte: —</p>
+          <div class="eventos-loading__track">
+            <span class="eventos-loading__bar"></span>
+          </div>
+        </div>
         ${pageBack()}
       </div>
     `;
+  }
+
+  let eventosBotTimer = null;
+
+  function stopEventosBotDemo() {
+    if (eventosBotTimer) {
+      clearInterval(eventosBotTimer);
+      eventosBotTimer = null;
+    }
+  }
+
+  function startEventosBotDemo() {
+    stopEventosBotDemo();
+    const statusEl = document.getElementById("eventos-bot-status");
+    const sourceEl = document.getElementById("eventos-bot-source");
+    if (!statusEl || !sourceEl) return;
+
+    const steps = [
+      { status: "Conectando à rede…", source: "fonte: gateway operacional" },
+      { status: "Pesquisando agendas culturais em SP…", source: "fonte: google.com / eventos" },
+      { status: "Varredura: Barra Funda · 09/10/2026", source: "fonte: ticketmaster / sympla" },
+      { status: "Cruzando locais e horários…", source: "fonte: mapas + programação" },
+      { status: "Validando capacidade de público…", source: "fonte: bases abertas" },
+      { status: "Atualizando painel de eventos…", source: "fonte: agente OBE" },
+      { status: "Monitoramento contínuo ativo", source: "fonte: varredura automática" },
+    ];
+
+    let i = 0;
+    const apply = () => {
+      const step = steps[i % steps.length];
+      statusEl.textContent = step.status;
+      sourceEl.textContent = step.source;
+      i += 1;
+    };
+    apply();
+    eventosBotTimer = setInterval(apply, 2200);
   }
 
   function renderAbastecimento() {
@@ -1311,6 +1364,8 @@
     currentRoute = route;
     setActiveNav(route);
 
+    stopEventosBotDemo();
+
     if (route === "escala") main.innerHTML = renderEscala(!!fromNav);
     else main.innerHTML = (getRouteRenderer(route) || routes.inicio)();
 
@@ -1320,6 +1375,9 @@
 
     if (route === "painel-supervisor") {
       loadPainelSupervisor();
+    }
+    if (route === "eventos") {
+      startEventosBotDemo();
     }
 
     try {
