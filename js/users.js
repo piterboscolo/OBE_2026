@@ -28,6 +28,8 @@
     { re: "116134", senha: "sanches", nome: "Sanches", graduacao: "Cap PM", setor: "OBE", setorCurto: "Cmt da 2ª Cia Es" },
     { re: "973654", senha: "soares", nome: "SOARES", graduacao: "Maj PM", setor: "CH DIV DA ESSGT", setorCurto: "Ch Div da ESSgt" },
     { re: "127845", senha: "dene", nome: "DENE", graduacao: "Cap PM", setor: "OBE", setorCurto: "Cmt da 3ª Cia Es" },
+    { re: "108437", senha: "bordim", nome: "BORDIM", graduacao: "Maj PM", setor: "OBE", setorCurto: "SCmt do 4º BPM/M" },
+    { re: "152709", senha: "marcella", nome: "MARCELLA", graduacao: "1º Ten PM", setor: "OBE", setorCurto: "Ch St Comunic" },
   ];
 
   function normalize(value) {

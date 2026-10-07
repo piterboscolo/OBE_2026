@@ -56,10 +56,9 @@ window.OBE_DATA = {
     {
       id: "vtr",
       titulo: "CPP VTR",
-      descricao: "CPP das viaturas",
+      descricao: "CPP e RSM das viaturas",
       sigla: "VTR",
       icon: "vtr",
-      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1678212823#gid=1678212823",
     },
     {
       id: "cpp-mapa",
@@ -75,14 +74,6 @@ window.OBE_DATA = {
       descricao: "Local e RSO das áreas CPP",
       sigla: "CPP",
       icon: "pin",
-    },
-    {
-      id: "abordados",
-      titulo: "Abordados",
-      descricao: "Pessoas e veículos abordados OBE",
-      sigla: "AB",
-      icon: "users",
-      url: "https://docs.google.com/forms/d/e/1FAIpQLSdckd9cz0f-XYfiOMeGolq0rwEoMuWy_E4a3DcCDThg1AkWeg/viewform?usp=publish-editor",
     },
     {
       id: "painel-supervisor",
@@ -141,15 +132,35 @@ window.OBE_DATA = {
       "14": "910485153",
       "15": "1627903963",
     };
+    // Links específicos (sobrescrevem gid/sheet padrão quando informados)
+    const urls = {
+      "01": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1245416641#gid=1245416641",
+      "02": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1553214801#gid=1553214801",
+      "03": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1261469995#gid=1261469995",
+      "04": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1012821437#gid=1012821437",
+      "05": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1476075140#gid=1476075140",
+      "06": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=2087688309#gid=2087688309",
+      "07": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=426496318#gid=426496318",
+      "08": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1471493126#gid=1471493126",
+      "09": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=676496147#gid=676496147",
+      "10": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=442122667#gid=442122667",
+      "11": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1575911325#gid=1575911325",
+      "12": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1532135751#gid=1532135751",
+      "13": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1774547749#gid=1774547749",
+      "14": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1078570435#gid=1078570435",
+      "15": "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=2084776539#gid=2084776539",
+    };
     return Array.from({ length: 15 }, (_, i) => {
       const n = String(i + 1).padStart(2, "0");
       const gid = String(gids[n] || "").trim();
-      const url = gid
-        ? `https://docs.google.com/spreadsheets/d/${sheetId}/edit?gid=${gid}#gid=${gid}`
-        : `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;
+      const url =
+        urls[n] ||
+        (gid
+          ? `https://docs.google.com/spreadsheets/d/${sheetId}/edit?gid=${gid}#gid=${gid}`
+          : `https://docs.google.com/spreadsheets/d/${sheetId}/edit`);
       return {
         id: "rso-" + n,
-        titulo: "RSO " + n,
+        titulo: "POP " + n,
         descricao: "Planilha RSO POP " + n,
         sigla: n,
         icon: "sheet",
@@ -251,7 +262,89 @@ window.OBE_DATA = {
     },
   },
 
-  vtrOpcoes: [],
+  vtrOpcoes: [
+    {
+      id: "vtr-cpp",
+      titulo: "CPP",
+      descricao: "CPP das viaturas",
+      sigla: "CPP",
+      icon: "vtr",
+    },
+    {
+      id: "vtr-rso",
+      titulo: "RSO",
+      descricao: "Relatórios de serviço operacional VTR",
+      sigla: "RSO",
+      icon: "sheet",
+    },
+  ],
+
+  vtrCppOpcoes: [
+    {
+      id: "vtr-cpp-cgp-i",
+      titulo: "CGP I",
+      descricao: "CPP VTR CGP I",
+      sigla: "CGP",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1678212823#gid=1678212823",
+    },
+    {
+      id: "vtr-cpp-cgp-ii",
+      titulo: "CGP II",
+      descricao: "CPP VTR CGP II",
+      sigla: "CGP",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=709359279#gid=709359279",
+    },
+    {
+      id: "vtr-cpp-cgp-iii",
+      titulo: "CGP III",
+      descricao: "CPP VTR CGP III",
+      sigla: "CGP",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=556307463#gid=556307463",
+    },
+    {
+      id: "vtr-cpp-essgt-034",
+      titulo: "ESSGT-034",
+      descricao: "CPP VTR ESSGT-034",
+      sigla: "034",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1198846853#gid=1198846853",
+    },
+    {
+      id: "vtr-cpp-essgt-035",
+      titulo: "ESSgt-035",
+      descricao: "CPP VTR ESSgt-035",
+      sigla: "035",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=486743165#gid=486743165",
+    },
+    {
+      id: "vtr-cpp-essgt-036",
+      titulo: "ESSgt-036",
+      descricao: "CPP VTR ESSgt-036",
+      sigla: "036",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1409115155#gid=1409115155",
+    },
+    {
+      id: "vtr-cpp-essgt-037",
+      titulo: "ESSgt-037",
+      descricao: "CPP VTR ESSgt-037",
+      sigla: "037",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=2055675044#gid=2055675044",
+    },
+    {
+      id: "vtr-cpp-bcm-4bpmm",
+      titulo: "BCM-4ºBPM/M",
+      descricao: "CPP VTR BCM-4ºBPM/M",
+      sigla: "BCM",
+      icon: "sheet",
+      url: "https://docs.google.com/spreadsheets/d/1Lg-OlkJjwCa3NdhzwTv_E77ikvEnCEC_/edit?gid=1132577963#gid=1132577963",
+    },
+  ],
 
   vtrRsoOpcoes: [
     {
@@ -260,7 +353,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR Cmt de Cia",
       sigla: "CMT",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=1944622959#gid=1944622959",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1070881425#gid=1070881425",
     },
     {
       id: "vtr-rso-scmt-cia",
@@ -268,7 +361,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR SCmt de Cia",
       sigla: "SCM",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=1924236897#gid=1924236897",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=354675535#gid=354675535",
     },
     {
       id: "vtr-rso-cmt-obe",
@@ -276,7 +369,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR Cmt da OBE",
       sigla: "OBE",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=844058780#gid=844058780",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=831444685#gid=831444685",
     },
     {
       id: "vtr-rso-scmt-obe",
@@ -284,7 +377,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR SCmt da OBE",
       sigla: "SCM",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=895860818#gid=895860818",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1820831758#gid=1820831758",
     },
     {
       id: "vtr-rso-cgp-i",
@@ -292,7 +385,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR CGP I",
       sigla: "CGP",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=1358595620#gid=1358595620",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1244188079#gid=1244188079",
     },
     {
       id: "vtr-rso-cgp-ii",
@@ -300,7 +393,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR CGP II",
       sigla: "CGP",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=2140855512#gid=2140855512",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1416735913#gid=1416735913",
     },
     {
       id: "vtr-rso-cgp-iii",
@@ -308,7 +401,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR CGP III",
       sigla: "CGP",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=943511111#gid=943511111",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=843436965#gid=843436965",
     },
     {
       id: "vtr-rso-rp-01",
@@ -316,7 +409,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR Radiopatrulhamento 01",
       sigla: "RP",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=1322875542#gid=1322875542",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1047353912#gid=1047353912",
     },
     {
       id: "vtr-rso-rp-02",
@@ -324,7 +417,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR Radiopatrulhamento 02",
       sigla: "RP",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=1674450667#gid=1674450667",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1407758504#gid=1407758504",
     },
     {
       id: "vtr-rso-rp-03",
@@ -332,7 +425,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR Radiopatrulhamento 03",
       sigla: "RP",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=896228136#gid=896228136",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1905992788#gid=1905992788",
     },
     {
       id: "vtr-rso-rp-04",
@@ -340,7 +433,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR Radiopatrulhamento 04",
       sigla: "RP",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=655050157#gid=655050157",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=1259352403#gid=1259352403",
     },
     {
       id: "vtr-rso-p4",
@@ -348,7 +441,7 @@ window.OBE_DATA = {
       descricao: "RSO VTR Apoio P4",
       sigla: "P4",
       icon: "sheet",
-      url: "https://docs.google.com/spreadsheets/d/1naa7tx6o5tPzJ7xaVISq-dz55hMY-x98/edit?gid=750106562#gid=750106562",
+      url: "https://docs.google.com/spreadsheets/d/186S-iSP5Ruvlour4TjEkNnb2DHRi5DeH/edit?gid=670730022#gid=670730022",
     },
   ],
 

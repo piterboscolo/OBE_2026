@@ -946,9 +946,41 @@
     const opcoes = window.OBE_DATA.vtrOpcoes || [];
     return `
       <div class="page page--subcards">
-        ${pageHeader("CPP VTR", "Planilha CPP das viaturas")}
+        ${pageHeader("CPP VTR", "Escolha CPP ou RSO")}
         <div class="access-grid access-grid--sub">
           ${opcoes.map(cardHtml).join("")}
+        </div>
+        ${pageBack()}
+      </div>
+    `;
+  }
+
+  function renderVtrCpp() {
+    const opcoes = window.OBE_DATA.vtrCppOpcoes || [];
+    const sheet = (window.obeIcon && window.obeIcon("sheet")) || "";
+    if (!opcoes.length) {
+      return `
+        <div class="page">
+          ${pageHeader("CPP", "CPP VTR")}
+          <p class="empty">Links das planilhas CPP VTR em breve.</p>
+          ${pageBack()}
+        </div>
+      `;
+    }
+    const rows = opcoes
+      .map(
+        (m) => `
+      <div class="pop-chip" data-route="${m.id}" role="button" tabindex="0" aria-label="${m.titulo}">
+        <span class="pop-chip__icon">${sheet}</span>
+        <span class="pop-chip__text">${m.titulo}</span>
+      </div>`
+      )
+      .join("");
+    return `
+      <div class="page page--pops">
+        ${pageHeader("CPP", "Cartão de prioridade de patrulhamento VTR")}
+        <div class="pop-list">
+          ${rows}
         </div>
         ${pageBack()}
       </div>
@@ -1048,6 +1080,7 @@
     cpp: renderCpp,
     "painel-supervisor": renderPainelSupervisor,
     vtr: renderVtr,
+    "vtr-cpp": renderVtrCpp,
     "vtr-rso": renderVtrRso,
     mais: renderMais,
   };
@@ -1061,6 +1094,7 @@
       window.OBE_DATA?.modulos,
       window.OBE_DATA?.cppOpcoes,
       window.OBE_DATA?.vtrOpcoes,
+      window.OBE_DATA?.vtrCppOpcoes,
       window.OBE_DATA?.vtrRsoOpcoes,
       window.OBE_DATA?.pontosInteresseOpcoes,
       window.OBE_DATA?.shoppingOpcoes,
@@ -1085,6 +1119,7 @@
     const fromModulos = window.OBE_DATA?.modulos?.find((m) => m.id === route);
     const fromCpp = window.OBE_DATA?.cppOpcoes?.find((m) => m.id === route);
     const fromVtr = window.OBE_DATA?.vtrOpcoes?.find((m) => m.id === route);
+    const fromVtrCpp = window.OBE_DATA?.vtrCppOpcoes?.find((m) => m.id === route);
     const fromVtrRso = window.OBE_DATA?.vtrRsoOpcoes?.find((m) => m.id === route);
     const fromPi = window.OBE_DATA?.pontosInteresseOpcoes?.find((m) => m.id === route);
     const fromShop = window.OBE_DATA?.shoppingOpcoes?.find((m) => m.id === route);
@@ -1100,6 +1135,7 @@
       fromModulos ||
       fromCpp ||
       fromVtr ||
+      fromVtrCpp ||
       fromVtrRso ||
       fromPi ||
       fromShop ||
@@ -1127,9 +1163,10 @@
       !!window.OBE_DATA?.pontoApoioDestinos?.[route] ||
       !!window.OBE_DATA?.popDestinos?.[route] ||
       !!(window.OBE_DATA?.rsoOpcoes || []).some((o) => o.id === route) ||
+      !!(window.OBE_DATA?.vtrCppOpcoes || []).some((o) => o.id === route) ||
       !!(window.OBE_DATA?.vtrRsoOpcoes || []).some((o) => o.id === route);
     if (
-      (fromCpp || fromVtr || fromVtrRso || fromPi || fromShop || fromHosp || fromParq || fromEsp || fromDel || fromPa || fromPop || fromRso || fromCppPop) &&
+      (fromCpp || fromVtr || fromVtrCpp || fromVtrRso || fromPi || fromShop || fromHosp || fromParq || fromEsp || fromDel || fromPa || fromPop || fromRso || fromCppPop) &&
       !hasInternal
     )
       return true;
@@ -1155,6 +1192,9 @@
     if (route === "inicio" || !route) return null;
     if (route === "vtr") return "cpp";
     if (route === "vtr-cpp" || route === "vtr-rso") return "vtr";
+    if ((window.OBE_DATA?.vtrCppOpcoes || []).some((o) => o.id === route)) {
+      return "vtr-cpp";
+    }
     if ((window.OBE_DATA?.vtrRsoOpcoes || []).some((o) => o.id === route)) {
       return "vtr-rso";
     }
