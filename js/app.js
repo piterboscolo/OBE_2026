@@ -1213,8 +1213,23 @@
     a.remove();
   }
 
+  function planilhaBridgeHref(key) {
+    const k = String(key || "").trim();
+    if (!k || !window.OBE_PLANILHAS?.[k]) return "";
+    return "abrir-planilha.html?k=" + encodeURIComponent(k);
+  }
+
   function sheetChipHtml(m, iconHtml) {
     const titulo = String(m?.titulo || "");
+    const bridge = planilhaBridgeHref(m?.id);
+    if (bridge) {
+      // Nova aba: mantém o app aberto para voltar facilmente
+      return `
+      <a class="pop-chip pop-chip--link" href="${bridge}" target="_blank" rel="noopener noreferrer" data-planilha="${m.id}" aria-label="${titulo}">
+        <span class="pop-chip__icon">${iconHtml}</span>
+        <span class="pop-chip__text">${titulo}</span>
+      </a>`;
+    }
     const href = normalizeSheetUrl(m?.url || "");
     if (href) {
       return `
@@ -1232,6 +1247,11 @@
 
   function openModuleLink(route) {
     if (isModuloBloqueado(route)) return true;
+    const bridge = planilhaBridgeHref(route);
+    if (bridge) {
+      window.open(bridge, "_blank", "noopener,noreferrer");
+      return true;
+    }
     const fromModulos = window.OBE_DATA?.modulos?.find((m) => m.id === route);
     const fromCpp = window.OBE_DATA?.cppOpcoes?.find((m) => m.id === route);
     const fromVtr = window.OBE_DATA?.vtrOpcoes?.find((m) => m.id === route);
@@ -1565,6 +1585,9 @@
         return;
       }
 
+      // Links de planilha (bridge): deixa o navegador seguir o href nativo
+      if (e.target.closest("a.pop-chip[data-planilha]")) return;
+
       const sheetLink = e.target.closest("a.pop-chip[data-external-sheet]");
       if (sheetLink && main.contains(sheetLink)) {
         e.preventDefault();
@@ -1583,6 +1606,16 @@
 
     main.addEventListener("keydown", (e) => {
       if (e.key !== "Enter" && e.key !== " ") return;
+      const planilhaLink = e.target.closest("a.pop-chip[data-planilha]");
+      if (planilhaLink) {
+        e.preventDefault();
+        window.open(
+          planilhaLink.getAttribute("href") || planilhaLink.href,
+          "_blank",
+          "noopener,noreferrer"
+        );
+        return;
+      }
       const sheetLink = e.target.closest("a.pop-chip[data-external-sheet]");
       if (sheetLink) {
         e.preventDefault();

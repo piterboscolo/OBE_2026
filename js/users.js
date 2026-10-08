@@ -30,7 +30,7 @@
     { re: "127845", senha: "dene", nome: "DENE", graduacao: "Cap PM", setor: "OBE", setorCurto: "Cmt da 3ª Cia Es" },
     { re: "108437", senha: "bordim", nome: "BORDIM", graduacao: "Maj PM", setor: "OBE", setorCurto: "SCmt do 4º BPM/M" },
     { re: "152709", senha: "marcella", nome: "MARCELLA", graduacao: "1º Ten PM", setor: "OBE", setorCurto: "Ch St Comunic" },
-  ];
+    ];
 
   function normalize(value) {
     return String(value)

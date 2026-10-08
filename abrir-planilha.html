@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#002355" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Abrir planilha — OBE 2026</title>
+  <style>
+    :root {
+      --navy: #002355;
+      --text: #1a1a1a;
+      --muted: #5a6570;
+      --bg: #f4f6f8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Roboto, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .box {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px 18px 20px;
+      box-shadow: 0 8px 28px rgba(0, 35, 85, 0.08);
+      border: 1px solid rgba(0, 35, 85, 0.08);
+      text-align: center;
+    }
+    .brand {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin: 0 0 10px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+      color: var(--navy);
+      line-height: 1.25;
+    }
+    p {
+      margin: 0 0 16px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    a.btn {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+    a.btn--primary {
+      background: var(--navy);
+      color: #fff;
+    }
+    a.btn--secondary {
+      background: rgba(0, 35, 85, 0.08);
+      color: var(--navy);
+    }
+    a.back {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .err { color: #b00020; }
+  </style>
+</head>
+<body>
+  <div class="box" id="box">
+    <p class="brand">OBE 2026 SGE</p>
+    <h1 id="titulo">Abrindo planilha…</h1>
+    <p id="msg">Preparando a aba correta. No celular, use o navegador (Chrome/Safari) — o app Planilhas ignora a aba.</p>
+    <div class="actions" id="actions" hidden></div>
+    <a class="back" href="home.html">← Voltar ao app</a>
+  </div>
+
+  <script src="js/planilhas.js?v=20261008a"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const key = String(params.get("k") || "").trim();
+      const entry = window.OBE_PLANILHAS && window.OBE_PLANILHAS[key];
+      const tituloEl = document.getElementById("titulo");
+      const msgEl = document.getElementById("msg");
+      const actions = document.getElementById("actions");
+
+      if (!entry) {
+        tituloEl.textContent = "Link não encontrado";
+        msgEl.className = "err";
+        msgEl.textContent = "Não foi possível localizar esta planilha. Volte e tente novamente.";
+        return;
+      }
+
+      const urls = window.OBE_sheetUrls(entry);
+      if (!urls) {
+        tituloEl.textContent = "Dados incompletos";
+        msgEl.className = "err";
+        msgEl.textContent = "Falta sheetId ou gid para esta planilha.";
+        return;
+      }
+
+      tituloEl.textContent = entry.titulo || "Planilha";
+      msgEl.textContent =
+        "Abrindo em nova aba. Feche esta aba ou volte ao app quando quiser. Se o app Planilhas abrir na primeira aba, use o botão abaixo no navegador.";
+
+      actions.hidden = false;
+      actions.innerHTML =
+        '<a class="btn btn--primary" id="btn-edit" href="' +
+        urls.editHash +
+        '" target="_blank" rel="noopener noreferrer">Abrir aba para editar</a>' +
+        '<a class="btn btn--secondary" id="btn-view" href="' +
+        urls.view +
+        '" target="_blank" rel="noopener noreferrer">Abrir só esta aba (navegador)</a>';
+
+      const ua = navigator.userAgent || "";
+      const isAndroid = /Android/i.test(ua);
+      const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+      // Auto-abre: Android → Chrome; iOS → redirect Google; desktop → edit
+      try {
+        if (isAndroid) {
+          const path = urls.edit.replace(/^https?:\/\//i, "");
+          location.href =
+            "intent://" +
+            path +
+            "#Intent;scheme=https;package=com.android.chrome;" +
+            "S.browser_fallback_url=" +
+            encodeURIComponent(urls.editHash) +
+            ";end";
+        } else if (isIOS) {
+          location.href =
+            "https://www.google.com/url?q=" +
+            encodeURIComponent(urls.editHash) +
+            "&sa=D&ust=" +
+            Date.now();
+        } else {
+          location.href = urls.editHash;
+        }
+      } catch (_) {
+        /* botões manuais ficam disponíveis */
+      }
+    })();
+  </script>
+</body>
+</html>
