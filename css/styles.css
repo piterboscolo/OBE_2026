@@ -1397,11 +1397,15 @@ body.page-home #screen-app {
   margin: 0 auto;
 }
 
-a.pop-chip {
+a.pop-chip,
+button.pop-chip {
   text-decoration: none;
   color: #fff;
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
+  font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .pop-chip {

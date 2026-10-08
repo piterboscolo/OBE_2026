@@ -1151,11 +1151,37 @@
   function openExternalUrl(url) {
     const href = String(url || "").trim();
     if (!href) return;
-    window.open(href, "_blank", "noopener,noreferrer");
+    // Se for planilha Google, monta /edit#gid= e abre em _blank (lê o gid do zero)
+    try {
+      const u = new URL(href);
+      if (/docs\.google\.com$/i.test(u.hostname) && /\/spreadsheets\//i.test(u.pathname)) {
+        const idMatch = u.pathname.match(/\/spreadsheets\/d\/([^/]+)/i);
+        let gid = u.searchParams.get("gid");
+        if (!gid && u.hash) {
+          const m = String(u.hash).match(/gid=(\d+)/i);
+          if (m) gid = m[1];
+        }
+        if (idMatch?.[1] && gid && typeof window.OBE_irParaAba === "function") {
+          window.OBE_irParaAba(idMatch[1], gid);
+          return;
+        }
+      }
+    } catch (_) {
+      /* segue fallback */
+    }
+    window.open(href, "_blank");
   }
 
   function sheetChipHtml(m, iconHtml) {
     const titulo = String(m?.titulo || "");
+    const entry = window.OBE_PLANILHAS?.[m.id];
+    if (entry?.sheetId && entry?.gid) {
+      return `
+      <button type="button" class="pop-chip" data-sheet-id="${entry.sheetId}" data-gid="${entry.gid}" aria-label="${titulo}">
+        <span class="pop-chip__icon">${iconHtml}</span>
+        <span class="pop-chip__text">${titulo}</span>
+      </button>`;
+    }
     return `
       <div class="pop-chip" data-route="${m.id}" role="button" tabindex="0" aria-label="${titulo}">
         <span class="pop-chip__icon">${iconHtml}</span>
@@ -1165,6 +1191,9 @@
 
   function openModuleLink(route) {
     if (isModuloBloqueado(route)) return true;
+    if (typeof window.OBE_abrirPlanilhaPorChave === "function" && window.OBE_abrirPlanilhaPorChave(route)) {
+      return true;
+    }
     const fromModulos = window.OBE_DATA?.modulos?.find((m) => m.id === route);
     const fromCpp = window.OBE_DATA?.cppOpcoes?.find((m) => m.id === route);
     const fromVtr = window.OBE_DATA?.vtrOpcoes?.find((m) => m.id === route);
@@ -1498,6 +1527,15 @@
         return;
       }
 
+      const abaBtn = e.target.closest(".pop-chip[data-sheet-id][data-gid]");
+      if (abaBtn && main.contains(abaBtn)) {
+        e.preventDefault();
+        if (typeof window.OBE_irParaAba === "function") {
+          window.OBE_irParaAba(abaBtn.dataset.sheetId, abaBtn.dataset.gid);
+        }
+        return;
+      }
+
       const card = e.target.closest(".access-card[data-route], .pop-chip[data-route]");
       if (card && main.contains(card)) {
         const route = card.dataset.route;
@@ -1509,6 +1547,14 @@
 
     main.addEventListener("keydown", (e) => {
       if (e.key !== "Enter" && e.key !== " ") return;
+      const abaBtn = e.target.closest(".pop-chip[data-sheet-id][data-gid]");
+      if (abaBtn) {
+        e.preventDefault();
+        if (typeof window.OBE_irParaAba === "function") {
+          window.OBE_irParaAba(abaBtn.dataset.sheetId, abaBtn.dataset.gid);
+        }
+        return;
+      }
       const card = e.target.closest(".access-card[data-route], .pop-chip[data-route]");
       if (!card) return;
       e.preventDefault();
