@@ -1143,101 +1143,14 @@
     return false;
   }
 
-  function normalizeSheetUrl(url) {
-    try {
-      const raw = String(url || "").trim();
-      const u = new URL(raw);
-      if (!/docs\.google\.com$/i.test(u.hostname) || !/\/spreadsheets\//i.test(u.pathname)) {
-        return raw;
-      }
-      const idMatch = u.pathname.match(/\/spreadsheets\/d\/([^/]+)/i);
-      const sheetId = idMatch?.[1];
-      let gid = u.searchParams.get("gid");
-      if (!gid && u.hash) {
-        const m = String(u.hash).match(/gid=(\d+)/i);
-        if (m) gid = m[1];
-      }
-      if (!sheetId || !gid) return u.toString();
-      // Formato limpo (mesmo do "Copiar link" da aba no Google Sheets)
-      return (
-        "https://docs.google.com/spreadsheets/d/" +
-        sheetId +
-        "/edit?gid=" +
-        encodeURIComponent(gid) +
-        "&single=true#gid=" +
-        encodeURIComponent(gid)
-      );
-    } catch (_) {
-      return String(url || "");
-    }
-  }
-
   function openExternalUrl(url) {
-    const href = normalizeSheetUrl(url);
+    const href = String(url || "").trim();
     if (!href) return;
-
-    const ua = navigator.userAgent || "";
-    const isAndroid = /Android/i.test(ua);
-    const isIOS = /iPhone|iPad|iPod/i.test(ua);
-    const isSheet = /docs\.google\.com\/spreadsheets\//i.test(href);
-
-    // App Planilhas no celular ignora o gid e abre a 1ª aba.
-    // Força o Chrome (Intent URI não pode ter '#' antes de #Intent).
-    if (isSheet && isAndroid) {
-      const noHash = href.split("#")[0];
-      const path = noHash.replace(/^https?:\/\//i, "");
-      window.location.href =
-        "intent://" +
-        path +
-        "#Intent;scheme=https;package=com.android.chrome;" +
-        "S.browser_fallback_url=" +
-        encodeURIComponent(href) +
-        ";end";
-      return;
-    }
-
-    if (isSheet && isIOS) {
-      // Evita Universal Link do app Sheets (descarta #gid)
-      window.location.href =
-        "https://www.google.com/url?q=" + encodeURIComponent(href) + "&sa=D&ust=" + Date.now();
-      return;
-    }
-
-    const a = document.createElement("a");
-    a.href = href;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  }
-
-  function planilhaBridgeHref(key) {
-    const k = String(key || "").trim();
-    if (!k || !window.OBE_PLANILHAS?.[k]) return "";
-    return "abrir-planilha.html?k=" + encodeURIComponent(k);
+    window.open(href, "_blank", "noopener,noreferrer");
   }
 
   function sheetChipHtml(m, iconHtml) {
     const titulo = String(m?.titulo || "");
-    const bridge = planilhaBridgeHref(m?.id);
-    if (bridge) {
-      // Nova aba: mantém o app aberto para voltar facilmente
-      return `
-      <a class="pop-chip pop-chip--link" href="${bridge}" target="_blank" rel="noopener noreferrer" data-planilha="${m.id}" aria-label="${titulo}">
-        <span class="pop-chip__icon">${iconHtml}</span>
-        <span class="pop-chip__text">${titulo}</span>
-      </a>`;
-    }
-    const href = normalizeSheetUrl(m?.url || "");
-    if (href) {
-      return `
-      <a class="pop-chip pop-chip--link" href="${href}" target="_blank" rel="noopener noreferrer" data-external-sheet="1" aria-label="${titulo}">
-        <span class="pop-chip__icon">${iconHtml}</span>
-        <span class="pop-chip__text">${titulo}</span>
-      </a>`;
-    }
     return `
       <div class="pop-chip" data-route="${m.id}" role="button" tabindex="0" aria-label="${titulo}">
         <span class="pop-chip__icon">${iconHtml}</span>
@@ -1247,11 +1160,6 @@
 
   function openModuleLink(route) {
     if (isModuloBloqueado(route)) return true;
-    const bridge = planilhaBridgeHref(route);
-    if (bridge) {
-      window.open(bridge, "_blank", "noopener,noreferrer");
-      return true;
-    }
     const fromModulos = window.OBE_DATA?.modulos?.find((m) => m.id === route);
     const fromCpp = window.OBE_DATA?.cppOpcoes?.find((m) => m.id === route);
     const fromVtr = window.OBE_DATA?.vtrOpcoes?.find((m) => m.id === route);
@@ -1585,16 +1493,6 @@
         return;
       }
 
-      // Links de planilha (bridge): deixa o navegador seguir o href nativo
-      if (e.target.closest("a.pop-chip[data-planilha]")) return;
-
-      const sheetLink = e.target.closest("a.pop-chip[data-external-sheet]");
-      if (sheetLink && main.contains(sheetLink)) {
-        e.preventDefault();
-        openExternalUrl(sheetLink.getAttribute("href") || sheetLink.href);
-        return;
-      }
-
       const card = e.target.closest(".access-card[data-route], .pop-chip[data-route]");
       if (card && main.contains(card)) {
         const route = card.dataset.route;
@@ -1606,22 +1504,6 @@
 
     main.addEventListener("keydown", (e) => {
       if (e.key !== "Enter" && e.key !== " ") return;
-      const planilhaLink = e.target.closest("a.pop-chip[data-planilha]");
-      if (planilhaLink) {
-        e.preventDefault();
-        window.open(
-          planilhaLink.getAttribute("href") || planilhaLink.href,
-          "_blank",
-          "noopener,noreferrer"
-        );
-        return;
-      }
-      const sheetLink = e.target.closest("a.pop-chip[data-external-sheet]");
-      if (sheetLink) {
-        e.preventDefault();
-        openExternalUrl(sheetLink.getAttribute("href") || sheetLink.href);
-        return;
-      }
       const card = e.target.closest(".access-card[data-route], .pop-chip[data-route]");
       if (!card) return;
       e.preventDefault();
