@@ -415,13 +415,18 @@
         ${pageHeader("Eventos", "Agenda e programação da operação")}
         ${corpo}
         <div class="eventos-bot" id="eventos-bot" aria-hidden="true">
+          <div class="eventos-bot__robot" aria-hidden="true">
+            <dotlottie-player
+              src="https://lottie.host/ae897f45-6cd3-47ce-99ac-f625c2d291bc/DVJmkjmIWz.lottie"
+              background="transparent"
+              speed="1"
+              loop
+              autoplay
+            ></dotlottie-player>
+          </div>
           <div class="eventos-bot__head">
-            <span class="eventos-bot__avatar" aria-hidden="true">
-              <span class="eventos-bot__pulse"></span>
-              BOT
-            </span>
             <div class="eventos-bot__titles">
-              <strong>Agente de monitoramento</strong>
+              <strong>Agente Obezinho</strong>
               <span>Buscando eventos na internet</span>
             </div>
           </div>

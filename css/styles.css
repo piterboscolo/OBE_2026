@@ -908,40 +908,33 @@ body.page-home #screen-app {
   box-sizing: border-box;
 }
 
+.eventos-bot__robot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 0 6px;
+}
+
+.eventos-bot__robot dotlottie-player {
+  width: 120px;
+  height: 120px;
+  display: block;
+}
+
 .eventos-bot__head {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   margin-bottom: 10px;
-}
-
-.eventos-bot__avatar {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #002355;
-  color: #fff;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  flex-shrink: 0;
-}
-
-.eventos-bot__pulse {
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  border: 2px solid rgba(0, 35, 85, 0.35);
-  animation: eventosBotPulse 1.6s ease-out infinite;
+  text-align: center;
 }
 
 .eventos-bot__titles {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 2px;
   min-width: 0;
 }
@@ -966,6 +959,7 @@ body.page-home #screen-app {
   color: var(--text);
   line-height: 1.35;
   min-height: 1.35em;
+  text-align: center;
 }
 
 .eventos-bot__source {
@@ -976,6 +970,7 @@ body.page-home #screen-app {
   line-height: 1.3;
   min-height: 1.3em;
   word-break: break-word;
+  text-align: center;
 }
 
 .eventos-loading__track {
@@ -1004,17 +999,6 @@ body.page-home #screen-app {
   }
   100% {
     left: 100%;
-  }
-}
-
-@keyframes eventosBotPulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1.45);
-    opacity: 0;
   }
 }
 
