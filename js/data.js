@@ -901,6 +901,15 @@ window.OBE_DATA = {
       descricao:
         "Monólogo e show de humor ácido e crítico sobre a língua portuguesa e o cotidiano, com grande capacidade de público sentado.",
     },
+    {
+      titulo: "Orange Disaster /// Giallos /// Mamãe Bar",
+      data: "Sexta-feira, 9 de outubro de 2026",
+      hora: "19h",
+      local: "Mamãe Bar, Rua Lopes Chaves, 391, Barra Funda, São Paulo, SP",
+      status: "Informativo",
+      descricao:
+        "Show de rock/indie no Mamãe Bar, em um ambiente intimista e com público reduzido.",
+    },
   ],
 
   cpp: [
