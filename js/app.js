@@ -1316,6 +1316,72 @@
     return "inicio";
   }
 
+  function metaAcessoApoioPublico(route) {
+    const id = String(route || "").trim();
+    if (!id) return null;
+
+    if (id === "abastecimento") {
+      return { pagina_id: id, pagina_titulo: "Auxílio ao Público", categoria: "menu" };
+    }
+
+    const menuPi = {
+      "pi-hospital": "hospital",
+      "pi-metro": "metro",
+      "pi-shopping": "shopping",
+      "pi-parques": "parques",
+      "pi-espacos": "espacos",
+      "pi-delegacias": "delegacias",
+    };
+    if (menuPi[id]) {
+      const item = (window.OBE_DATA?.pontosInteresseOpcoes || []).find((m) => m.id === id);
+      return {
+        pagina_id: id,
+        pagina_titulo: item?.titulo || id,
+        categoria: menuPi[id],
+      };
+    }
+
+    const groups = [
+      { list: "shoppingOpcoes", dest: "shoppingDestinos", categoria: "shopping" },
+      { list: "hospitalOpcoes", dest: "hospitalDestinos", categoria: "hospital" },
+      { list: "parquesOpcoes", dest: "parquesDestinos", categoria: "parques" },
+      { list: "espacosOpcoes", dest: "espacosDestinos", categoria: "espacos" },
+      { list: "delegaciasOpcoes", dest: "delegaciasDestinos", categoria: "delegacias" },
+    ];
+    for (const g of groups) {
+      const item = (window.OBE_DATA?.[g.list] || []).find((m) => m.id === id);
+      const dest = window.OBE_DATA?.[g.dest]?.[id];
+      if (item || dest) {
+        return {
+          pagina_id: id,
+          pagina_titulo: item?.titulo || dest?.nome || id,
+          categoria: g.categoria,
+        };
+      }
+    }
+
+    return null;
+  }
+
+  function trackAcessoApoioPublico(route) {
+    const meta = metaAcessoApoioPublico(route);
+    if (!meta) return;
+    if (!window.OBE_DB?.isConfigured?.()) return;
+    if (!window.OBE_DB.registrarAcessoApoioPublico) return;
+
+    window.OBE_DB
+      .registrarAcessoApoioPublico({
+        pagina_id: meta.pagina_id,
+        pagina_titulo: meta.pagina_titulo,
+        categoria: meta.categoria,
+        login: currentUser?.login || null,
+        nome: currentUser?.name || null,
+      })
+      .catch(() => {
+        /* não interrompe o uso do app */
+      });
+  }
+
   function applyRoute(route, fromNav) {
     if (!main) return;
     if (route === "painel-supervisor" && !isSupervisorAtual()) {
@@ -1356,6 +1422,7 @@
     if (!getRouteRenderer(route)) route = "inicio";
 
     applyRoute(route, fromNav);
+    trackAcessoApoioPublico(route);
 
     if (fromHistory) return;
 

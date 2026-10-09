@@ -138,6 +138,18 @@
     return data;
   }
 
+  async function registrarAcessoApoioPublico(payload) {
+    const data = await rpc("registrar_acesso_apoio_publico", {
+      p_pagina_id: payload.pagina_id,
+      p_pagina_titulo: payload.pagina_titulo || null,
+      p_categoria: payload.categoria || null,
+      p_login: payload.login || null,
+      p_nome: payload.nome || null,
+    });
+    const id = typeof data === "string" ? data.replace(/^"|"$/g, "") : data;
+    return id;
+  }
+
   window.OBE_DB = {
     isConfigured,
     getConfig,
@@ -146,5 +158,6 @@
     salvarResultadoQuantitativo,
     listarResultadosQuantitativos,
     totaisResultadosQuantitativos,
+    registrarAcessoApoioPublico,
   };
 })();
