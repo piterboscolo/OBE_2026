@@ -374,10 +374,10 @@ body.page-login .bg-watermark {
   padding: 0;
   text-align: center;
   font-family: var(--display);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 400;
-  letter-spacing: 0.35em;
-  text-indent: 0.35em;
+  letter-spacing: 0.12em;
+  text-indent: 0.12em;
   color: #9aa3ad;
   transform: none;
 }

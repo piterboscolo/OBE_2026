@@ -775,17 +775,39 @@
     }
   }
 
+  function dataExtensoSaoPaulo(date) {
+    const d = date instanceof Date ? date : new Date();
+    const meses = [
+      "janeiro",
+      "fevereiro",
+      "março",
+      "abril",
+      "maio",
+      "junho",
+      "julho",
+      "agosto",
+      "setembro",
+      "outubro",
+      "novembro",
+      "dezembro",
+    ];
+    const dia = String(d.getDate()).padStart(2, "0");
+    return `São Paulo, ${dia} de ${meses[d.getMonth()]} de ${d.getFullYear()}`;
+  }
+
   async function gerarPdfResultadoOperacao() {
     const totais =
       supTotaisCache?.totais || Object.fromEntries(SUP_CAMPOS.map(([k]) => [k, 0]));
     const envios = Number(supTotaisCache?.envios || 0);
-    const dataStr = new Date().toLocaleString("pt-BR", {
+    const agora = new Date();
+    const dataStr = agora.toLocaleString("pt-BR", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
     });
+    const dataLocal = dataExtensoSaoPaulo(agora);
     const linhas = SUP_CAMPOS.map(
       ([key, label]) =>
         `<tr><td>${label}</td><td>${formatSupVal(key, totais[key])}</td></tr>`
@@ -872,6 +894,49 @@
       color: #666;
       text-align: center;
     }
+    .assinatura {
+      margin-top: 18mm;
+      width: 100%;
+      page-break-inside: avoid;
+      font-family: "Times New Roman", Times, serif;
+      text-align: center;
+    }
+    .assinatura__data {
+      margin: 5.2em 0 0 8%;
+      font-size: 12pt;
+      text-align: left;
+    }
+    .assinatura__linha {
+      width: 72mm;
+      margin: 2em auto 0;
+      border-bottom: 1pt solid #000;
+      height: 0;
+    }
+    .assinatura__cargo {
+      margin: 3mm auto 0;
+      width: 110mm;
+      font-size: 11pt;
+      line-height: 1.45;
+      text-align: center;
+    }
+    .assinatura__cargo .posto {
+      white-space: nowrap;
+    }
+    .assinatura__re-nome {
+      display: inline-block;
+      min-width: 48mm;
+      margin: 0 2mm;
+      vertical-align: baseline;
+    }
+    .assinatura__funcao {
+      white-space: nowrap;
+    }
+    .assinatura__hint {
+      margin: 1.5mm 0 0;
+      font-size: 8.5pt;
+      color: #555;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
     @media print {
       html, body {
         width: auto;
@@ -885,7 +950,8 @@
       .cabecalho,
       table.resultado,
       .meta,
-      .rodape {
+      .rodape,
+      .assinatura {
         page-break-inside: avoid;
       }
     }
@@ -902,6 +968,16 @@
         ${linhas}
       </tbody>
     </table>
+    <div class="assinatura">
+      <p class="assinatura__data">${dataLocal}.</p>
+      <div class="assinatura__linha" aria-hidden="true"></div>
+      <p class="assinatura__cargo">
+        <span class="posto">Al Sgt PM</span>
+        <span class="assinatura__re-nome" title="RE e Nome">&nbsp;</span>
+        <span class="funcao">Comandante OBE</span>
+      </p>
+      <p class="assinatura__hint">RE e Nome</p>
+    </div>
     <p class="rodape">Documento gerado pelo Painel do Supervisor — OBE 2026 SGE</p>
   </div>
   <script>
